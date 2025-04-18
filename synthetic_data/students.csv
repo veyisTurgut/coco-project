@@ -1,0 +1,51 @@
+studentId,name,learningStyle,lovedTopicIds,dislikedTopicIds
+S0001,Barbara Love,Kinaesthetic,[],[]
+S0002,Jimmy Nguyen,Mixed,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]","[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]"
+S0003,Stacey King,Visual,"[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]"
+S0004,Christopher Camacho,Mixed,[],[]
+S0005,Judy Davis DDS,Visual,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]",[]
+S0006,Jeffrey Green,Reading/Writing,[],"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0007,Eric Holland,Mixed,[],"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]"
+S0008,Lisa Johnson,Mixed,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]",[]
+S0009,Dennis Booker,Kinaesthetic,[],"[""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0010,Edwin Ross DDS,Audio,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005""]"
+S0011,Jessica Robinson,Visual,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005""]",[]
+S0012,Jesse Lam,Mixed,[],"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0013,Michael Curtis,Kinaesthetic,[],[]
+S0014,Melissa Barnett,Kinaesthetic,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]","[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0015,Mark Price,Kinaesthetic,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]","[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0016,Hector Morgan,Audio,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005""]",[]
+S0017,Dana Walker,Mixed,[],"[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0018,Steven Allen,Mixed,[],"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0019,Jesse Robinson,Kinaesthetic,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]",[]
+S0020,Marie Diaz DVM,Visual,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]",[]
+S0021,Ricky Cannon,Visual,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0022,Larry Brown,Reading/Writing,"[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]",[]
+S0023,Francisco Sanchez,Visual,[],"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0024,Lisa Brooks,Visual,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005""]"
+S0025,Andrea Turner,Visual,"[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]",[]
+S0026,Brian Price,Kinaesthetic,[],"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0027,Sylvia Martin,Visual,"[""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0028,Cassandra Lewis MD,Audio,[],[]
+S0029,Maureen George,Reading/Writing,[],[]
+S0030,Andrea Ryan,Kinaesthetic,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005""]"
+S0031,Laura Anderson,Visual,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005""]","[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]"
+S0032,John Ayers,Audio,"[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005""]"
+S0033,Joshua Koch,Audio,[],"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0034,Cynthia Rodriguez,Kinaesthetic,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005""]","[""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0035,Austin Parker,Mixed,"[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]",[]
+S0036,Courtney Wallace,Visual,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0037,Chad Torres,Visual,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0038,David Sullivan,Mixed,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]","[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0039,Kenneth Mccullough,Visual,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]","[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0040,Rebecca Wright,Reading/Writing,[],"[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0041,Adrienne Harper,Kinaesthetic,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]","[""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0042,Gerald Gates,Reading/Writing,"[""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]"
+S0043,Elizabeth Melton,Audio,"[""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0044,Sarah Johnston,Mixed,"[""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0045,Michele Roberson,Kinaesthetic,[],"[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]"
+S0046,Angela Moore,Reading/Writing,"[""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]","[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]"
+S0047,Stacy Frazier,Audio,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""BIO006"", ""BIO007"", ""BIO008"", ""BIO009"", ""BIO010""]","[""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015"", ""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
+S0048,Ian Harmon,Audio,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005"", ""CHM011"", ""CHM012"", ""CHM013"", ""CHM014"", ""CHM015""]",[]
+S0049,Jeffrey Smith,Audio,[],[]
+S0050,Mary Hall,Audio,"[""PHY001"", ""PHY002"", ""PHY003"", ""PHY004"", ""PHY005""]","[""MAT016"", ""MAT017"", ""MAT018"", ""MAT019"", ""MAT020""]"
