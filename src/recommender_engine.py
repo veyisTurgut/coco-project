@@ -2,7 +2,6 @@ import json, logging, os, random, pandas as pd
 from py2neo import Graph # Import Neo4j driver
 from llm.curl_vertex import CurlVertex, vertex_credentials
 from llm.mylib import *
-from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -309,7 +308,6 @@ Begin Recommendation (JSON output only):
     return res
 
 
-# --- Example Usage (Illustrative) ---
 if __name__ == "__main__":
     logger.info("Starting recommendation engine...")
 
