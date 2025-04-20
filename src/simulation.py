@@ -13,7 +13,8 @@ from recommender_engine import (
     fetch_lookup_maps_from_neo4j,
     fetch_student_data_from_neo4j,
     recommend_to_student,
-    chat_with_llm # We need this for feedback generation
+    chat_with_llm, # We need this for feedback generation
+    fetch_resource_metrics_from_neo4j
 )
 
 load_dotenv()
@@ -22,8 +23,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 logger = logging.getLogger(__name__)
 
 # --- Simulation Parameters ---
-MAX_WORKERS = 20 # Number of concurrent LLM calls (for recs AND feedback)
-NUM_TURNS = 20
+MAX_WORKERS = 30 # Number of concurrent LLM calls (for recs AND feedback)
+NUM_TURNS = 40
 STUDENTS_PER_TURN = 30
 DIVERSITY_THRESHOLD = 0.5 # Example: If Shannon entropy drops below this, trigger adaptation
 HISTORY_LIMIT_FOR_ENTROPY = 10 # How far back to look for entropy calculation
@@ -255,7 +256,7 @@ def add_llm_recommendation_to_neo4j(graph: Graph, student_id: str, resource_id: 
 # --- NEW: Wrapper Functions for Parallel Execution ---
 def process_student_recommendation(args):
     """Wrapper to generate recommendations for one student."""
-    student_id, student_data, resource_map, topic_map, num_recs, needs_adapt = args
+    student_id, student_data, resource_map, topic_map, num_recs, needs_adapt, current_resource_metrics = args
     logger.debug(f"Thread {os.getpid()} starting recommendations for {student_id} (Adapt: {needs_adapt})...")
     try:
         recommendations = recommend_to_student(
@@ -263,6 +264,7 @@ def process_student_recommendation(args):
             resource_map,
             topic_map,
             num_recommendations=num_recs,
+            resource_metrics_map=current_resource_metrics,
             adapt_prompt=needs_adapt
         )
         logger.debug(f"Thread {os.getpid()} finished recommendations for {student_id}.")
@@ -317,6 +319,12 @@ if __name__ == "__main__":
                 students_this_turn = random.sample(all_student_ids, k=min(STUDENTS_PER_TURN, len(all_student_ids)))
                 logger.info(f"Simulating for students: {students_this_turn}")
 
+                # --- NEW: Fetch current resource metrics for this turn ---
+                logger.info(f"Fetching current resource metrics for Turn {turn}...")
+                current_resource_metrics = fetch_resource_metrics_from_neo4j(db)
+                # --- End Fetch Metrics ---
+
+
                 # --- Phase 1: Fetch Data, Calc Entropy, Prep Rec Tasks ---
                 rec_tasks_args = []
                 student_states = {} # Store fetched data and entropy results
@@ -327,7 +335,7 @@ if __name__ == "__main__":
                     current_entropy = calculate_topic_entropy(student_data['history'], resource_map, HISTORY_LIMIT_FOR_ENTROPY)
                     needs_adaptation = current_entropy < DIVERSITY_THRESHOLD
                     student_states[student_id] = {'data': student_data, 'entropy': current_entropy, 'needs_adapt': needs_adaptation}
-                    rec_tasks_args.append((student_id, student_data, resource_map, topic_map, NUM_RECOMMENDATIONS_PER_STUDENT, needs_adaptation))
+                    rec_tasks_args.append((student_id, student_data, resource_map, topic_map, NUM_RECOMMENDATIONS_PER_STUDENT, needs_adaptation, current_resource_metrics))
                     logger.debug(f"Prepared rec task for {student_id} (Entropy: {current_entropy:.3f}, Adapt: {needs_adaptation})")
 
                 # --- Phase 2: Parallel Recommendation Generation ---

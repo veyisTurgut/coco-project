@@ -1,151 +1,211 @@
 resourceId,title,type,modality
-R0001,Simulation on PHY03: Force and Motion,Simulation,Kinaesthetic
-R0002,Quiz on BIO01: Biology and Living Things,Quiz,Kinaesthetic
-R0003,Article on PHY04: Energy,Article,Reading/Writing
-R0004,Article on MAT04: Functions Intro,Article,Reading/Writing
-R0005,Podcast on BIO04: Cell Division,Podcast,Audio
-R0006,Video on CHM02: Atomic Structure,Video,Visual
-R0007,Slideshow on PHY02: Matter and Properties,Slideshow,Visual
-R0008,Video on BIO01: Biology and Living Things,Video,Visual
-R0009,Quiz on CHM02: Atomic Structure,Quiz,Kinaesthetic
-R0010,Video on CHM04: States of Matter,Video,Visual
-R0011,Article on MAT02: Sets,Article,Reading/Writing
-R0012,Article on BIO02: Cell Structure,Article,Reading/Writing
-R0013,Article on PHY02: Matter and Properties,Article,Reading/Writing
-R0014,Podcast on MAT03: Equations,Podcast,Audio
-R0015,Quiz on BIO04: Cell Division,Quiz,Kinaesthetic
-R0016,Podcast on CHM02: Atomic Structure,Podcast,Audio
-R0017,Quiz on BIO05: Genetics Intro,Quiz,Kinaesthetic
-R0018,Video on BIO05: Genetics Intro,Video,Visual
-R0019,Podcast on BIO01: Biology and Living Things,Podcast,Audio
-R0020,Article on BIO04: Cell Division,Article,Reading/Writing
-R0021,Article on MAT05: Triangles,Article,Reading/Writing
-R0022,Podcast on PHY04: Energy,Podcast,Audio
-R0023,Podcast on CHM05: Reactions Intro,Podcast,Audio
-R0024,Video on BIO03: Classification,Video,Visual
-R0025,Simulation on MAT05: Triangles,Simulation,Kinaesthetic
-R0026,Podcast on BIO03: Classification,Podcast,Audio
-R0027,Podcast on PHY02: Matter and Properties,Podcast,Audio
-R0028,Podcast on PHY05: Heat and Temperature,Podcast,Audio
-R0029,Quiz on BIO01: Biology and Living Things,Quiz,Kinaesthetic
-R0030,Video on PHY02: Matter and Properties,Video,Visual
-R0031,Slideshow on PHY04: Energy,Slideshow,Visual
-R0032,Podcast on PHY03: Force and Motion,Podcast,Audio
-R0033,Quiz on MAT05: Triangles,Quiz,Kinaesthetic
-R0034,Article on MAT04: Functions Intro,Article,Reading/Writing
-R0035,Quiz on BIO02: Cell Structure,Quiz,Kinaesthetic
-R0036,Simulation on CHM02: Atomic Structure,Simulation,Kinaesthetic
-R0037,Quiz on PHY05: Heat and Temperature,Quiz,Kinaesthetic
-R0038,Simulation on BIO03: Classification,Simulation,Kinaesthetic
-R0039,Slideshow on MAT02: Sets,Slideshow,Visual
-R0040,Simulation on MAT03: Equations,Simulation,Kinaesthetic
-R0041,Slideshow on CHM03: Bonding Basics,Slideshow,Visual
-R0042,Video on PHY01: Introduction to Physics,Video,Visual
-R0043,Podcast on CHM05: Reactions Intro,Podcast,Audio
-R0044,Video on PHY01: Introduction to Physics,Video,Visual
-R0045,Podcast on BIO02: Cell Structure,Podcast,Audio
-R0046,Quiz on MAT05: Triangles,Quiz,Kinaesthetic
-R0047,Podcast on BIO04: Cell Division,Podcast,Audio
-R0048,Video on PHY05: Heat and Temperature,Video,Visual
-R0049,Podcast on PHY03: Force and Motion,Podcast,Audio
-R0050,Article on CHM04: States of Matter,Article,Reading/Writing
-R0051,Podcast on PHY03: Force and Motion,Podcast,Audio
-R0052,Podcast on CHM04: States of Matter,Podcast,Audio
-R0053,Podcast on BIO02: Cell Structure,Podcast,Audio
-R0054,Podcast on PHY04: Energy,Podcast,Audio
-R0055,Podcast on BIO03: Classification,Podcast,Audio
-R0056,Slideshow on MAT01: Logic,Slideshow,Visual
-R0057,Podcast on PHY05: Heat and Temperature,Podcast,Audio
-R0058,Simulation on CHM05: Reactions Intro,Simulation,Kinaesthetic
-R0059,Slideshow on BIO05: Genetics Intro,Slideshow,Visual
-R0060,Podcast on CHM01: Intro to Chemistry,Podcast,Audio
-R0061,Simulation on BIO05: Genetics Intro,Simulation,Kinaesthetic
-R0062,Video on CHM04: States of Matter,Video,Visual
-R0063,Quiz on PHY04: Energy,Quiz,Kinaesthetic
-R0064,Quiz on CHM05: Reactions Intro,Quiz,Kinaesthetic
-R0065,Simulation on MAT04: Functions Intro,Simulation,Kinaesthetic
-R0066,Article on BIO03: Classification,Article,Reading/Writing
-R0067,Simulation on BIO04: Cell Division,Simulation,Kinaesthetic
-R0068,Article on BIO01: Biology and Living Things,Article,Reading/Writing
-R0069,Slideshow on PHY03: Force and Motion,Slideshow,Visual
-R0070,Quiz on CHM04: States of Matter,Quiz,Kinaesthetic
-R0071,Video on BIO03: Classification,Video,Visual
-R0072,Simulation on BIO01: Biology and Living Things,Simulation,Kinaesthetic
-R0073,Podcast on MAT02: Sets,Podcast,Audio
-R0074,Simulation on PHY05: Heat and Temperature,Simulation,Kinaesthetic
-R0075,Quiz on PHY05: Heat and Temperature,Quiz,Kinaesthetic
-R0076,Article on BIO02: Cell Structure,Article,Reading/Writing
-R0077,Slideshow on BIO04: Cell Division,Slideshow,Visual
-R0078,Quiz on CHM02: Atomic Structure,Quiz,Kinaesthetic
-R0079,Article on PHY05: Heat and Temperature,Article,Reading/Writing
-R0080,Video on MAT01: Logic,Video,Visual
-R0081,Video on CHM03: Bonding Basics,Video,Visual
-R0082,Article on CHM02: Atomic Structure,Article,Reading/Writing
-R0083,Simulation on BIO01: Biology and Living Things,Simulation,Kinaesthetic
-R0084,Video on CHM01: Intro to Chemistry,Video,Visual
-R0085,Video on BIO05: Genetics Intro,Video,Visual
-R0086,Simulation on PHY05: Heat and Temperature,Simulation,Kinaesthetic
-R0087,Slideshow on BIO03: Classification,Slideshow,Visual
-R0088,Quiz on CHM04: States of Matter,Quiz,Kinaesthetic
-R0089,Article on PHY04: Energy,Article,Reading/Writing
-R0090,Video on PHY03: Force and Motion,Video,Visual
-R0091,Simulation on MAT03: Equations,Simulation,Kinaesthetic
-R0092,Quiz on PHY01: Introduction to Physics,Quiz,Kinaesthetic
-R0093,Podcast on MAT05: Triangles,Podcast,Audio
-R0094,Video on CHM05: Reactions Intro,Video,Visual
-R0095,Video on MAT02: Sets,Video,Visual
-R0096,Podcast on PHY04: Energy,Podcast,Audio
-R0097,Video on BIO02: Cell Structure,Video,Visual
-R0098,Article on BIO04: Cell Division,Article,Reading/Writing
-R0099,Article on PHY01: Introduction to Physics,Article,Reading/Writing
-R0100,Video on BIO03: Classification,Video,Visual
-R0101,Slideshow on CHM01: Intro to Chemistry,Slideshow,Visual
-R0102,Quiz on BIO03: Classification,Quiz,Kinaesthetic
-R0103,Podcast on MAT02: Sets,Podcast,Audio
-R0104,Simulation on MAT02: Sets,Simulation,Kinaesthetic
-R0105,Quiz on CHM01: Intro to Chemistry,Quiz,Kinaesthetic
-R0106,Video on BIO03: Classification,Video,Visual
-R0107,Article on CHM04: States of Matter,Article,Reading/Writing
-R0108,Article on BIO01: Biology and Living Things,Article,Reading/Writing
-R0109,Article on CHM04: States of Matter,Article,Reading/Writing
-R0110,Video on CHM01: Intro to Chemistry,Video,Visual
-R0111,Podcast on BIO02: Cell Structure,Podcast,Audio
-R0112,Podcast on CHM04: States of Matter,Podcast,Audio
-R0113,Article on BIO01: Biology and Living Things,Article,Reading/Writing
-R0114,Quiz on CHM02: Atomic Structure,Quiz,Kinaesthetic
-R0115,Article on CHM05: Reactions Intro,Article,Reading/Writing
-R0116,Podcast on PHY02: Matter and Properties,Podcast,Audio
-R0117,Video on PHY05: Heat and Temperature,Video,Visual
-R0118,Podcast on MAT03: Equations,Podcast,Audio
-R0119,Article on MAT03: Equations,Article,Reading/Writing
-R0120,Podcast on PHY01: Introduction to Physics,Podcast,Audio
-R0121,Slideshow on CHM04: States of Matter,Slideshow,Visual
-R0122,Slideshow on MAT02: Sets,Slideshow,Visual
-R0123,Video on MAT05: Triangles,Video,Visual
-R0124,Quiz on PHY04: Energy,Quiz,Kinaesthetic
-R0125,Video on CHM01: Intro to Chemistry,Video,Visual
-R0126,Simulation on CHM01: Intro to Chemistry,Simulation,Kinaesthetic
-R0127,Podcast on MAT03: Equations,Podcast,Audio
-R0128,Podcast on BIO04: Cell Division,Podcast,Audio
-R0129,Slideshow on CHM03: Bonding Basics,Slideshow,Visual
-R0130,Simulation on CHM02: Atomic Structure,Simulation,Kinaesthetic
-R0131,Simulation on PHY01: Introduction to Physics,Simulation,Kinaesthetic
-R0132,Slideshow on MAT02: Sets,Slideshow,Visual
-R0133,Article on PHY04: Energy,Article,Reading/Writing
-R0134,Quiz on CHM01: Intro to Chemistry,Quiz,Kinaesthetic
-R0135,Podcast on CHM02: Atomic Structure,Podcast,Audio
-R0136,Article on MAT03: Equations,Article,Reading/Writing
-R0137,Video on MAT01: Logic,Video,Visual
-R0138,Podcast on PHY01: Introduction to Physics,Podcast,Audio
-R0139,Simulation on BIO02: Cell Structure,Simulation,Kinaesthetic
-R0140,Podcast on BIO03: Classification,Podcast,Audio
-R0141,Podcast on CHM04: States of Matter,Podcast,Audio
-R0142,Slideshow on CHM02: Atomic Structure,Slideshow,Visual
-R0143,Video on MAT01: Logic,Video,Visual
-R0144,Video on PHY03: Force and Motion,Video,Visual
-R0145,Simulation on BIO01: Biology and Living Things,Simulation,Kinaesthetic
-R0146,Video on BIO01: Biology and Living Things,Video,Visual
-R0147,Podcast on PHY05: Heat and Temperature,Podcast,Audio
-R0148,Article on MAT01: Logic,Article,Reading/Writing
-R0149,Podcast on CHM05: Reactions Intro,Podcast,Audio
-R0150,Slideshow on BIO05: Genetics Intro,Slideshow,Visual
+R0001,Video on PHY02: Matter and Properties,Video,Visual
+R0002,Simulation on MAT01: Logic,Simulation,Kinaesthetic
+R0003,Quiz on BIO04: Cell Division,Quiz,Kinaesthetic
+R0004,Video on LIT05: The Novel Genre,Video,Visual
+R0005,"Video on GEO03: Physical Geography (Landforms, Climate)",Video,Visual
+R0006,Article on PHY02: Matter and Properties,Article,Reading/Writing
+R0007,Video on CHM04: States of Matter,Video,Visual
+R0008,Quiz on LIT03: Short Stories Analysis,Quiz,Kinaesthetic
+R0009,Article on CHM03: Bonding Basics,Article,Reading/Writing
+R0010,Document on GEO02: Maps and Mapmaking,Document,Reading/Writing
+R0011,"Quiz on GEO04: Human Geography (Population, Culture)",Quiz,Kinaesthetic
+R0012,Simulation on PHY01: Introduction to Physics,Simulation,Kinaesthetic
+R0013,"Podcast on GEO03: Physical Geography (Landforms, Climate)",Podcast,Audio
+R0014,Slideshow on MAT03: Equations,Slideshow,Visual
+R0015,Podcast on CHM04: States of Matter,Podcast,Audio
+R0016,Slideshow on BIO02: Cell Structure,Slideshow,Visual
+R0017,Video on HIS05: Age of Exploration,Video,Visual
+R0018,Video on HIS03: Ancient Greece & Rome,Video,Visual
+R0019,Slideshow on MAT02: Sets,Slideshow,Visual
+R0020,Article on GEO05: Regional Geography Intro,Article,Reading/Writing
+R0021,Document on BIO03: Classification,Document,Reading/Writing
+R0022,Map on BIO01: Biology and Living Things,Map,Visual
+R0023,Document on MAT04: Functions Intro,Document,Reading/Writing
+R0024,Slideshow on CHM03: Bonding Basics,Slideshow,Visual
+R0025,Video on PHY03: Force and Motion,Video,Visual
+R0026,Quiz on MAT04: Functions Intro,Quiz,Kinaesthetic
+R0027,Video on CHM05: Reactions Intro,Video,Visual
+R0028,Video on HIS05: Age of Exploration,Video,Visual
+R0029,Simulation on GEO05: Regional Geography Intro,Simulation,Kinaesthetic
+R0030,Slideshow on CHM01: Intro to Chemistry,Slideshow,Visual
+R0031,Slideshow on HIS03: Ancient Greece & Rome,Slideshow,Visual
+R0032,Quiz on MAT03: Equations,Quiz,Kinaesthetic
+R0033,Video on CHM01: Intro to Chemistry,Video,Visual
+R0034,Document on MAT01: Logic,Document,Reading/Writing
+R0035,Podcast on GEO05: Regional Geography Intro,Podcast,Audio
+R0036,Map on MAT03: Equations,Map,Visual
+R0037,Document on CHM05: Reactions Intro,Document,Reading/Writing
+R0038,Slideshow on PHY04: Energy,Slideshow,Visual
+R0039,Quiz on PHY03: Force and Motion,Quiz,Kinaesthetic
+R0040,Slideshow on GEO01: Introduction to Geography,Slideshow,Visual
+R0041,Simulation on PHY05: Heat and Temperature,Simulation,Kinaesthetic
+R0042,Quiz on HIS01: What is History?,Quiz,Kinaesthetic
+R0043,Quiz on LIT02: Introduction to Poetry,Quiz,Kinaesthetic
+R0044,Map on GEO05: Regional Geography Intro,Map,Visual
+R0045,Podcast on MAT02: Sets,Podcast,Audio
+R0046,Podcast on MAT01: Logic,Podcast,Audio
+R0047,Document on LIT05: The Novel Genre,Document,Reading/Writing
+R0048,"Simulation on GEO03: Physical Geography (Landforms, Climate)",Simulation,Kinaesthetic
+R0049,Map on HIS04: Middle Ages Overview,Map,Visual
+R0050,Quiz on BIO04: Cell Division,Quiz,Kinaesthetic
+R0051,Document on LIT02: Introduction to Poetry,Document,Reading/Writing
+R0052,Video on PHY04: Energy,Video,Visual
+R0053,Video on BIO05: Genetics Intro,Video,Visual
+R0054,"Podcast on GEO03: Physical Geography (Landforms, Climate)",Podcast,Audio
+R0055,Video on HIS05: Age of Exploration,Video,Visual
+R0056,Map on GEO05: Regional Geography Intro,Map,Visual
+R0057,Document on MAT02: Sets,Document,Reading/Writing
+R0058,Document on PHY01: Introduction to Physics,Document,Reading/Writing
+R0059,Video on LIT05: The Novel Genre,Video,Visual
+R0060,Simulation on HIS02: Early Civilizations,Simulation,Kinaesthetic
+R0061,Video on MAT04: Functions Intro,Video,Visual
+R0062,Map on CHM01: Intro to Chemistry,Map,Visual
+R0063,Timeline on PHY01: Introduction to Physics,Timeline,Visual
+R0064,Simulation on LIT03: Short Stories Analysis,Simulation,Kinaesthetic
+R0065,Podcast on LIT03: Short Stories Analysis,Podcast,Audio
+R0066,Video on MAT05: Triangles,Video,Visual
+R0067,Document on CHM03: Bonding Basics,Document,Reading/Writing
+R0068,Podcast on HIS04: Middle Ages Overview,Podcast,Audio
+R0069,Podcast on LIT05: The Novel Genre,Podcast,Audio
+R0070,Document on PHY01: Introduction to Physics,Document,Reading/Writing
+R0071,Slideshow on LIT02: Introduction to Poetry,Slideshow,Visual
+R0072,Article on BIO03: Classification,Article,Reading/Writing
+R0073,Slideshow on MAT05: Triangles,Slideshow,Visual
+R0074,Quiz on PHY04: Energy,Quiz,Kinaesthetic
+R0075,Quiz on BIO01: Biology and Living Things,Quiz,Kinaesthetic
+R0076,Video on LIT02: Introduction to Poetry,Video,Visual
+R0077,Video on LIT05: The Novel Genre,Video,Visual
+R0078,Podcast on BIO04: Cell Division,Podcast,Audio
+R0079,Timeline on CHM01: Intro to Chemistry,Timeline,Visual
+R0080,Simulation on LIT04: Introduction to Drama,Simulation,Kinaesthetic
+R0081,Map on CHM04: States of Matter,Map,Visual
+R0082,Document on CHM03: Bonding Basics,Document,Reading/Writing
+R0083,Simulation on GEO01: Introduction to Geography,Simulation,Kinaesthetic
+R0084,"Slideshow on GEO04: Human Geography (Population, Culture)",Slideshow,Visual
+R0085,"Document on GEO04: Human Geography (Population, Culture)",Document,Reading/Writing
+R0086,Video on MAT01: Logic,Video,Visual
+R0087,Quiz on PHY05: Heat and Temperature,Quiz,Kinaesthetic
+R0088,Slideshow on PHY02: Matter and Properties,Slideshow,Visual
+R0089,Document on CHM05: Reactions Intro,Document,Reading/Writing
+R0090,Quiz on PHY01: Introduction to Physics,Quiz,Kinaesthetic
+R0091,Video on PHY04: Energy,Video,Visual
+R0092,Quiz on PHY05: Heat and Temperature,Quiz,Kinaesthetic
+R0093,Article on HIS02: Early Civilizations,Article,Reading/Writing
+R0094,Video on LIT03: Short Stories Analysis,Video,Visual
+R0095,Quiz on MAT03: Equations,Quiz,Kinaesthetic
+R0096,Timeline on CHM04: States of Matter,Timeline,Visual
+R0097,Document on BIO04: Cell Division,Document,Reading/Writing
+R0098,Timeline on MAT01: Logic,Timeline,Visual
+R0099,Timeline on GEO02: Maps and Mapmaking,Timeline,Visual
+R0100,Quiz on BIO02: Cell Structure,Quiz,Kinaesthetic
+R0101,"Video on GEO03: Physical Geography (Landforms, Climate)",Video,Visual
+R0102,"Slideshow on GEO03: Physical Geography (Landforms, Climate)",Slideshow,Visual
+R0103,Map on GEO05: Regional Geography Intro,Map,Visual
+R0104,Article on BIO02: Cell Structure,Article,Reading/Writing
+R0105,Article on GEO01: Introduction to Geography,Article,Reading/Writing
+R0106,Slideshow on BIO02: Cell Structure,Slideshow,Visual
+R0107,Quiz on CHM03: Bonding Basics,Quiz,Kinaesthetic
+R0108,Quiz on LIT05: The Novel Genre,Quiz,Kinaesthetic
+R0109,Timeline on BIO04: Cell Division,Timeline,Visual
+R0110,Map on CHM02: Atomic Structure,Map,Visual
+R0111,Simulation on GEO05: Regional Geography Intro,Simulation,Kinaesthetic
+R0112,Quiz on PHY05: Heat and Temperature,Quiz,Kinaesthetic
+R0113,Timeline on BIO02: Cell Structure,Timeline,Visual
+R0114,Article on LIT05: The Novel Genre,Article,Reading/Writing
+R0115,Article on BIO01: Biology and Living Things,Article,Reading/Writing
+R0116,Quiz on CHM01: Intro to Chemistry,Quiz,Kinaesthetic
+R0117,Map on LIT02: Introduction to Poetry,Map,Visual
+R0118,Timeline on CHM04: States of Matter,Timeline,Visual
+R0119,Map on PHY04: Energy,Map,Visual
+R0120,Podcast on HIS05: Age of Exploration,Podcast,Audio
+R0121,Article on HIS05: Age of Exploration,Article,Reading/Writing
+R0122,Simulation on GEO05: Regional Geography Intro,Simulation,Kinaesthetic
+R0123,"Simulation on GEO03: Physical Geography (Landforms, Climate)",Simulation,Kinaesthetic
+R0124,Document on LIT02: Introduction to Poetry,Document,Reading/Writing
+R0125,Podcast on CHM03: Bonding Basics,Podcast,Audio
+R0126,Simulation on CHM04: States of Matter,Simulation,Kinaesthetic
+R0127,Article on LIT05: The Novel Genre,Article,Reading/Writing
+R0128,Article on HIS01: What is History?,Article,Reading/Writing
+R0129,Article on PHY04: Energy,Article,Reading/Writing
+R0130,Timeline on LIT03: Short Stories Analysis,Timeline,Visual
+R0131,Document on CHM01: Intro to Chemistry,Document,Reading/Writing
+R0132,Article on LIT03: Short Stories Analysis,Article,Reading/Writing
+R0133,Video on CHM02: Atomic Structure,Video,Visual
+R0134,Video on PHY05: Heat and Temperature,Video,Visual
+R0135,Quiz on GEO01: Introduction to Geography,Quiz,Kinaesthetic
+R0136,Video on MAT01: Logic,Video,Visual
+R0137,Article on BIO01: Biology and Living Things,Article,Reading/Writing
+R0138,Map on LIT04: Introduction to Drama,Map,Visual
+R0139,Slideshow on MAT02: Sets,Slideshow,Visual
+R0140,Quiz on HIS01: What is History?,Quiz,Kinaesthetic
+R0141,Quiz on MAT02: Sets,Quiz,Kinaesthetic
+R0142,Map on BIO04: Cell Division,Map,Visual
+R0143,Simulation on GEO05: Regional Geography Intro,Simulation,Kinaesthetic
+R0144,Slideshow on PHY05: Heat and Temperature,Slideshow,Visual
+R0145,Article on GEO05: Regional Geography Intro,Article,Reading/Writing
+R0146,Video on PHY05: Heat and Temperature,Video,Visual
+R0147,Document on CHM04: States of Matter,Document,Reading/Writing
+R0148,Document on MAT02: Sets,Document,Reading/Writing
+R0149,Podcast on HIS03: Ancient Greece & Rome,Podcast,Audio
+R0150,Video on MAT01: Logic,Video,Visual
+R0151,Slideshow on MAT04: Functions Intro,Slideshow,Visual
+R0152,"Podcast on GEO04: Human Geography (Population, Culture)",Podcast,Audio
+R0153,Document on MAT05: Triangles,Document,Reading/Writing
+R0154,Document on PHY01: Introduction to Physics,Document,Reading/Writing
+R0155,Document on MAT05: Triangles,Document,Reading/Writing
+R0156,Video on BIO04: Cell Division,Video,Visual
+R0157,Simulation on BIO03: Classification,Simulation,Kinaesthetic
+R0158,Video on BIO05: Genetics Intro,Video,Visual
+R0159,Simulation on MAT04: Functions Intro,Simulation,Kinaesthetic
+R0160,Quiz on HIS02: Early Civilizations,Quiz,Kinaesthetic
+R0161,Quiz on MAT02: Sets,Quiz,Kinaesthetic
+R0162,Document on LIT02: Introduction to Poetry,Document,Reading/Writing
+R0163,Simulation on PHY04: Energy,Simulation,Kinaesthetic
+R0164,"Video on GEO03: Physical Geography (Landforms, Climate)",Video,Visual
+R0165,Simulation on PHY03: Force and Motion,Simulation,Kinaesthetic
+R0166,Article on HIS02: Early Civilizations,Article,Reading/Writing
+R0167,Podcast on MAT02: Sets,Podcast,Audio
+R0168,"Podcast on GEO04: Human Geography (Population, Culture)",Podcast,Audio
+R0169,"Document on GEO03: Physical Geography (Landforms, Climate)",Document,Reading/Writing
+R0170,Document on PHY01: Introduction to Physics,Document,Reading/Writing
+R0171,Video on PHY05: Heat and Temperature,Video,Visual
+R0172,Podcast on LIT05: The Novel Genre,Podcast,Audio
+R0173,Article on HIS04: Middle Ages Overview,Article,Reading/Writing
+R0174,Document on BIO05: Genetics Intro,Document,Reading/Writing
+R0175,Map on BIO04: Cell Division,Map,Visual
+R0176,Article on MAT05: Triangles,Article,Reading/Writing
+R0177,Slideshow on PHY03: Force and Motion,Slideshow,Visual
+R0178,Slideshow on CHM04: States of Matter,Slideshow,Visual
+R0179,Quiz on BIO02: Cell Structure,Quiz,Kinaesthetic
+R0180,Slideshow on GEO02: Maps and Mapmaking,Slideshow,Visual
+R0181,Podcast on MAT01: Logic,Podcast,Audio
+R0182,Podcast on CHM02: Atomic Structure,Podcast,Audio
+R0183,Map on PHY02: Matter and Properties,Map,Visual
+R0184,Podcast on HIS02: Early Civilizations,Podcast,Audio
+R0185,Map on MAT01: Logic,Map,Visual
+R0186,Simulation on CHM01: Intro to Chemistry,Simulation,Kinaesthetic
+R0187,Video on HIS05: Age of Exploration,Video,Visual
+R0188,"Article on LIT01: Elements of Literature (Plot, Character)",Article,Reading/Writing
+R0189,Quiz on CHM03: Bonding Basics,Quiz,Kinaesthetic
+R0190,Timeline on HIS03: Ancient Greece & Rome,Timeline,Visual
+R0191,Simulation on CHM05: Reactions Intro,Simulation,Kinaesthetic
+R0192,Quiz on PHY02: Matter and Properties,Quiz,Kinaesthetic
+R0193,Quiz on GEO01: Introduction to Geography,Quiz,Kinaesthetic
+R0194,Slideshow on MAT03: Equations,Slideshow,Visual
+R0195,Video on MAT03: Equations,Video,Visual
+R0196,Slideshow on LIT03: Short Stories Analysis,Slideshow,Visual
+R0197,Map on LIT05: The Novel Genre,Map,Visual
+R0198,Slideshow on PHY02: Matter and Properties,Slideshow,Visual
+R0199,Video on MAT02: Sets,Video,Visual
+R0200,Podcast on MAT02: Sets,Podcast,Audio
+R0201,Article on BIO02: Cell Structure,Article,Reading/Writing
+R0202,Map on HIS03: Ancient Greece & Rome,Map,Visual
+R0203,"Slideshow on GEO03: Physical Geography (Landforms, Climate)",Slideshow,Visual
+R0204,Document on BIO03: Classification,Document,Reading/Writing
+R0205,Map on CHM03: Bonding Basics,Map,Visual
+R0206,Simulation on PHY03: Force and Motion,Simulation,Kinaesthetic
+R0207,Map on PHY01: Introduction to Physics,Map,Visual
+R0208,Document on LIT05: The Novel Genre,Document,Reading/Writing
+R0209,Quiz on HIS04: Middle Ages Overview,Quiz,Kinaesthetic
+R0210,Map on PHY05: Heat and Temperature,Map,Visual

@@ -1,543 +1,487 @@
 studentId,resourceId,timestamp,rating,comment,feedback_generated_by
-S0001,R0024,2024-09-09T22:24:18.765141,3,"The video was okay, but I learn better when I can listen to things instead of just watching.",llm
-S0001,R0085,2024-12-26T01:51:33.755692,4,"This video on genetics was pretty good. It's a topic I find interesting, even though I prefer audio.",llm
-S0001,R0113,2024-12-08T11:55:50.156539,2,Reading this article was kind of boring. I really don't like learning by reading.,llm
-S0001,R0059,2024-10-06T01:33:57.607117,3,"The slideshow was alright, but it's not my favorite way to learn. I like the genetics topic though.",llm
-S0001,R0015,2024-12-21T12:59:59.844126,5,The slideshow was great! It matched how I like to learn.,llm
-S0001,R0068,2025-01-07T09:36:25.776396,2,Another article. I still don't like reading to learn about biology.,llm
-S0001,R0111,2024-09-06T15:10:07.844072,5,This podcast was great! I love being able to just listen and learn about cell structure.,llm
-S0001,R0072,2025-01-18T03:24:37.712482,4,The simulation was cool and helped me understand the topic better. It was more hands-on than just watching or reading.,llm
-S0001,R0117,2024-11-03T02:24:54.632361,2,"This was a video which isn't my preferred way to learn. Plus, I'm not really into physics topics.",llm
-S0001,R0061,2025-01-05T11:28:48.425066,4,"It was cool to do a simulation on genetics! I like this topic, even if the simulation wasn't exactly my usual style.",llm
-S0001,R0018,2025-01-20T00:32:07.946647,3,"Okay video on genetics, which I like. Still wish it was something I could just listen to though.",llm
-S0001,R0100,2024-09-06T11:41:44.208767,3,The video was alright and covered classification. I'd probably learn it better if it was audio.,llm
-S0001,R0045,2025-01-05T06:24:01.403855,5,"Loved the podcast on cell structure! Audio is how I learn best, and this topic is interesting.",llm
-S0001,R0053,2024-12-28T23:34:09.561612,5,Another great podcast on cell structure. This is exactly the kind of resource I like.,llm
-S0001,R0066,2024-09-29T03:11:36.074714,2,Reading about classification wasn't ideal for me. I prefer listening to things.,llm
-S0002,R0056,2024-12-23T02:23:15.367279,3,"The slideshow on logic was okay. I like math, but I usually learn best by listening.",llm
-S0002,R0132,2025-01-10T17:10:53.195678,3,"The slideshow was okay, but I prefer learning by listening. The topic was interesting though.",llm
-S0002,R0046,2024-10-14T17:01:41.958310,4,Doing the quiz was a good way to practice triangles. It helped me understand the topic better.,llm
-S0002,R0004,2024-09-06T15:46:38.717565,2,"Reading the article was hard to focus on. I like the topic, but this format isn't for me.",llm
-S0002,R0073,2024-10-16T01:22:24.137182,5,This podcast was great! Learning about sets by listening is exactly how I like it.,llm
-S0002,R0048,2024-12-01T00:29:07.681176,1,"I really didn't like this video. Physics topics are tough for me, and watching a video just made it worse.",llm
-S0002,R0065,2025-01-19T04:43:13.303076,4,The simulation was fun and helped me visualize functions. It's a good way to learn by doing.,llm
-S0002,R0123,2024-10-21T14:11:33.432120,3,"The video on triangles was alright. I like the topic, but visual isn't my favorite way to learn.",llm
-S0003,R0149,2024-11-08T14:33:39.813265,3,"The podcast was about a topic I like, but I find it hard to learn chemistry just by listening. I prefer reading.",llm
-S0003,R0007,2024-12-06T20:06:58.219496,4,This slideshow was pretty good for learning about matter. It had clear pictures.,llm
-S0003,R0027,2024-11-19T04:07:49.332878,2,I didn't really like the podcast. I learn better when I can see things written down.,llm
-S0003,R0135,2025-01-13T06:40:41.191328,3,"The podcast was okay, but it's harder to follow complex chemistry topics without seeing diagrams.",llm
-S0003,R0129,2024-09-21T06:20:26.175613,4,The slideshow on bonding was helpful. I liked seeing the different bond types.,llm
-S0003,R0042,2024-11-16T03:16:00.223749,5,This video introduction to physics was great! Easy to understand and kept my attention.,llm
-S0003,R0112,2024-10-12T04:45:41.700055,2,Listening to a podcast about states of matter was not ideal. I needed to see the phase changes.,llm
-S0003,R0075,2025-01-01T03:08:29.381110,3,"The quiz was a good way to check what I learned, but I prefer reading to study.",llm
-S0003,R0028,2024-10-20T22:23:57.000906,2,Another podcast... it's hard to visualize heat and temperature just by listening.,llm
-S0003,R0116,2024-12-20T09:34:33.971963,3,"The podcast was okay, but I prefer reading about these topics. It covered the basics well though.",llm
-S0003,R0058,2024-12-07T21:23:09.842936,4,The simulation was a fun way to see reactions in action. It helped me understand the topic better.,llm
-S0003,R0062,2024-12-18T12:11:59.210175,4,The video was pretty good for understanding states of matter. Seeing the changes helped.,llm
-S0003,R0041,2024-09-03T03:02:28.049717,5,"I really liked the slideshow on bonding basics. It was clear and easy to follow, matching how I like to learn.",llm
-S0003,R0074,2024-10-21T21:41:40.336408,4,The simulation for heat and temperature was interesting. It was cool to play around with the concepts.,llm
-S0004,R0123,2024-10-15T13:10:04.475113,2,I didn't really like the video on triangles. I prefer hands-on activities and I'm not that into math topics.,llm
-S0004,R0141,2024-12-11T20:01:47.031523,2,"The podcast wasn't very engaging for me. I learn best by doing things, not just listening.",llm
-S0004,R0010,2024-09-30T04:00:59.424126,3,"The video was alright, but I prefer more interactive ways to learn about states of matter. It was a bit passive.",llm
-S0004,R0073,2024-12-02T06:05:56.784404,2,I don't really like math and just listening to someone talk about it isn't my favorite way to learn.,llm
-S0004,R0005,2024-12-06T10:44:32.199946,3,The topic was interesting but listening to a podcast isn't the best way for me to learn this stuff.,llm
-S0004,R0125,2024-11-01T05:29:49.625350,4,The video helped me understand the chemistry intro. I like seeing things explained.,llm
-S0004,R0047,2024-11-04T13:59:47.684889,3,"Another podcast on cell division. It was okay, but I wish there was something more hands-on.",llm
-S0004,R0050,2024-10-20T12:24:22.360588,2,Reading about states of matter was pretty boring. I need to do something to understand it.,llm
-S0004,R0113,2024-10-31T12:37:10.868806,2,Reading an article about biology isn't how I learn best. I prefer doing activities.,llm
-S0004,R0084,2024-09-15T09:40:32.244238,4,Good video on chemistry. Seeing the examples helps it make more sense.,llm
-S0004,R0041,2025-01-27T05:37:37.694656,4,The slideshow was helpful for visualizing the bonding basics. I could follow along well.,llm
-S0004,R0043,2024-11-12T02:17:37.150539,3,"The podcast was okay, but I learn better when I can actually do things. I liked the topic though.",llm
-S0004,R0114,2025-01-20T07:25:52.328975,5,"This quiz was great! I prefer active learning, and atomic structure is interesting.",llm
-S0004,R0105,2024-09-02T00:45:08.484607,5,I really liked this quiz on chemistry. It matched how I like to learn.,llm
-S0005,R0013,2024-10-28T22:04:24.930516,5,"This article was exactly what I needed. Reading is my preferred way to learn, and I enjoy physics.",llm
-S0005,R0027,2024-11-07T10:58:10.311696,3,"The podcast was alright for the topic, but I find it hard to focus on just audio. I'd rather read about it.",llm
-S0005,R0049,2024-10-11T07:35:14.787307,3,Listening to a podcast isn't my favorite way to learn about force and motion. I prefer reading or seeing visuals.,llm
-S0005,R0030,2024-10-20T18:33:43.557139,4,"The video was pretty good for learning about matter. Visuals help, but I still like reading best.",llm
-S0005,R0069,2024-11-27T22:50:15.949087,4,"The slideshow was helpful for understanding force and motion. I prefer reading, but visual aids are good too.",llm
-S0006,R0004,2024-11-26T12:06:27.027135,2,Reading articles isn't my favorite way to learn. I prefer doing things hands-on.,llm
-S0006,R0118,2024-10-10T11:52:07.026798,3,"The podcast was okay, but I still find it hard to follow math concepts just by listening.",llm
-S0006,R0015,2024-10-25T07:01:00.394297,5,This quiz was great! I learned a lot about cell division by actively answering questions.,llm
-S0006,R0065,2024-10-06T16:21:37.946078,5,The simulation made learning about functions much clearer. I really like interactive activities.,llm
-S0006,R0059,2024-12-10T20:03:24.768109,3,"The slideshow was alright, but I get more out of activities where I can move around or interact.",llm
-S0006,R0020,2024-11-10T06:35:29.209825,2,Reading about cell division wasn't very engaging for me. I wish there was a different way to learn this.,llm
-S0006,R0045,2024-09-25T02:48:49.588649,3,"Listening to the podcast was okay, but it's not as helpful as actually doing something related to the topic.",llm
-S0006,R0024,2024-12-13T14:19:50.874547,4,"The video was pretty good. It was better than just reading, but I still prefer activities where I can be more active.",llm
-S0006,R0072,2025-01-18T09:20:10.300360,5,This simulation was really helpful! It made understanding biology much easier to do.,llm
-S0006,R0011,2025-01-13T01:23:32.367735,2,Reading articles isn't my favorite way to learn. I'd rather do something hands-on.,llm
-S0006,R0128,2024-12-26T05:54:14.241558,3,"The podcast was okay, but I prefer learning by doing.  I didn't feel very engaged.",llm
-S0006,R0035,2024-12-14T05:36:44.379957,4,Taking the quiz felt more like learning. It was a good way to check what I knew.,llm
-S0006,R0053,2024-12-06T10:41:23.433081,2,Listening to a podcast about cell structure wasn't for me. I need to be more active when I learn.,llm
-S0007,R0067,2025-01-21T00:51:48.601639,3,"The simulation was interesting because I like biology, but it's not my preferred way to learn.",llm
-S0007,R0014,2024-10-26T11:58:44.777432,4,"I like math, and the podcast was a decent way to review equations. Easy to listen to on the go.",llm
-S0007,R0039,2024-10-04T08:21:27.524328,5,The slideshow was perfect for learning about sets! I really like seeing things visually.,llm
-S0007,R0143,2025-01-23T13:28:28.508028,4,"I usually like reading more, but this video explained logic really well. It was easy to follow and helped me understand the concepts.",llm
-S0007,R0017,2024-11-12T04:55:52.336706,5,"I love genetics, and this quiz was a great way to test what I know. It was fun and helped me see what I need to review.",llm
-S0007,R0053,2024-11-08T16:50:33.756435,3,"The podcast was okay, but I prefer reading about cell structure. It was a bit hard to keep track of everything just by listening.",llm
-S0008,R0021,2025-01-28T07:32:55.586071,4,"Triangles aren't my favorite, but this article made it pretty clear. It was a good way to learn about the topic.",llm
-S0008,R0130,2024-10-27T10:00:59.138498,2,"I really dislike chemistry, and this simulation was confusing. I didn't feel like I learned much about atomic structure.",llm
-S0008,R0040,2024-12-15T23:49:59.498850,4,This simulation helped me understand equations better. It was interactive and made the topic less boring than I expected.,llm
-S0008,R0127,2025-01-16T19:58:33.323297,3,The podcast on equations was alright. I think I'd rather see the equations written down to understand them fully.,llm
-S0008,R0082,2024-12-24T08:38:17.867238,2,"Reading about chemistry is tough for me, especially atomic structure. This article was hard to get through.",llm
-S0008,R0078,2024-12-31T02:25:47.460759,4,The quiz was a good way to check what I knew about atomic structure. It wasn't too hard.,llm
-S0008,R0114,2025-01-03T15:59:13.620946,4,Doing the quiz helped me remember the stuff about atoms. It felt like a good review.,llm
-S0008,R0025,2024-12-25T00:58:45.345991,5,Playing around with the simulation made learning about triangles way more interesting. I liked being able to move things.,llm
-S0008,R0033,2024-12-12T17:33:32.824036,3,The quiz on triangles was okay. It was a bit basic after using the simulation.,llm
-S0008,R0101,2024-11-29T23:13:53.843107,4,The slideshow gave a good overview of chemistry. It was easy to follow along with the pictures.,llm
-S0008,R0056,2024-12-28T21:25:52.967710,3,The logic slideshow was kind of boring. I prefer doing things myself.,llm
-S0008,R0107,2024-11-19T08:26:10.039711,2,Reading the article about states of matter was dry. I'd rather watch a video or do an activity.,llm
-S0008,R0081,2024-11-19T18:05:57.845909,5,The video explained bonding basics really well. It was way better than just reading about it.,llm
-S0008,R0010,2024-10-25T15:06:30.108715,4,The video was pretty good for understanding states of matter. It made the topic easier to visualize.,llm
-S0009,R0002,2025-01-17T12:05:41.342547,3,"The quiz was okay, but I prefer reading about things.  Biology is alright though.",llm
-S0009,R0069,2024-09-17T22:38:40.777912,2,I really don't like physics topics. The slideshow wasn't my favorite way to learn this.,llm
-S0009,R0068,2025-01-04T03:28:37.817563,4,Reading the article was helpful for biology. It fits how I learn best.,llm
-S0009,R0092,2025-01-15T08:04:00.093753,1,Physics is hard for me and doing a quiz on it was tough. I didn't like this.,llm
-S0009,R0109,2024-10-01T12:36:58.201110,5,Reading about states of matter in an article was perfect. This really helped me understand.,llm
-S0009,R0081,2024-11-21T00:51:23.088731,3,"The video on bonding was alright. I usually like reading more, but the visuals were decent.",llm
-S0009,R0063,2024-09-25T20:16:57.559641,2,Taking a quiz on energy topics in physics was not fun. I still struggle with physics.,llm
-S0009,R0030,2025-01-08T00:39:26.246877,3,"The video was okay, but I prefer reading about stuff. It was a little hard to follow.",llm
-S0009,R0071,2024-11-06T17:13:48.586219,3,The video on classification was a bit dry. I would have liked to read about it instead.,llm
-S0009,R0135,2024-12-12T17:23:23.792248,2,Podcasts aren't really my thing. I didn't get much out of this one on atomic structure.,llm
-S0009,R0074,2024-12-18T06:06:38.553979,1,Simulations are confusing for me. I really didn't understand the heat and temperature concept from this.,llm
-S0009,R0089,2024-11-13T19:30:45.186466,4,This article was much better. Reading about energy makes more sense to me.,llm
-S0009,R0149,2025-01-14T17:34:30.038195,2,Another podcast. Still not a fan of this format for learning about reactions.,llm
-S0010,R0022,2024-11-07T06:25:45.395351,1,Listening to a podcast about energy isn't helpful for me. I need to do something hands-on.,llm
-S0010,R0042,2024-09-09T09:37:26.977130,3,The video was alright for an intro to physics. I still think I'd learn better by doing experiments.,llm
-S0010,R0041,2024-09-20T22:09:58.635042,3,"The slideshow was okay, but I learn better by doing things. It was a bit hard to focus.",llm
-S0010,R0049,2024-11-02T17:29:55.160207,2,Listening to a podcast isn't really my thing. It was hard to keep track of everything without seeing it.,llm
-S0010,R0120,2024-11-25T03:36:50.885272,2,Another podcast. Still not a good fit for how I learn. I need something more interactive.,llm
-S0010,R0138,2024-11-24T09:04:51.777018,2,Still struggling with audio-only resources. I really wish there was a way to move around or do something while learning.,llm
-S0010,R0099,2024-12-11T14:06:36.680803,1,Reading an article is the worst way for me to learn. I can't focus at all and didn't get much from it.,llm
-S0010,R0111,2024-10-17T12:48:23.400202,2,The podcast on cells wasn't very engaging. I prefer learning about things I can see or interact with.,llm
-S0010,R0129,2024-09-04T06:53:46.101858,3,"The slideshow was visual, which is better than audio, but still not ideal. I need to be more involved.",llm
-S0010,R0081,2024-10-09T10:09:10.662844,4,"The video was pretty good! Seeing the bonding process helped a lot, even though it wasn't hands-on.",llm
-S0011,R0050,2024-09-01T10:55:41.048566,3,"The topic was okay since I like chemistry, but reading articles isn't really my favorite way to learn. It was a bit boring.",llm
-S0011,R0074,2024-10-03T21:40:27.633471,4,"The simulation was pretty cool and helped me understand the topic better. Physics is a good subject, so that helped too.",llm
-S0011,R0058,2024-09-12T00:39:32.406903,5,I really liked the simulation for this topic. It made understanding chemical reactions more hands-on and interesting.,llm
-S0011,R0134,2024-11-03T23:28:45.560776,4,Taking a quiz was a good way to check what I knew about intro chemistry. It was engaging.,llm
-S0011,R0135,2024-12-15T18:11:41.273607,5,This podcast was great! It matched my learning style and the topic was interesting. Easy to follow along.,llm
-S0011,R0078,2024-11-21T17:10:35.539628,4,The quiz was helpful for reviewing atomic structure. It was a good way to test myself.,llm
-S0011,R0116,2024-09-10T02:21:59.068415,5,Loved listening to the podcast about matter and properties. It's my preferred way to learn and physics is fun.,llm
-S0011,R0142,2025-01-14T00:38:51.525264,2,"I didn't really like the slideshow format. I learn best by listening, so just looking at slides wasn't that helpful for me.",llm
-S0011,R0028,2025-01-27T21:45:40.993381,5,This podcast was great! It was easy to listen to and explained heat and temperature really well.,llm
-S0011,R0036,2024-11-11T06:47:09.714713,3,"The simulation was okay, but I prefer learning by listening. It was interesting to see the atomic structure though.",llm
-S0011,R0009,2024-10-14T08:25:00.198387,4,The quiz helped me check my understanding. It was a good way to see what I remembered about atomic structure.,llm
-S0012,R0051,2024-09-28T04:15:08.382299,5,Loved this podcast! Force and motion is a cool topic and the audio made it easy to follow along.,llm
-S0012,R0092,2024-09-21T10:47:39.163768,4,Taking the quiz was a good way to review the intro to physics. It was helpful to see what I still need to study.,llm
-S0012,R0018,2024-12-06T20:53:11.762249,3,"The video was alright for genetics. I usually like audio more, but the visuals helped a little.",llm
-S0012,R0100,2024-12-20T02:56:42.523238,3,"This video on classification was okay. I'd rather listen to a podcast, but the pictures were helpful.",llm
-S0012,R0001,2025-01-24T12:44:52.881294,4,"The simulation for force and motion was pretty cool. It was different from just listening, which was nice.",llm
-S0012,R0059,2024-10-27T13:02:46.955015,3,"The topic was interesting, but I learn better by listening. The slideshow wasn't the best way for me to understand it.",llm
-S0012,R0102,2025-01-13T14:11:34.747123,4,It was a good way to check what I know about classification. I liked being able to interact with the material.,llm
-S0012,R0044,2024-11-07T17:29:54.847570,4,"The video was okay, but I wish there was an audio version too. The topic was pretty interesting though.",llm
-S0012,R0027,2025-01-17T11:37:30.136420,5,This podcast was great! It was exactly how I like to learn about science topics. Really easy to follow along.,llm
-S0012,R0022,2024-10-28T00:02:48.375814,5,Another good podcast on energy. Learning by listening is the best for me. The content was also really clear.,llm
-S0012,R0131,2024-09-13T02:49:33.503840,4,The simulation was a cool way to see the physics concepts. It helped reinforce what I've heard about the topic.,llm
-S0012,R0067,2025-01-24T14:03:33.192013,4,The simulation for cell division was interactive and helpful. It was a good change from just reading or listening.,llm
-S0012,R0007,2025-01-11T01:22:57.674668,3,The slideshow was a bit hard to focus on since I prefer audio. The information was relevant though.,llm
-S0012,R0005,2024-09-21T01:57:18.209378,5,This podcast was great! I like listening to things and cell division is interesting.,llm
-S0012,R0135,2025-01-08T21:40:42.852017,2,"The audio format was good, but I don't really like chemistry topics.",llm
-S0013,R0025,2024-09-18T21:55:35.753671,4,The simulation helped me understand triangles better. It was good to do something hands-on.,llm
-S0013,R0065,2025-01-28T22:04:36.179419,4,Playing with the functions in the simulation made sense. It was a good way to learn.,llm
-S0013,R0119,2024-10-30T08:26:40.133707,3,The article was okay for learning about equations. I prefer other ways to learn math though.,llm
-S0013,R0095,2024-09-20T05:30:21.040046,4,The video explained sets well. It was easy to follow along.,llm
-S0013,R0132,2025-01-26T18:53:49.712436,3,"The slideshow was alright, but the video on sets was better. This one was a bit dry.",llm
-S0013,R0032,2025-01-05T01:23:36.674475,3,"The podcast was okay, but I usually prefer audio for biology or other subjects.",llm
-S0013,R0104,2024-12-24T04:23:39.118016,5,This simulation was great! It made understanding sets much easier by letting me try things out.,llm
-S0013,R0014,2025-01-26T18:03:00.842505,4,The podcast was pretty good for equations. It was easy to listen to while doing other things.,llm
-S0013,R0034,2024-11-09T21:55:34.096548,3,"The article on functions was okay. It explained the topic well, but reading isn't my favorite way to learn.",llm
-S0013,R0137,2024-12-18T13:59:47.635582,5,I liked the video about logic. Seeing the examples helped me understand the concepts visually.,llm
-S0013,R0091,2024-11-04T01:02:23.927114,5,The equations simulation was really helpful. Being able to interact with the problems made a big difference.,llm
-S0013,R0120,2024-10-28T06:29:52.512556,2,"I didn't really enjoy this podcast. I'm not interested in physics, so it was hard to pay attention.",llm
-S0013,R0046,2024-10-05T16:18:09.280942,5,The quiz was a good way to practice triangles. It helped me see what I still need to work on.,llm
-S0014,R0104,2024-11-09T13:18:21.634056,3,"The simulation was interesting, but I prefer visual learning methods more than hands-on activities.",llm
-S0014,R0080,2024-09-24T10:09:35.483366,4,The video helped me understand the logic concepts better. It was easy to follow.,llm
-S0014,R0079,2024-09-29T11:03:11.359015,2,Reading about heat and temperature wasn't as engaging for me. I prefer learning with visuals.,llm
-S0014,R0123,2025-01-11T03:45:15.929411,5,This video on triangles was really clear and helpful. I liked the diagrams used.,llm
-S0014,R0006,2024-12-25T14:08:07.813164,4,Good video explaining atomic structure. The visuals made it much easier to grasp.,llm
-S0014,R0081,2024-09-05T20:45:19.977242,5,Excellent video on bonding basics! The animations were very useful for understanding.,llm
-S0014,R0092,2024-12-09T16:33:23.088051,3,"The quiz was okay, but I'm not sure it helped me learn the physics intro as much as a video would.",llm
-S0014,R0129,2024-12-02T20:28:54.130530,4,The slideshow for bonding basics was pretty good. It had clear pictures.,llm
-S0014,R0132,2025-01-20T08:55:34.534981,3,The slideshow on sets was alright. I think I'd understand it better with a video explanation.,llm
-S0015,R0085,2025-01-13T05:53:08.963718,3,"The video was okay, but I usually learn better by listening. The genetics topic was interesting though.",llm
-S0015,R0019,2024-10-07T08:10:28.739910,5,Loved this podcast! It was easy to follow and the topic was something I really like. Great way to learn.,llm
-S0015,R0008,2024-09-11T03:51:44.035458,3,"The video was alright, but I'm more of an audio learner. The biology topic was good though.",llm
-S0015,R0113,2024-11-29T16:27:12.925675,2,Reading articles isn't really my thing. I prefer listening. The topic was fine but I struggled to focus.,llm
-S0015,R0066,2024-11-07T09:54:08.726706,2,This article was hard for me to get through. I wish there was an audio version. The classification topic was okay.,llm
-S0015,R0108,2024-12-11T11:24:49.176090,2,Still not a fan of reading for learning. I really need audio to understand things better. The biology part was easy enough.,llm
-S0015,R0087,2025-01-10T16:53:52.087408,3,"The slideshow was decent, but I learn best from audio. The classification topic was interesting.",llm
-S0015,R0134,2024-10-07T22:54:59.630456,1,I really didn't like this. It wasn't a topic I'm interested in and doing a quiz felt like a test I wasn't ready for.,llm
-S0015,R0002,2024-09-07T16:18:50.075003,3,"The quiz was okay, but I prefer learning by listening. The topic was interesting though.",llm
-S0015,R0072,2024-11-06T06:48:04.423790,4,"The simulation was a cool way to learn about biology. It was a bit different from my usual style, but still helpful.",llm
-S0015,R0060,2024-11-21T12:05:22.370930,5,"I loved this podcast! It matched my learning style perfectly, even though the topic wasn't one I usually study.",llm
-S0015,R0063,2024-12-23T21:53:37.710601,3,"The quiz was alright, but the topic wasn't my favorite. I usually enjoy biology more.",llm
-S0016,R0004,2024-12-27T04:27:16.431077,4,This article was pretty good. It was easy to read and explained the topic well.,llm
-S0016,R0044,2024-09-22T03:51:04.767179,2,I didn't really like the video. I learn better by reading.,llm
-S0016,R0126,2025-01-29T00:23:02.367833,3,"The simulation was okay, but it's not how I prefer to learn. I'd rather read about it.",llm
-S0016,R0034,2024-10-06T08:36:04.817237,5,This article was great! It was exactly what I needed and in a format I like.,llm
-S0016,R0132,2025-01-17T09:01:22.252917,4,The slideshow was helpful for understanding the topic. It was easy to follow along.,llm
-S0016,R0018,2024-11-26T23:49:25.882115,3,"The video was okay, but I prefer reading. It had good information though.",llm
-S0016,R0096,2024-11-27T04:46:07.421692,2,I didn't really like the podcast. I learn better by reading the information.,llm
-S0016,R0083,2024-12-26T15:40:42.535327,3,"The simulation was interesting, but I wish there was more text explaining things. It helped me see how things work.",llm
-S0016,R0087,2025-01-02T13:49:05.305666,4,This slideshow was useful. It presented the information clearly.,llm
-S0016,R0114,2024-10-06T18:32:24.799311,3,The quiz helped me check my understanding. It was a good way to review.,llm
-S0016,R0019,2025-01-11T07:33:36.574408,2,I found it hard to focus on the podcast. I would rather read about this topic.,llm
-S0017,R0065,2025-01-27T20:09:38.563444,4,The simulation was pretty cool and helped me visualize the topic. It was easy to use.,llm
-S0017,R0033,2024-11-18T17:00:49.754362,3,"The quiz was okay, but I prefer listening to things. It was a good way to check if I understood triangles though.",llm
-S0017,R0124,2024-11-02T10:44:31.877388,3,"This quiz on energy was fine. It wasn't really my learning style, but the questions were clear.",llm
-S0017,R0028,2024-10-12T13:09:28.108523,5,I really liked listening to this podcast about heat and temperature. It's much easier for me to learn this way.,llm
-S0017,R0137,2024-11-24T01:32:47.256048,2,Watching this video on logic wasn't the best for me. I learn better by hearing the information.,llm
-S0017,R0027,2024-11-29T08:12:05.943627,5,This podcast about matter and properties was great. Listening helps me understand the concepts much better.,llm
-S0017,R0089,2024-12-21T00:24:31.263087,1,Reading this article about energy was difficult for me. I have trouble focusing when I have to read for long periods.,llm
-S0017,R0045,2024-09-27T10:40:57.627348,5,I enjoyed this podcast on cell structure. The audio format makes it easy for me to learn about biology.,llm
-S0017,R0004,2024-12-12T11:47:25.608442,1,Reading about functions was not helpful for me. I need to hear explanations to understand math topics.,llm
-S0017,R0024,2024-11-23T22:24:10.128690,2,"This video was okay, but I learn better with audio. The topic wasn't one I'm really into either.",llm
-S0018,R0070,2024-09-08T01:54:28.682481,4,I like quizzes and this topic is interesting. It helped me check what I know about states of matter.,llm
-S0018,R0092,2024-10-23T00:09:33.635145,5,This quiz was great! Physics is one of my favorite subjects and I like interactive activities.,llm
-S0018,R0117,2024-12-07T03:22:38.714415,4,"Good video on heat and temperature. It's a topic I enjoy, and the visuals were helpful.",llm
-S0018,R0126,2024-10-28T13:18:15.796960,3,Feedback unavailable.,fallback
-S0018,R0010,2024-11-19T04:39:14.864585,4,The video explained states of matter clearly. Chemistry is a subject I find pretty interesting.,llm
-S0018,R0094,2024-12-15T03:25:18.005117,4,This video on reactions was good. It's helpful to see it explained visually.,llm
-S0018,R0030,2024-11-01T15:31:52.524590,5,Excellent video about matter and properties. Physics videos are usually really engaging.,llm
-S0018,R0147,2024-10-16T06:47:45.253802,5,"This podcast was great! I really liked learning about heat and temperature, and the audio format worked well for me.",llm
-S0018,R0044,2024-09-28T18:22:38.708328,4,Good introduction to physics. The video was easy to follow and explained the basics clearly.,llm
-S0018,R0051,2024-11-21T05:27:07.308548,4,"The podcast on force and motion was pretty good. It covered the topic well, even though I sometimes prefer visuals.",llm
-S0018,R0099,2024-10-07T09:16:07.381114,3,"The article on the introduction to physics was okay. Reading isn't always my favorite way to learn, but the information was helpful.",llm
-S0018,R0110,2024-10-05T00:38:55.115984,5,Loved the video on Intro to Chemistry! It was really engaging and made the topic interesting.,llm
-S0018,R0041,2025-01-08T11:43:46.014919,4,The slideshow on bonding basics was pretty good. It helped visualize the concepts clearly.,llm
-S0018,R0013,2024-09-22T19:07:50.660309,3,"This article about matter and properties was informative, but I think a video or interactive would have been better.",llm
-S0019,R0049,2024-11-09T22:00:11.440883,2,"This podcast wasn't for me. I prefer hands-on activities or visuals to understand physics concepts, and this topic wasn't really in my interest area.",llm
-S0019,R0043,2024-09-09T16:49:44.898611,3,"The topic was good, but listening to a podcast isn't really how I learn best. It was okay though.",llm
-S0019,R0064,2024-11-02T07:32:35.592243,5,This quiz was great! I liked being able to actually do something to learn about reactions.,llm
-S0019,R0023,2024-11-02T21:25:28.231598,3,"Another podcast. Still not my favorite way to learn, but the information was helpful for the topic I like.",llm
-S0019,R0058,2024-11-20T00:41:25.202210,5,"The simulation was awesome! I could really play around and see how the reactions work, which helped me understand it better.",llm
-S0019,R0130,2024-10-29T15:37:50.278362,5,This simulation was perfect for learning about atomic structure. I like actually doing things.,llm
-S0019,R0135,2024-10-09T12:06:15.190854,3,"Podcasts are just hard for me to focus on. The topic was interesting, but the format wasn't ideal.",llm
-S0019,R0062,2024-10-20T20:52:23.120018,4,"The video was pretty good. I prefer doing things, but seeing the examples helped explain states of matter.",llm
-S0019,R0129,2024-09-12T22:33:04.502242,3,"Slideshows aren't the most exciting. I got some info about bonding, but it wasn't very engaging.",llm
-S0019,R0001,2024-11-07T22:01:38.844499,4,This simulation was pretty cool. It helped me understand force and motion better because I could actually mess around with it.,llm
-S0019,R0115,2024-10-27T00:47:05.411486,2,Reading about reactions wasn't the best way for me to learn. I wish there was something more hands-on.,llm
-S0019,R0101,2024-11-20T21:08:35.461400,3,"The slideshow was okay for the intro to chemistry. I prefer doing things, but it wasn't too boring.",llm
-S0019,R0131,2025-01-04T05:46:06.159429,4,Another good simulation for physics! It's easier to get the ideas when you can interact with them.,llm
-S0019,R0081,2024-09-08T18:46:07.478073,3,"The video on bonding was alright. I like chemistry, but I still wish it was more active than just watching.",llm
-S0020,R0113,2024-10-27T22:51:24.268536,2,"I don't really like chemistry topics, and reading about biology isn't my favorite. This wasn't very engaging.",llm
-S0020,R0137,2024-12-01T08:24:33.385289,3,"The video on logic was okay. It wasn't a chemistry topic, which is good, but watching isn't the best for me.",llm
-S0020,R0122,2024-09-06T23:19:13.211206,3,"The slideshow on sets was just alright. It wasn't chemistry, which is a plus, but I didn't really get into it.",llm
-S0020,R0075,2024-09-11T23:46:13.461679,5,"This quiz was great! I like doing things to learn, and this helped me understand heat and temperature better.",llm
-S0020,R0005,2024-12-31T12:03:13.820725,3,"The podcast was okay, but I prefer doing activities rather than just listening. Cell division is interesting though.",llm
-S0020,R0124,2024-11-28T17:24:11.837921,5,Really liked this quiz on energy. It was a good way to check what I knew and was fun to do.,llm
-S0020,R0133,2024-12-11T09:20:12.093292,2,Reading an article isn't my favorite way to learn about energy. I'd rather try something hands-on.,llm
-S0020,R0045,2024-10-03T18:28:04.348547,3,"Listened to the podcast on cell structure. It was informative, but I wish there was an activity to go with it.",llm
-S0020,R0093,2024-10-02T13:00:50.604888,3,The podcast on triangles was alright. I had trouble picturing the shapes just from listening.,llm
-S0020,R0120,2025-01-15T23:05:13.081133,3,Listened to the intro to physics podcast. It was a bit hard to stay focused without something to do.,llm
-S0020,R0073,2024-10-16T18:45:12.257594,3,The podcast about sets was okay. I learn better when I can actually work with examples.,llm
-S0020,R0136,2025-01-16T06:11:41.418245,2,Reading about equations wasn't really my thing. I prefer doing stuff hands-on.,llm
-S0021,R0015,2024-10-02T23:35:28.917260,5,This quiz was a great way to practice cell division. I liked being able to test myself.,llm
-S0021,R0085,2024-09-29T16:38:45.168762,4,The video explained genetics well. It was easy to follow along.,llm
-S0021,R0087,2024-12-21T23:06:22.088644,4,The slideshow on classification was helpful. Good visuals.,llm
-S0021,R0150,2024-12-22T18:41:25.153085,4,The genetics slideshow was pretty good. Made sense of the concepts.,llm
-S0021,R0077,2024-12-23T21:41:40.604786,4,This slideshow on cell division was clear. The pictures helped a lot.,llm
-S0021,R0067,2025-01-17T01:56:06.934253,5,The simulation on cell division was awesome! I really learned by doing it.,llm
-S0021,R0106,2024-12-15T00:56:58.773821,4,Watching the video about classification was helpful. Easy to understand.,llm
-S0022,R0036,2024-12-16T06:27:26.437020,3,"The simulation was okay for understanding the topic, but I prefer reading about it.",llm
-S0022,R0057,2024-10-30T21:23:40.504665,2,I didn't really get much out of the podcast. I'd rather read the information.,llm
-S0022,R0077,2024-10-07T03:20:07.423015,4,The slideshow was pretty good and easy to follow. It helped me understand the topic.,llm
-S0022,R0046,2024-10-19T13:31:58.051166,3,"The quiz helped me check what I know, but I like learning by reading more.",llm
-S0022,R0121,2024-10-13T17:48:23.514527,4,The slideshow was helpful. It made the topic easier to understand with the visuals.,llm
-S0022,R0027,2024-11-10T09:41:30.012376,2,Listening to the podcast wasn't the best way for me to learn this. I'd rather read.,llm
-S0022,R0098,2024-12-07T22:57:58.090112,5,"This article was perfect! Reading is how I learn best, and it covered everything well.",llm
-S0022,R0104,2024-10-17T13:43:20.489721,3,"The simulation was a different way to learn, but reading about sets makes more sense to me.",llm
-S0022,R0026,2024-10-25T07:21:07.544025,4,The podcast was pretty good for learning about classification. It was easy to listen to and follow along.,llm
-S0023,R0115,2025-01-12T07:18:37.855296,3,"The article was okay. I like chemistry topics, but reading isn't my favorite way to learn.",llm
-S0023,R0116,2024-11-10T08:47:55.458456,2,I didn't really like the podcast. I'm more of a visual learner and audio is hard for me.,llm
-S0023,R0099,2024-12-31T05:24:26.774913,3,The article on physics intro was alright. I prefer seeing things explained instead of just reading.,llm
-S0023,R0005,2024-12-19T02:01:36.441224,2,This podcast wasn't very helpful. I need to see diagrams or something to understand cell division.,llm
-S0023,R0041,2024-12-25T00:08:36.185202,5,The slideshow was great! I learn best when I can see the information like this.,llm
-S0023,R0134,2024-10-19T08:31:31.526669,4,The quiz was a good way to test myself on chemistry. It helped me see what I need to study more.,llm
-S0023,R0089,2024-10-01T16:08:02.501921,3,"Reading about energy was fine, but I'd rather watch a video or see examples.",llm
-S0023,R0078,2024-10-18T06:01:45.826988,3,"The quiz was okay for practicing the topic, but I learn better with things I can see.",llm
-S0023,R0036,2024-09-07T21:40:22.020541,4,I liked the simulation! It helped me understand the topic better even though I prefer visual stuff.,llm
-S0023,R0049,2025-01-09T11:26:36.475747,2,Podcasts aren't really my thing. I wish there was a video or diagrams to go with this.,llm
-S0023,R0064,2024-12-21T22:17:55.033687,3,The quiz was a good way to check what I knew about reactions. It was a bit short though.,llm
-S0024,R0007,2024-09-03T10:46:51.316423,5,This slideshow was really helpful! The pictures made it easy to understand.,llm
-S0024,R0051,2024-11-23T13:12:03.982597,2,I didn't get much from the podcast. I need to see things to learn properly.,llm
-S0024,R0087,2024-11-28T04:31:53.768653,5,This slideshow was great! The visuals made the classification topic easy to follow.,llm
-S0024,R0098,2024-12-18T17:19:23.744651,3,"Reading articles is okay, but I'd rather see a video or diagrams about cell division.",llm
-S0024,R0019,2024-10-15T13:46:36.659741,2,I didn't really like listening to this. I prefer seeing things explained.,llm
-S0024,R0076,2024-09-30T14:59:56.474167,3,"It was okay, but reading isn't my favorite way to learn. Some pictures would have helped.",llm
-S0024,R0003,2024-10-05T17:35:15.002289,3,"The article was informative, but I wish there were more diagrams to explain the concepts.",llm
-S0024,R0061,2024-11-26T00:55:01.898542,4,This simulation was pretty cool! It helped me understand genetics a bit better by doing it.,llm
-S0024,R0013,2024-10-08T02:31:32.085639,3,"Another article. It wasn't bad, but I'd rather watch a video or see some visuals.",llm
-S0024,R0077,2024-11-23T03:31:42.736231,5,This slideshow was great! Seeing the steps of cell division made it much easier to understand.,llm
-S0024,R0139,2025-01-21T11:06:55.840509,4,The simulation for cell structure was helpful. It's good to actually interact with the material.,llm
-S0024,R0018,2024-10-21T23:19:58.675254,5,The video was perfect! Seeing the genetics concepts explained visually made a lot of sense.,llm
-S0025,R0049,2024-12-25T06:25:08.066693,4,"This podcast was pretty good. I already like this topic, and listening to it helped me understand it a bit more.",llm
-S0025,R0057,2024-11-13T18:45:46.326004,4,Another good podcast! It covered Heat and Temperature which I find interesting. Easy to listen to.,llm
-S0025,R0096,2024-12-19T06:10:26.391868,5,Loved this podcast on Energy. It was really engaging and made the topic feel simple. Definitely recommend.,llm
-S0025,R0099,2024-12-21T16:17:20.344385,3,"The article on Intro to Physics was okay. Reading isn't my favorite way to learn, but the topic was interesting.",llm
-S0025,R0020,2024-11-09T14:02:39.445355,3,"This article about Cell Division was informative. It's a topic I like, but I prefer other ways to learn than just reading.",llm
-S0025,R0048,2024-12-20T15:33:59.713123,5,This video was great for learning about Heat and Temperature. Seeing the concepts explained visually really helped me understand.,llm
-S0025,R0028,2024-10-24T04:17:11.162527,4,"Listened to this podcast again. Still a good way to review Heat and Temperature, I like learning by listening.",llm
-S0025,R0045,2024-09-22T03:12:34.947274,4,This podcast on Cell Structure was helpful. It explained things clearly and was easy to follow along with.,llm
-S0025,R0008,2024-11-22T12:41:02.023088,5,"This video was great! It explained Biology really well, and I like watching videos to learn.",llm
-S0025,R0042,2024-09-28T18:59:20.863857,4,Good video on Physics. It was easy to follow along and understand the intro.,llm
-S0025,R0138,2025-01-13T07:03:25.400474,3,"The podcast was okay, but I prefer watching videos for physics. It was a little hard to pay attention.",llm
-S0025,R0067,2025-01-28T12:55:57.043735,5,The simulation was really helpful for understanding cell division. It made the process much clearer.,llm
-S0025,R0113,2025-01-23T13:01:35.412742,3,"The article was informative, but I didn't find it as engaging as videos or simulations for this topic.",llm
-S0025,R0001,2024-11-19T02:46:28.421128,5,Loved the simulation for force and motion! It was super interactive and helped me see how things work.,llm
-S0025,R0092,2025-01-05T16:47:03.194837,4,The quiz was a good way to check what I learned about physics. It made me think.,llm
-S0026,R0069,2024-09-12T05:22:24.279850,5,The slideshow was perfect for learning about force and motion. The pictures and diagrams really helped me understand.,llm
-S0026,R0006,2025-01-02T12:25:01.851375,5,This video was great! It really helped me understand atomic structure because of the visuals.,llm
-S0026,R0105,2024-09-08T07:48:58.192444,3,"The quiz was okay, but I learn better with videos. Chemistry is interesting though.",llm
-S0026,R0081,2024-09-01T23:08:05.927184,5,Another helpful video! The pictures for bonding basics made it easy to follow.,llm
-S0026,R0027,2024-09-21T18:16:09.503476,2,Podcasts aren't really my thing. I couldn't visualize what they were talking about with matter.,llm
-S0027,R0142,2024-12-05T05:39:45.979594,4,The slideshow had some good images. Atomic structure is a cool topic.,llm
-S0027,R0004,2024-09-11T06:18:56.954144,2,"I really don't like math, and reading about functions was boring. Not helpful for me.",llm
-S0027,R0058,2024-09-23T19:19:53.179638,5,The simulation was awesome! It was fun to see the reactions happen.,llm
-S0027,R0129,2024-10-04T00:38:24.334709,4,Good slideshow about bonding. I like seeing the diagrams.,llm
-S0027,R0041,2024-11-08T20:34:44.414805,4,This slideshow was really helpful for understanding bonding basics. The visuals made it easy to follow.,llm
-S0027,R0023,2024-09-10T03:04:16.431387,3,The podcast about reactions intro was okay. I prefer other ways to learn this topic.,llm
-S0027,R0125,2024-12-06T07:07:42.299546,5,Great video about the intro to chemistry. It made the topic much more interesting.,llm
-S0028,R0142,2025-01-20T00:28:01.506933,2,I didn't really like the slideshow on atomic structure. I learn better by listening.,llm
-S0028,R0058,2025-01-16T19:48:40.579053,4,The simulation for reactions intro was cool. It helped me see how things work.,llm
-S0028,R0040,2024-12-09T13:14:47.239337,4,Doing the simulation for equations made sense. It was a good way to practice.,llm
-S0028,R0079,2024-09-03T09:00:42.923283,1,Reading the article on heat and temperature was boring. I don't like reading to learn.,llm
-S0028,R0127,2024-11-20T08:44:16.964470,5,The podcast about equations was perfect. I love learning math by listening.,llm
-S0028,R0134,2024-11-02T02:41:26.713608,4,The quiz was a good way to check what I learned. I liked that it wasn't about biology.,llm
-S0028,R0126,2024-09-03T12:36:56.012083,4,The simulation was interactive and helped me understand the topic. It was a good change from just listening.,llm
-S0028,R0016,2024-12-19T01:13:35.123418,5,Loved this podcast! It was easy to listen to and explained the topic well. Perfect for my learning style.,llm
-S0028,R0103,2024-11-20T21:30:53.585987,5,"Another great podcast. I learn best by listening, and this explained the topic clearly.",llm
-S0029,R0024,2024-10-14T06:57:33.323028,5,"This video was perfect! I enjoy biology topics, and seeing the concepts helped me understand better.",llm
-S0029,R0092,2024-11-15T20:01:51.243087,3,"The quiz was okay, but I'm not really into physics. It wasn't as engaging as other topics.",llm
-S0029,R0061,2024-12-15T09:02:28.651958,5,This simulation was really cool! It made genetics much easier to understand and was fun to do.,llm
-S0029,R0035,2024-11-05T00:23:50.309671,5,Great quiz on a topic I like. It helped me review the cell structure stuff.,llm
-S0029,R0051,2025-01-20T21:30:57.499078,3,"The podcast was okay, but I'm not really into physics topics like force and motion. It was a bit hard to follow without visuals.",llm
-S0029,R0146,2024-09-28T01:39:46.914642,5,"This video on biology was great! I really enjoy learning about living things, and the video format helped a lot.",llm
-S0029,R0045,2025-01-17T15:00:32.444350,4,"I liked the podcast about cell structure. It's a topic I find interesting, and the audio format was pretty good.",llm
-S0029,R0150,2024-11-19T04:22:21.698552,5,"The slideshow on genetics was really helpful. It's a topic I'm curious about, and the slides made it easy to understand.",llm
-S0029,R0116,2024-10-07T09:16:15.773895,3,"The podcast on matter was alright, but physics isn't my favorite subject. I prefer topics about biology.",llm
-S0030,R0030,2024-12-03T14:05:08.782443,3,"I usually prefer audio, so a video wasn't the best for me. The topic was okay, but I think I would have learned better from a podcast.",llm
-S0030,R0042,2024-10-09T02:45:48.756400,3,"The video on physics intro was fine, but I learn best by listening. I would have liked this more as an audio resource.",llm
-S0030,R0001,2024-10-24T12:29:40.378267,4,"The simulation on force and motion was interesting. It was a different way to learn, even though I usually like audio more.",llm
-S0030,R0131,2024-12-30T00:50:57.362894,4,This simulation helped me understand the basics of physics. It was engaging and made the topic more real.,llm
-S0030,R0003,2024-09-12T22:21:56.662501,2,"Reading isn't my favorite way to learn, so this article was a bit difficult to get through. The topic was interesting, but I prefer listening.",llm
-S0030,R0031,2025-01-23T20:29:42.741579,3,"The slideshow was okay, but I learn best by listening. It was helpful to see some visuals, though.",llm
-S0030,R0074,2024-11-09T07:24:28.187559,4,I liked the simulation on heat and temperature. It was a good way to see the concepts in action.,llm
-S0030,R0048,2024-10-07T17:23:07.470798,3,"The video was helpful for seeing some examples of heat and temperature. I still like audio resources best, though.",llm
-S0030,R0049,2024-12-15T06:47:03.874350,5,This podcast was perfect! I love learning about force and motion by listening. It was easy to follow and really clear.,llm
-S0030,R0138,2024-10-16T07:06:29.147731,5,Another great podcast! This one on the introduction to physics was super helpful and exactly how I like to learn.,llm
-S0030,R0092,2025-01-04T00:53:49.103726,4,"Taking the quiz was a good way to check if I understood the material. It was a bit different from my usual style, but still useful.",llm
-S0030,R0051,2024-09-13T04:09:20.566909,5,This podcast was great! It matched how I like to learn and was about a topic I enjoy.,llm
-S0030,R0032,2025-01-28T17:49:44.875010,5,Really liked listening to this podcast. The topic was interesting and easy to follow.,llm
-S0030,R0124,2024-12-08T03:13:02.975884,3,"The quiz was okay, but I prefer learning by listening. The topic was good though.",llm
-S0031,R0007,2024-09-05T18:49:28.708496,3,"The slideshow was informative, but I learn better with audio.  Still, it was about a topic I like.",llm
-S0031,R0118,2024-11-01T04:43:42.788388,5,Perfect! An audio resource about math is exactly what I needed. Super helpful.,llm
-S0031,R0080,2024-10-27T22:51:45.058273,4,"The video was pretty good. I usually prefer audio, but the topic was explained well.",llm
-S0031,R0137,2024-11-11T21:02:32.938361,4,"Liked the video content. It was a good topic, even if I usually learn better by ear.",llm
-S0031,R0040,2024-12-06T03:34:30.092929,4,The simulation was a fun way to learn about equations.  It helped me understand the topic better.,llm
-S0031,R0122,2024-12-16T03:06:38.965209,3,"The topic was interesting, but I prefer learning by listening instead of looking at slides.",llm
-S0032,R0063,2024-09-13T11:39:16.228660,2,"I don't really like physics, and a quiz wasn't the best way for me to learn this.",llm
-S0032,R0100,2025-01-06T15:28:30.631491,4,This video was pretty good! It helped me understand the topic better.,llm
-S0032,R0077,2024-12-07T09:08:37.841289,4,The slideshow covered the topic well. I liked learning about this.,llm
-S0032,R0087,2024-10-21T00:31:28.977528,4,Another good slideshow on a topic I enjoy. It was easy to follow.,llm
-S0032,R0020,2025-01-26T13:50:27.978728,3,"The article was okay, but I find it harder to focus when reading compared to other ways.",llm
-S0032,R0059,2025-01-26T01:11:42.857466,4,This slideshow explained genetics clearly. I like learning about this stuff.,llm
-S0032,R0076,2025-01-14T02:43:24.070099,3,"Reading the article was informative, but I wish there was an audio version too.",llm
-S0032,R0028,2025-01-17T19:00:27.463519,3,"The podcast was okay, but the topic wasn't really something I'm into right now.",llm
-S0032,R0017,2024-10-05T16:40:25.627779,4,"I liked the quiz, and the topic was interesting. I usually prefer listening though.",llm
-S0032,R0004,2025-01-15T02:12:47.532618,2,"Reading articles isn't my favorite way to learn, especially about math topics I don't enjoy.",llm
-S0033,R0075,2024-12-14T12:51:02.411727,3,"The quiz was alright for practicing, but the topic isn't one of my favorites.",llm
-S0033,R0069,2024-11-25T14:01:32.695299,3,Feedback unavailable.,fallback
-S0033,R0017,2024-10-11T22:26:54.495655,4,"The quiz was a good way to check what I know. I prefer visual things, but this was still helpful.",llm
-S0033,R0139,2025-01-18T13:09:11.455882,5,The simulation was really cool and helped me understand the topic better. This is how I like to learn.,llm
-S0033,R0045,2024-12-13T08:22:11.158724,2,I didn't really like the podcast. I learn better when I can see things.,llm
-S0033,R0037,2024-10-13T08:04:18.486712,3,"The quiz was okay, but I prefer more visual ways to learn. It helped check what I knew though.",llm
-S0033,R0066,2024-11-21T23:56:35.702635,3,"Reading about biology was fine. It wasn't my favorite, but the article was clear.",llm
-S0034,R0016,2024-12-09T08:59:16.394986,4,"Even though I usually dislike chemistry, the podcast made atomic structure easier to understand. It was a good way to listen and learn.",llm
-S0034,R0036,2024-09-28T01:58:50.590810,5,I liked the simulation for atomic structure a lot. It really helped me visualize the concepts in a hands-on way.,llm
-S0034,R0127,2025-01-07T09:56:58.642000,3,"The podcast on equations was alright. I prefer reading about math, but this was a different way to review.",llm
-S0034,R0003,2024-09-03T08:44:41.773112,5,"I really liked the article on energy. It was easy to read and explained the topic well, matching how I like to learn.",llm
-S0034,R0148,2024-10-02T06:44:27.636880,4,Reading about logic was helpful. It was a clear article and good for my learning style.,llm
-S0035,R0117,2024-09-22T18:33:00.785130,5,The video on heat and temperature was great! I really enjoy physics and the visual style worked well for me.,llm
-S0035,R0032,2025-01-02T22:10:59.689706,4,The podcast was pretty good for learning about Force and Motion. Easy to listen to while doing other stuff.,llm
-S0035,R0049,2025-01-02T22:57:00.912000,3,"It was okay, the podcast covered the topic but it was a bit slow at times. I prefer something more engaging.",llm
-S0035,R0133,2025-01-19T06:14:34.020521,5,I really liked this article on Energy. It explained things clearly and I could go back and re-read parts.,llm
-S0035,R0007,2024-10-16T04:34:46.012228,4,The slideshow on Matter and Properties was helpful. The visuals made it easier to understand.,llm
-S0035,R0069,2024-11-25T03:47:04.255571,5,This slideshow was great! The pictures and diagrams for Force and Motion were super useful.,llm
-S0035,R0063,2024-11-25T13:42:21.649267,4,The quiz on Energy was a good way to check what I learned. It was challenging but fair.,llm
-S0035,R0051,2025-01-07T06:22:45.657296,3,"Another podcast on Force and Motion. It was similar to the last one, nothing special.",llm
-S0035,R0124,2024-12-12T05:34:28.978814,5,"I like doing quizzes to practice, and this one for Energy was perfect. Helped me remember everything.",llm
-S0035,R0090,2024-11-21T14:59:53.699872,4,This video helped me understand force and motion better. It was easy to follow.,llm
-S0035,R0144,2024-10-28T23:03:31.247411,5,Really liked this video! It explained the concepts clearly and kept my attention.,llm
-S0035,R0022,2024-12-21T16:50:11.397900,3,"The podcast was okay. I prefer seeing things, but it covered the topic well.",llm
-S0035,R0001,2024-12-29T08:45:54.219199,5,The simulation was awesome! Doing things helped me learn about force and motion.,llm
-S0035,R0138,2024-12-14T02:03:41.044503,3,The podcast was a decent intro to physics. I wish there were some visuals though.,llm
-S0035,R0030,2024-09-12T20:13:19.028104,4,Good video on matter and properties. It made the topic more interesting.,llm
-S0036,R0004,2024-12-22T13:32:04.480756,2,"Reading an article isn't my favorite way to learn. Plus, I'm not really into math topics.",llm
-S0036,R0149,2024-10-23T05:23:41.357129,3,The podcast was alright for learning about reactions. I learn best by doing experiments though.,llm
-S0036,R0036,2024-09-15T18:00:47.856188,5,This simulation was awesome! It really helped me understand atomic structure because I could interact with it.,llm
-S0036,R0043,2024-10-06T01:17:23.538935,3,"The podcast was okay for learning about reactions, but I prefer doing things hands-on. It was a bit hard to focus just listening.",llm
-S0036,R0082,2024-09-12T11:29:24.451995,2,"Reading an article about atomic structure wasn't very engaging for me. I learn best by doing, not just reading.",llm
-S0036,R0135,2024-12-01T09:07:53.491293,3,"The podcast for atomic structure was alright, but I didn't feel like I learned as much as I would from a simulation or activity.",llm
-S0036,R0081,2024-12-02T16:38:51.383919,4,"The video on bonding basics was pretty good. It showed some helpful visuals, which made it easier to follow.",llm
-S0036,R0105,2024-11-29T22:29:08.848494,5,Taking the quiz was a great way to test what I knew about intro to chemistry. I like activities that let me actively participate.,llm
-S0036,R0129,2025-01-25T07:22:04.766082,4,"The slideshow for bonding basics was helpful with the diagrams. I still like simulations more, but this was good too.",llm
-S0036,R0044,2024-10-20T06:47:20.287132,1,I really didn't like this video on physics. I find physics topics boring and the video format wasn't engaging for me.,llm
-S0036,R0062,2024-12-05T18:03:41.621021,4,This video was pretty good. It helped me understand the different states of matter better.,llm
-S0036,R0101,2024-12-28T07:34:42.440395,3,The slideshow was okay for an intro topic I like. I prefer more hands-on stuff though.,llm
-S0036,R0006,2024-11-08T00:47:38.060913,4,I liked this video on atomic structure. It made sense and was easy to follow.,llm
-S0036,R0060,2024-10-05T10:46:24.689394,2,I didn't really get much out of the podcast. Listening isn't how I learn best for chemistry.,llm
-S0036,R0013,2024-11-23T12:12:31.374794,1,This article was boring and not about chemistry which I like. Reading isn't my favorite way to learn anyway.,llm
-S0037,R0091,2024-10-27T16:32:50.760504,5,"This simulation was awesome! It really helped me see how equations work, and I like doing things.",llm
-S0037,R0056,2024-09-29T01:06:50.232690,3,The slideshow on logic was alright. I'd rather listen to something about it.,llm
-S0037,R0143,2024-11-28T11:12:41.181368,3,The video on logic was okay too. Still prefer listening to topics I enjoy.,llm
-S0037,R0116,2024-10-28T09:23:00.649886,5,This podcast was great! It covered a topic I like in a way I learn best.,llm
-S0037,R0117,2024-12-26T14:20:04.821303,3,"The video was okay, and I like the topic. But I prefer listening to things.",llm
-S0037,R0046,2024-10-15T14:27:18.857071,4,I enjoyed the quiz on triangles. It was a good way to practice the topic.,llm
-S0037,R0090,2024-10-08T05:08:02.426842,3,The video on force and motion was decent. I wish it was an audio lesson instead.,llm
-S0038,R0004,2024-09-12T02:23:17.598516,2,"Reading the article wasn't my favorite. I like the topic, but I learn better by doing.",llm
-S0038,R0070,2024-10-11T11:07:50.303863,1,I did not like this quiz at all. I dislike chemistry topics.,llm
-S0038,R0122,2024-10-28T09:07:11.909764,3,The slideshow was alright for learning about sets. I'd rather do something hands-on.,llm
-S0038,R0040,2024-12-28T08:49:06.173392,5,The simulation was awesome! It's exactly how I like to learn math.,llm
-S0038,R0073,2024-09-24T07:05:58.025565,2,I didn't really like just listening to this. I need to do stuff to understand sets.,llm
-S0038,R0132,2024-10-29T19:59:24.139821,3,The pictures were okay but it was still just looking. I wish there was something to click or move.,llm
-S0038,R0137,2024-10-25T11:10:39.456067,4,The video was pretty good for understanding logic. It showed some examples which helped.,llm
-S0038,R0078,2024-09-14T19:40:12.120943,1,"I did not like this quiz at all. I don't like chemistry and even though it was a quiz, it wasn't fun.",llm
-S0038,R0110,2025-01-21T09:17:16.310001,1,Watching a video about chemistry was boring. I really don't like this subject.,llm
-S0038,R0104,2024-11-07T03:43:21.989088,5,This simulation was awesome! I got to mess around with the sets and see how they work. This is how I learn best.,llm
-S0038,R0065,2024-12-24T23:07:10.862804,5,Loved the simulation for functions! It made it easy to see how things changed when I messed with them.,llm
-S0038,R0095,2024-09-16T10:29:11.921087,3,"The video was okay, but I'd rather do something interactive to learn about sets.",llm
-S0038,R0034,2024-09-14T04:21:54.612198,3,"The article was okay, but reading isn't really my favorite way to learn. I like the topic though.",llm
-S0038,R0080,2024-11-05T01:52:11.157230,3,"The video was helpful for understanding logic. It's a good topic, but I prefer hands-on activities.",llm
-S0038,R0014,2024-11-24T02:30:49.524371,2,Podcasts aren't the best for me. I didn't really connect with the material on equations.,llm
-S0039,R0119,2024-11-17T09:05:08.284702,4,This article explained equations pretty well. Reading is a good way for me to learn new things.,llm
-S0039,R0051,2024-09-16T14:20:00.847270,1,"I didn't like this podcast at all. I'm not interested in physics topics, and listening isn't my learning style.",llm
-S0039,R0072,2024-09-14T12:46:43.259752,3,"The simulation was kind of interesting for biology, which I like. But I usually learn better by reading.",llm
-S0039,R0012,2024-11-23T16:29:33.269139,5,This article on cell structure was excellent. It was easy to understand and I learned a lot.,llm
-S0039,R0047,2024-11-30T03:15:16.518098,2,"I like biology, but listening to a podcast on cell division wasn't very engaging for me.",llm
-S0039,R0005,2024-12-28T10:48:21.372092,3,"The podcast was okay, but I prefer reading to learn about cell division. It was a bit hard to follow without seeing diagrams.",llm
-S0039,R0128,2025-01-09T10:06:52.827912,3,"Listened to the podcast about cell division. It covered the topic well, but I learn better when I can read the information.",llm
-S0039,R0029,2024-09-02T20:43:20.598022,4,The quiz was a good way to check what I know about biology basics. I like challenging myself with questions.,llm
-S0039,R0002,2024-11-02T11:38:51.694223,4,Taking the quiz on biology was helpful. It reinforced some of the ideas I had read about.,llm
-S0039,R0026,2024-12-27T15:42:31.819618,3,"The podcast on classification was informative. Still, I wish there was a reading version available.",llm
-S0039,R0098,2024-12-19T10:50:02.726816,5,This article on cell division was exactly what I needed. Reading about it made the process much clearer.,llm
-S0040,R0133,2024-11-24T11:45:37.590636,5,I really enjoyed reading this article about energy. It was easy to understand and covered the topic well.,llm
-S0040,R0067,2025-01-28T21:39:15.282951,3,"The simulation was interesting, but I learn better by reading or writing notes. It was a bit too visual for my style.",llm
-S0040,R0037,2024-10-07T15:41:56.017649,4,"The quiz was a good way to check my understanding of Heat and Temperature. It was a different format than I usually use, but it was okay.",llm
-S0040,R0106,2024-11-18T16:28:58.150153,5,I really liked the video on Classification. It was easy to follow and helped me understand the topic better.,llm
-S0040,R0150,2024-12-13T11:35:06.555349,5,"The slideshow on Genetics was great! I prefer visual learning, and this resource made the concepts clear.",llm
-S0040,R0138,2024-09-26T14:16:27.569166,3,"The podcast on Physics was okay, but I prefer reading about the topic. It was a bit hard to focus just by listening.",llm
-S0041,R0126,2024-10-11T14:33:44.365800,4,"The simulation on Chemistry was actually pretty cool. Even though I don't usually like Chemistry, the hands-on part made it more interesting.",llm
-S0041,R0144,2024-10-11T12:42:22.438327,5,This video on Force and Motion was exactly what I needed. The visuals helped me understand the concepts really well.,llm
-S0041,R0051,2024-09-23T00:52:04.044083,2,I didn't really like the podcast for Force and Motion. I need to see diagrams and examples to understand physics properly.,llm
-S0041,R0138,2024-09-26T05:57:34.633264,2,Listening to the podcast on Physics wasn't very helpful for me. I learn best by seeing things explained visually.,llm
-S0041,R0101,2024-10-12T16:05:08.961674,5,The slideshow was really helpful! The pictures made it easy to understand the basics of chemistry.,llm
-S0041,R0023,2024-10-16T06:18:07.805562,2,I didn't really like the podcast. I'm a visual learner and it was hard to follow without anything to look at.,llm
-S0041,R0114,2024-12-28T04:23:01.845513,3,"The quiz was okay, good for testing what I know. I prefer seeing things explained though.",llm
-S0041,R0001,2024-10-25T12:43:00.055694,3,"The simulation was interesting, but I still think I learn best by watching videos or looking at diagrams.",llm
-S0041,R0006,2025-01-21T13:51:41.757725,4,This video was much better! Seeing the atomic structure explained visually really helped it make sense.,llm
-S0041,R0096,2024-12-18T20:32:22.616517,2,Another podcast... I really struggle with just listening to information. I need to see it.,llm
-S0041,R0052,2024-11-14T20:47:16.910461,2,Podcasts just aren't for me. It's hard to picture the states of matter without a visual.,llm
-S0041,R0063,2024-12-03T02:48:27.728416,3,The quiz was fine for practice. I still need to find a visual way to learn about energy.,llm
-S0041,R0149,2024-11-09T03:17:26.007541,2,"I prefer to see things, so a podcast wasn't the best for me. The topic was okay, but I learn better visually.",llm
-S0041,R0142,2024-09-21T11:00:50.547840,4,"The slideshow was good because I learn best by seeing things. The topic was new, but the visuals helped a lot.",llm
-S0042,R0019,2024-09-02T00:31:29.808472,3,"I like biology, but the podcast format isn't my favorite. I wish there were more visuals to go with it.",llm
-S0042,R0029,2024-10-30T17:59:15.827342,5,The quiz was a fun way to test what I know about biology. I like hands-on activities.,llm
-S0042,R0128,2025-01-06T02:00:24.888528,3,"I like learning about cell division, but the podcast was hard to follow sometimes. I need to see diagrams.",llm
-S0042,R0081,2024-10-28T08:43:16.323877,4,This video was great! I learn so much better when I can watch something. The topic was interesting too.,llm
-S0042,R0020,2025-01-09T04:36:24.038962,3,"The article was okay for cell division, but I'm a visual learner. It would be better with more pictures or diagrams.",llm
-S0042,R0145,2024-11-06T11:22:04.322813,5,The simulation was awesome! It was really helpful to interact with the biology concepts. I learned a lot.,llm
-S0042,R0012,2024-11-05T00:33:11.464965,3,"The article was okay, but I learn better with pictures or diagrams. It was a bit dry without any visuals.",llm
-S0042,R0102,2025-01-03T08:29:30.156961,4,The quiz on classification was a good way to check what I knew. I like interactive things even though I'm visual.,llm
-S0042,R0076,2024-12-08T07:21:27.268994,3,Another article on cell structure. Still wish there were more images or videos to explain things.,llm
-S0042,R0100,2024-11-29T18:04:47.779283,5,This video on classification was great! It really helped me understand the different groups with the visuals.,llm
-S0042,R0108,2024-10-16T08:46:38.898038,3,"The article on biology intro was fine. It covered the basics, but again, visuals would have made it better.",llm
-S0042,R0061,2024-12-01T02:02:15.491921,4,The genetics simulation was pretty cool. It was a fun way to see how traits are passed down.,llm
-S0042,R0007,2024-12-14T23:44:21.404297,2,"This slideshow was about physics, which I'm not really into. The topic wasn't interesting to me.",llm
-S0043,R0110,2024-11-12T07:55:52.703188,3,"The video was on a topic I like, but I prefer reading about chemistry rather than watching videos.",llm
-S0043,R0062,2024-09-27T19:45:26.896538,4,The video helped me understand the different states of matter. It was easy to follow.,llm
-S0043,R0036,2024-10-31T03:13:12.889702,3,The simulation for atomic structure was okay. I prefer reading about it more.,llm
-S0043,R0023,2024-10-19T04:33:17.630316,2,I didn't really like the podcast about reactions. I learn better by seeing or reading things.,llm
-S0043,R0016,2024-12-20T23:11:04.921292,2,Listening to a podcast about atomic structure wasn't very helpful for me. I need visuals or text.,llm
-S0043,R0090,2024-12-05T13:38:18.679825,3,"The video on force and motion was alright, but I'm not really into physics topics.",llm
-S0043,R0082,2025-01-25T03:10:24.318453,5,This article on atomic structure was perfect! Reading is how I learn best and I like this topic.,llm
-S0043,R0013,2024-12-28T01:52:30.415596,3,"The article on matter was well-written, but I'm not as interested in this physics topic compared to chemistry.",llm
-S0043,R0009,2024-10-20T05:00:42.208175,4,Taking the quiz helped me check what I learned about atomic structure. It was a good way to review.,llm
-S0043,R0129,2024-10-13T07:48:27.830831,4,The slideshow was pretty good. It helped me understand the basics of bonding.,llm
-S0043,R0064,2024-12-28T15:58:49.118872,3,"The quiz was okay, but I prefer reading about the topics. It was a bit hard to focus.",llm
-S0043,R0050,2024-10-26T02:48:58.707073,5,This article was really helpful. It explained the states of matter in a clear way.,llm
-S0044,R0030,2025-01-19T17:48:40.899530,3,"The video was alright, but I'm not really into this topic. It was kind of boring.",llm
-S0044,R0034,2024-10-01T04:04:31.355498,5,Great article on functions! It was easy to follow and made sense.,llm
-S0044,R0133,2025-01-29T14:05:17.127050,3,"This article on energy was okay. Not my favorite topic, but the writing was decent.",llm
-S0044,R0064,2024-09-28T04:03:22.386578,4,The quiz was a good way to check what I learned about reactions. It was challenging but fair.,llm
-S0044,R0065,2024-12-25T21:50:50.271648,5,The simulation was awesome! It really helped me see how functions work.,llm
-S0044,R0046,2024-09-05T01:32:38.320222,5,I really liked this quiz! It helped me practice what I learned about triangles.,llm
-S0045,R0003,2024-12-19T19:25:16.429592,3,"The article was okay, but I learn better when I can listen to things. I prefer audio.",llm
-S0045,R0133,2025-01-21T09:20:27.936507,3,Still not my favorite way to learn. Reading is hard for me.,llm
-S0045,R0147,2024-10-02T15:45:56.838288,5,This podcast was great! I understood everything and liked listening.,llm
-S0045,R0032,2024-12-30T10:48:44.381584,5,Another good podcast. I enjoy learning about force and motion this way.,llm
-S0045,R0038,2025-01-04T12:33:54.989159,2,This simulation was confusing. I don't really like biology and I learn best with audio.,llm
-S0045,R0069,2024-09-11T10:37:51.697567,4,"The slideshow was decent. I prefer audio, but the topic was interesting.",llm
-S0045,R0048,2025-01-07T00:23:00.450461,4,"The video was pretty good. I like visual stuff sometimes, but audio is still my favorite.",llm
-S0045,R0086,2024-12-30T01:14:43.238627,4,"The simulation was okay, helped me understand the topic better even though I usually prefer audio stuff.",llm
-S0045,R0074,2024-12-11T14:52:15.644213,4,It was a good simulation for heat and temperature. I liked being able to interact with it.,llm
-S0045,R0075,2024-09-22T00:23:06.506346,3,"The quiz was a bit tough, but it made me think about the topic. Not my favorite way to learn though.",llm
-S0045,R0044,2024-10-16T17:27:55.787251,3,"The video was alright, but I learn better by listening. The introduction to physics part was interesting.",llm
-S0045,R0079,2024-10-09T03:43:06.334285,2,Reading articles isn't really my thing. I didn't get much out of this one.,llm
-S0045,R0117,2024-09-24T06:36:54.294005,3,"The video was visual, which isn't my preferred style. The topic heat and temperature was good though.",llm
-S0045,R0027,2024-11-03T21:24:56.553637,5,This podcast was great! It's exactly how I like to learn about physics.,llm
-S0045,R0092,2024-10-27T22:12:53.008455,3,The quiz on intro to physics was fine. It helped me check what I knew.,llm
-S0046,R0106,2024-11-07T19:25:04.066684,5,"This video was great!  It explained classification really well, and I like learning with videos.",llm
-S0046,R0042,2024-11-30T06:54:44.242650,3,"The video was okay, but I'm not really into physics. It was a little confusing.",llm
-S0046,R0020,2024-11-27T22:03:08.372304,4,"The article explained cell division clearly. It was helpful, even though I prefer videos sometimes.",llm
-S0046,R0029,2024-11-20T16:32:50.863043,5,I really liked this quiz! It was a fun way to test what I know about biology basics.,llm
-S0046,R0047,2025-01-18T10:44:55.005070,4,This podcast was pretty good for learning about cell division. It was easy to listen to.,llm
-S0046,R0128,2025-01-10T07:33:09.423039,4,Another good podcast on cell division. I understood the topic better after listening.,llm
-S0046,R0056,2024-11-03T03:55:18.152247,2,I didn't really get the slideshow on logic. It wasn't very interesting to me.,llm
-S0046,R0139,2024-09-06T13:14:13.036494,5,The simulation was awesome! It made cell structure easy to see and understand.,llm
-S0046,R0015,2025-01-25T05:34:59.590702,4,The quiz was a good way to check what I learned about cell division. I like doing things to test myself.,llm
-S0046,R0067,2024-12-15T22:43:21.562642,5,This simulation was really helpful for understanding cell division. Being able to interact with it made it easier to get.,llm
-S0046,R0140,2025-01-01T15:45:51.263498,3,"The podcast on classification was okay. I prefer learning in different ways, but the topic was interesting.",llm
-S0046,R0098,2024-11-29T16:00:12.508985,3,"Reading the article was fine, but it's not my favorite way to learn about cell division. I like the topic though.",llm
-S0047,R0048,2025-01-17T01:47:24.451439,4,The video on heat and temperature was pretty good. It helped me see some of the concepts in action.,llm
-S0047,R0011,2024-09-17T12:21:17.269507,2,I didn't really like reading about sets. It was hard to stay focused just reading text.,llm
-S0047,R0065,2024-10-08T11:35:20.511938,5,This simulation for functions was great! It was hands-on and made the topic make a lot more sense to me.,llm
-S0047,R0034,2024-12-10T08:51:02.329921,2,Reading about functions was tough. I really need to do things to understand math topics like this.,llm
-S0047,R0021,2024-09-26T02:48:38.518730,4,"The article was okay, but I prefer learning about triangles by actually doing stuff. It was clear though.",llm
-S0047,R0056,2024-12-02T12:20:40.984740,3,"The slideshow on logic was a bit hard to follow visually. I like logic, but this format wasn't the best for me.",llm
-S0048,R0030,2024-11-25T01:06:37.220258,3,"The video on matter was alright. I usually like reading more, so watching wasn't my favorite way to learn this.",llm
-S0048,R0129,2024-12-07T09:35:35.098649,3,The slideshow about bonding was confusing. I learn better by reading text.,llm
-S0048,R0125,2024-12-07T15:47:55.781685,3,"The video was okay, but I didn't really connect with the topic in this format. I'd rather read about chemistry.",llm
-S0048,R0139,2025-01-24T23:43:24.772989,2,"The simulation was not helpful for me. I learn by reading and writing, not by doing hands-on activities.",llm
-S0048,R0048,2024-10-21T01:42:23.214040,3,"The video on heat was average. I didn't hate it, but I'd prefer to read about it.",llm
-S0048,R0117,2024-12-30T05:32:28.958944,3,This video was similar to the last one. Still would rather read about heat.,llm
-S0048,R0045,2024-09-16T23:56:34.998074,3,"The podcast was okay, but I prefer reading about cell structure.",llm
-S0048,R0134,2024-09-15T21:21:00.605881,2,I didn't really like the quiz format for learning about chemistry. I'd rather read about it.,llm
-S0048,R0084,2024-10-04T12:31:54.884234,4,The video was pretty good for chemistry. It was easy to follow along.,llm
-S0048,R0109,2024-12-22T18:35:43.339709,5,This article was exactly what I needed to understand states of matter. Reading is my preferred way to learn.,llm
-S0049,R0065,2024-11-24T06:10:05.306978,5,The simulation was great for understanding functions. It's fun to learn this way!,llm
-S0049,R0093,2024-12-13T20:05:44.942933,3,"The podcast on triangles was alright. I usually like math topics, but audio isn't my favorite.",llm
-S0049,R0004,2024-10-04T09:01:08.442880,4,"The article on functions was helpful. I like learning about math, even if reading isn't my top style.",llm
-S0049,R0034,2024-10-27T11:48:33.529412,4,This article helped me understand functions better. It was a good resource.,llm
-S0049,R0021,2024-11-09T22:08:27.844063,4,"The article was pretty good and covered triangles well, which I like. Reading isn't my favorite way to learn though.",llm
-S0049,R0103,2024-12-12T14:42:32.712743,3,The podcast on sets was okay because I like the topic. I don't really learn well just by listening.,llm
-S0049,R0115,2024-12-14T06:08:41.265373,1,I really didn't like this article. Chemistry isn't my thing and reading about it was boring.,llm
-S0049,R0136,2024-09-23T18:17:58.687106,4,"I like learning about equations, and the article explained things clearly. Still prefer hands-on stuff though.",llm
-S0049,R0073,2025-01-29T15:40:28.836850,3,"Sets are interesting, but the podcast format wasn't very engaging for me. I need to do more than just listen.",llm
-S0049,R0119,2024-11-12T21:33:44.676710,4,Good information on equations in this article. It was easy to follow along.,llm
-S0049,R0014,2024-10-15T14:38:46.921771,3,"Listening to a podcast about equations wasn't the best way for me to understand it. I like the topic, but not the format.",llm
-S0049,R0070,2025-01-18T00:03:51.486796,5,"This quiz was great! I like doing quizzes, and states of matter was an interesting topic to test myself on. It felt interactive.",llm
-S0049,R0112,2024-09-13T23:08:16.055155,2,Didn't really like this. It was just listening and I prefer to do stuff.,llm
-S0049,R0127,2025-01-04T12:41:43.824547,4,"It was okay, I like this topic. Wish it was more hands-on though.",llm
-S0049,R0123,2024-12-20T06:03:58.392844,3,"The video was helpful for seeing things, but I still like doing things more. It was an okay topic.",llm
-S0050,R0133,2024-10-23T14:20:34.929647,3,The article was fine since I like the topic. But reading isn't my favorite way to learn.,llm
-S0050,R0116,2024-10-22T19:16:25.144958,5,Loved listening to this! The topic was interesting and the audio format is perfect for me.,llm
-S0050,R0041,2024-12-28T10:11:40.095758,4,"The slideshow was decent, I like the topic. Audio would have been better though.",llm
-S0050,R0112,2024-11-18T16:31:12.515509,5,This podcast was great! Easy to follow and I like learning about this stuff.,llm
-S0050,R0149,2024-10-23T14:14:24.990027,5,Really enjoyed this podcast. It was a good way to learn about chemical reactions.,llm
-S0050,R0010,2024-09-15T17:47:09.113278,3,"The video was okay, but I learn better when I can listen. The topic was interesting though.",llm
-S0050,R0082,2024-12-19T00:30:21.781604,2,Reading articles isn't really my thing. I prefer to hear explanations.,llm
-S0050,R0069,2024-11-08T07:40:07.062106,3,"The slideshow was helpful for the topic, but I wish there was audio with it.",llm
-S0050,R0070,2024-09-11T03:26:23.309917,4,The quiz was a good way to check what I knew. It's a fun way to learn about states of matter.,llm
-S0050,R0017,2024-09-07T17:55:52.978423,2,"This topic wasn't on my list of things I like. The quiz format was fine, just not interested in genetics.",llm
-S0050,R0048,2024-12-17T07:51:47.011943,3,"The video was visually good for heat and temperature, but I still prefer audio.",llm
+S0001,R0039,2024-09-18T15:49:22.180764,5,This quiz was a great way to check what I know about force and motion. I like doing things to learn.,llm
+S0001,R0112,2024-10-27T08:51:40.324229,5,The quiz on heat and temperature was helpful. It's good to practice with questions.,llm
+S0001,R0207,2024-09-22T08:17:00.098892,3,"The map was okay for physics intro, but I prefer learning by doing. It was a bit slow.",llm
+S0001,R0183,2024-10-29T15:47:27.196726,4,The quiz was a decent way to review geography. It made me think about the concepts.,llm
+S0001,R0090,2024-11-30T01:26:49.784701,5,"I really liked the quiz on functions! It helped me see what I understood, and I like kinesthetic activities.",llm
+S0002,R0176,2024-11-26T19:05:49.583850,5,This article explained triangles really well. I like reading about math topics.,llm
+S0002,R0145,2024-11-03T21:05:33.166440,5,Reading about regional geography was interesting. The article was easy to follow.,llm
+S0002,R0152,2024-11-13T11:41:34.302009,3,"The podcast was okay, but I learn better by reading. It was hard to focus sometimes.",llm
+S0002,R0103,2024-11-21T03:27:44.908102,3,Maps aren't my usual way to learn geography. I prefer reading about the regions.,llm
+S0002,R0044,2025-01-17T19:02:22.027538,3,Still not a big fan of maps for geography. I'd rather read an article on this topic.,llm
+S0002,R0159,2025-01-19T12:50:18.435278,3,"The simulation was okay, but I prefer reading. The topic was interesting though.",llm
+S0002,R0194,2024-09-27T03:48:10.522751,4,The slideshow was helpful for understanding equations. I like learning about math topics.,llm
+S0002,R0013,2024-09-26T04:43:14.370062,2,"Podcasts aren't really my thing, I learn better by reading. The geography topic was interesting but the format was hard to follow.",llm
+S0002,R0066,2024-10-14T14:44:13.996157,4,The video explained triangles well. I enjoy learning about geometry.,llm
+S0002,R0151,2024-09-29T06:02:42.913621,4,This slideshow was a good review of functions. Easy to understand.,llm
+S0002,R0026,2025-01-06T03:21:15.897711,3,"The quiz was a good way to test myself, but I'd rather read about functions first.",llm
+S0002,R0014,2024-12-03T12:44:30.347275,5,Excellent slideshow on equations! Very clear and easy to follow.,llm
+S0002,R0036,2025-01-09T16:39:09.232645,3,"The map for equations wasn't super helpful for me. I like math, but this visual didn't click.",llm
+S0002,R0158,2025-01-22T17:28:30.822846,1,I didn't understand this video at all. I don't like science topics like genetics.,llm
+S0003,R0053,2024-11-13T04:13:21.806656,4,"The video on genetics was pretty good. I usually like audio more, but this was clear.",llm
+S0003,R0155,2024-09-30T11:08:44.353257,3,"It was okay. Reading isn't my favorite way to learn, even if I like triangles.",llm
+S0003,R0066,2024-10-28T23:24:49.296044,3,"The video was alright. I prefer listening, but the visuals helped a bit with the math.",llm
+S0003,R0034,2024-11-24T19:10:24.413745,2,I really don't like reading about logic. It was hard to get through.,llm
+S0003,R0157,2024-12-08T14:43:29.324860,4,The simulation was pretty cool. It helped me understand classification better since I like biology.,llm
+S0003,R0174,2024-11-01T18:42:10.362547,3,"Reading about genetics was fine, but it wasn't the most engaging for me.",llm
+S0003,R0152,2024-11-14T06:00:52.521146,5,This podcast was great! I love listening and the topic on human geography was interesting.,llm
+S0003,R0161,2024-12-17T05:33:21.453095,4,The quiz was a good way to check what I knew about sets. I like interactive stuff.,llm
+S0003,R0072,2024-11-07T00:31:07.377387,3,"Reading this article was okay. I like the topic, but reading isn't my preferred style.",llm
+S0004,R0133,2024-09-26T06:07:35.898381,5,"This video was perfect! I learn best by watching, and atomic structure is a cool topic.",llm
+S0004,R0182,2024-11-25T09:00:05.848070,2,I didn't really like the podcast. I need to see things to understand chemistry.,llm
+S0004,R0110,2024-12-30T04:16:20.438109,5,This map helped me see how atomic structure works. It was easy to follow along.,llm
+S0004,R0205,2024-10-04T07:11:56.150948,5,The map for bonding basics was really good. It made the connections clear.,llm
+S0004,R0118,2024-09-05T22:29:13.181185,4,The timeline on states of matter was okay. I prefer seeing diagrams more than just a timeline.,llm
+S0004,R0107,2024-10-04T22:49:57.150894,3,The quiz was a bit hard. I don't think I learned much from just answering questions.,llm
+S0004,R0053,2024-10-14T14:08:28.334226,5,Loved the video on genetics! It explained everything in a way that made sense.,llm
+S0004,R0037,2024-12-27T21:24:08.911750,2,Reading the document was boring. I didn't really understand the reactions from just text.,llm
+S0004,R0157,2024-11-25T09:55:02.176815,4,The simulation for classification was pretty cool. I liked being able to interact with it.,llm
+S0004,R0158,2024-12-26T15:42:45.506522,5,Watching the video again helped reinforce the genetics concepts. Still my favorite way to learn.,llm
+S0004,R0072,2024-11-14T19:00:55.998522,2,Reading this article wasn't helpful. I need pictures or something visual.,llm
+S0004,R0021,2024-11-17T03:09:39.140271,1,This document was confusing. I really dislike reading long texts for science.,llm
+S0005,R0054,2024-11-26T11:30:56.633392,3,"This was okay, but I prefer reading about geography topics.",llm
+S0005,R0010,2024-10-11T10:49:45.867504,5,Loved reading this document! Maps are interesting and this was easy to understand.,llm
+S0005,R0105,2024-11-22T00:13:00.494059,5,Great article! It gave a good overview of geography and I liked the writing style.,llm
+S0005,R0031,2025-01-28T14:59:54.524042,4,"The slideshow was helpful for seeing the visuals, but I still prefer reading about history.",llm
+S0005,R0184,2024-11-21T20:21:54.741320,3,"The podcast was alright, but I think I would have learned more if I could read about early civilizations instead.",llm
+S0005,R0114,2024-12-24T06:35:36.033336,4,"This article was interesting, even though it's not one of my favorite subjects. I liked being able to read it.",llm
+S0005,R0021,2024-12-24T18:15:17.893273,5,Excellent document on classification! It was well-written and easy to follow.,llm
+S0005,R0103,2024-11-06T15:30:44.945776,4,"The map was useful for understanding regional geography, but I wish there was more text to go with it.",llm
+S0005,R0011,2024-10-03T23:59:45.500915,2,I don't really like quizzes and this topic isn't my favorite. It wasn't the best way for me to learn.,llm
+S0005,R0068,2024-11-04T04:45:38.105048,3,"The podcast about the Middle Ages was okay, but I learn history better when I can read about it.",llm
+S0005,R0060,2024-12-21T03:13:22.944808,2,I didn't really like this simulation. History isn't my favorite subject and I prefer reading about things.,llm
+S0006,R0039,2024-12-08T16:54:22.497931,5,This quiz was great! I love physics and quizzes are a good way for me to check what I know.,llm
+S0006,R0033,2024-10-08T09:03:16.590656,2,"Chemistry isn't my thing, and watching a video wasn't the best way for me to try and understand it.",llm
+S0006,R0053,2025-01-11T02:18:39.178467,4,"The video on genetics was pretty good. Biology is interesting to me, even if I usually like doing more hands-on stuff.",llm
+S0006,R0137,2024-09-05T20:48:10.631188,3,"Reading an article isn't my preferred way to learn, but the biology content was okay.",llm
+S0006,R0021,2024-10-10T16:26:32.548064,3,This document on classification was alright. I'd rather do an activity than read a document though.,llm
+S0006,R0144,2025-01-09T04:36:41.194091,4,This slideshow was helpful for learning about heat and temperature. Physics is one of my favorite subjects.,llm
+S0006,R0192,2024-09-14T03:13:35.089395,5,Another good quiz! It helped me remember the stuff about matter and properties.,llm
+S0006,R0165,2025-01-09T15:48:45.592717,5,This simulation was really fun and helped me understand force and motion better. I love doing simulations!,llm
+S0006,R0207,2024-09-18T17:24:25.056115,3,Looking at this map for physics was a bit weird. I usually like doing things more actively for physics.,llm
+S0006,R0038,2025-01-01T14:17:07.509285,4,This slideshow was pretty good. The pictures helped me understand the energy concepts better.,llm
+S0006,R0177,2024-10-02T16:35:54.525643,4,"The slideshow covered force and motion well. I prefer doing things hands-on, but the visuals were clear.",llm
+S0006,R0100,2024-12-21T09:06:34.008421,5,I really liked this quiz! It helped me check what I knew about cell structure by actually doing the questions.,llm
+S0007,R0128,2024-12-14T01:25:12.430895,2,"Reading this article was okay, but it's not how I learn best. I wish there was something I could listen to instead.",llm
+S0007,R0091,2025-01-09T00:26:25.711020,3,The video was alright for learning about energy. I usually like to hear things explained more.,llm
+S0007,R0130,2024-12-02T03:35:19.581695,2,This timeline didn't really help me with short stories. It was just visuals and not very engaging for me.,llm
+S0007,R0139,2024-11-04T15:40:38.747947,3,"The slideshow on sets was visual, which isn't my preferred way to learn math. I understood some of it, but it was a bit hard to follow.",llm
+S0007,R0058,2024-12-03T00:55:55.012838,2,Reading this document on physics wasn't the best way for me to learn. I'd rather hear someone explain it.,llm
+S0007,R0103,2024-12-28T12:17:38.037600,3,Looking at the map was okay for geography. I prefer listening to lessons though.,llm
+S0007,R0040,2025-01-01T20:13:56.037200,3,"The slideshow about geography intro was visual. It was decent, but I learn better by listening.",llm
+S0007,R0080,2024-12-31T14:54:58.852706,3,"The simulation was okay, but it wasn't really my preferred way to learn about drama.",llm
+S0007,R0138,2024-11-26T01:56:57.932064,2,Looking at a map for drama felt kind of confusing. I'd rather listen to something.,llm
+S0007,R0167,2024-11-20T08:59:08.194813,5,This podcast was great! It was easy to follow and explained sets really well.,llm
+S0007,R0204,2024-11-30T03:00:44.113125,1,Reading a document about classification was boring. I didn't really get much from it.,llm
+S0007,R0187,2024-09-26T10:11:58.449558,4,The video on the Age of Exploration was pretty interesting. It was nice to see things instead of just reading.,llm
+S0008,R0181,2025-01-26T19:53:47.640496,5,Loved this podcast on logic! It's one of my favorite topics and the audio format worked perfectly.,llm
+S0008,R0140,2024-10-15T04:30:29.322996,4,Doing the quiz was a good way to check what I learned about history. It was interactive.,llm
+S0008,R0025,2024-11-26T11:35:37.468480,4,This video on force and motion was helpful. Seeing the concepts made it easier to understand.,llm
+S0008,R0112,2025-01-22T19:29:16.727532,5,The quiz on heat and temperature was fun and helped me review. I like doing these kinds of activities.,llm
+S0008,R0092,2024-11-17T16:14:23.704010,5,Another good quiz on heat and temperature. It's a solid way to practice the topic.,llm
+S0008,R0039,2025-01-14T22:09:45.956824,3,"It was okay, but I like listening more than doing quizzes. The topic was good though.",llm
+S0008,R0027,2025-01-02T02:12:56.170379,2,"I don't really like chemistry, and videos aren't my favorite way to learn. It was hard to pay attention.",llm
+S0008,R0125,2024-09-21T11:22:27.108822,4,"The podcast was good since I like audio. Chemistry isn't my top subject, but it was explained clearly.",llm
+S0009,R0128,2024-12-23T06:20:28.142292,5,Loved reading this article! History is interesting and reading is how I learn best.,llm
+S0009,R0106,2024-11-02T03:37:28.965140,4,"The slideshow was pretty good. I prefer reading, but the pictures helped with cell structure.",llm
+S0009,R0065,2024-09-09T22:51:07.390021,2,Podcasts aren't my usual style. I'd rather read about short stories.,llm
+S0009,R0071,2024-10-12T21:01:13.774647,3,"It was okay, but I like reading poetry best. Slideshows are alright but not ideal.",llm
+S0009,R0188,2024-12-09T00:58:05.190614,5,This article was perfect for me. I learned a lot about literature elements by reading.,llm
+S0009,R0058,2024-12-15T21:58:11.047025,5,This document was great for learning about physics. Reading is my preferred method.,llm
+S0009,R0192,2024-09-21T00:52:17.986730,3,"Quizzes are fine, but I'd rather read about physics. It helped check what I knew though.",llm
+S0009,R0103,2024-09-23T01:59:10.460299,3,"This was okay, but maps aren't really my thing. I prefer reading about stuff.",llm
+S0009,R0012,2024-10-19T15:16:42.538341,4,The simulation was pretty cool and helped me understand the physics topic better.,llm
+S0009,R0038,2024-10-08T09:08:18.160232,4,The slideshow was helpful for visualizing energy concepts. Easy to follow.,llm
+S0009,R0183,2025-01-06T09:02:44.518833,2,A map for matter and properties? Didn't make much sense to me. I like to read about these topics.,llm
+S0009,R0077,2024-10-30T07:08:51.068743,5,Loved the video on the novel genre! It was engaging and covered everything well.,llm
+S0010,R0021,2024-09-22T11:13:47.993754,5,"This document was perfect! It explained classification clearly, and I learn best by reading.",llm
+S0010,R0142,2024-12-05T11:49:29.223989,2,A map didn't help me understand cell division at all. I wish it was something I could read.,llm
+S0010,R0157,2024-12-04T19:11:37.185011,4,The simulation for classification was surprisingly fun and helped me remember things.,llm
+S0010,R0137,2024-10-27T15:37:28.258013,5,Excellent article! It was exactly what I needed to learn about living things.,llm
+S0010,R0072,2024-09-12T09:40:15.508397,5,Another great article on classification. Reading is definitely my preferred way to learn this.,llm
+S0010,R0174,2024-12-29T23:37:31.575143,5,This document was really helpful for understanding genetics. The reading format works well for me.,llm
+S0010,R0106,2024-12-26T02:26:11.281208,4,"The slideshow was okay, but I prefer reading. The topic was interesting though.",llm
+S0010,R0158,2024-10-31T19:55:52.328805,3,The video on genetics was a bit hard to follow since I like to read. I think I'd understand it better in a different format.,llm
+S0010,R0014,2024-12-23T05:17:01.807917,1,I don't like math and the video format didn't help. This was confusing.,llm
+S0010,R0053,2024-12-14T21:36:21.252228,3,"The video was alright, but I still think I'd prefer reading about genetics. The topic is cool though.",llm
+S0010,R0027,2025-01-11T11:23:53.164184,2,Chemistry isn't my favorite and the video format wasn't ideal for me. I didn't get much from this.,llm
+S0010,R0022,2024-11-08T15:49:01.316085,4,"I like biology, but a map wasn't the best way to learn about living things. It was interesting to see though.",llm
+S0011,R0204,2024-11-13T16:40:23.509582,3,"I prefer visual learning, so reading this document was a bit of a struggle. The topic was okay.",llm
+S0011,R0031,2025-01-10T04:55:18.237523,5,The slideshow on ancient Greece and Rome was great. I really enjoy history and the visual format worked well for me.,llm
+S0011,R0151,2025-01-06T22:08:03.802040,5,This slideshow was great! It helped me understand functions with good visuals.,llm
+S0011,R0073,2025-01-25T19:04:21.568739,4,The slideshow on triangles was helpful. Good pictures to explain the concepts.,llm
+S0011,R0179,2024-12-05T20:39:43.693283,3,The quiz on cell structure was okay. I prefer learning with visuals before being tested.,llm
+S0011,R0028,2024-12-15T06:58:30.919821,5,Enjoyed the video about the Age of Exploration. It was interesting and easy to see what was happening.,llm
+S0011,R0072,2025-01-07T08:47:06.046805,3,The article on classification was a bit hard to get through. I learn better when I can see things.,llm
+S0011,R0093,2024-12-30T03:32:12.502218,3,"Reading about early civilizations was okay, but not my favorite way to learn. I like visuals more.",llm
+S0011,R0158,2024-10-31T01:19:20.302737,5,Loved the video on genetics! It made a complicated topic much clearer with the animations.,llm
+S0011,R0202,2025-01-25T04:29:52.707101,4,The map on Ancient Greece and Rome was useful. It helped me visualize where everything was.,llm
+S0011,R0121,2025-01-03T13:14:52.350119,2,This article was boring. I wish there were more pictures or a video instead.,llm
+S0011,R0036,2024-11-14T16:50:49.091788,4,"This visual map was helpful for understanding equations, which I like. It made the topic a bit easier to see how things connect.",llm
+S0012,R0124,2024-10-19T18:03:47.887610,5,"I really like poetry, and this document explained things well. It was easy to read and understand the concepts.",llm
+S0012,R0066,2024-10-13T19:44:28.706775,4,The video on triangles was pretty good. It covered the topic clearly since I enjoy math.,llm
+S0012,R0018,2024-11-22T15:27:12.169634,5,"Loved this video about Ancient Greece and Rome! History is interesting to me, and the video was engaging.",llm
+S0012,R0166,2024-09-20T17:16:24.827212,4,The article on early civilizations was informative. It's a topic I enjoy reading about.,llm
+S0012,R0194,2025-01-07T17:10:45.899289,4,The slideshow on equations was useful. It presented the information in a clear visual way that worked for me.,llm
+S0012,R0020,2024-12-29T00:48:44.784718,2,"I don't really like geography, so this article wasn't very interesting to me. It was hard to get through.",llm
+S0012,R0080,2025-01-14T00:24:59.330634,3,"The simulation was okay, but drama isn't my favorite subject. It was a different way to learn though.",llm
+S0012,R0153,2024-12-25T02:24:30.878133,4,This document on triangles was helpful. It explained the math concepts well.,llm
+S0012,R0151,2024-09-07T22:29:49.785313,4,The slideshow for functions was good. It helped me understand the basics of the topic.,llm
+S0012,R0161,2024-12-04T13:16:28.517855,4,The quiz was a good way to practice sets. I like this topic.,llm
+S0012,R0094,2025-01-05T08:12:31.306312,5,This video on short stories was really interesting. It helped me understand the analysis better.,llm
+S0012,R0017,2024-09-03T11:00:13.035596,4,The video about the Age of Exploration was informative. I enjoy learning about history.,llm
+S0013,R0138,2025-01-19T08:15:53.064934,3,The map for drama wasn't very helpful for me. I prefer reading about literature.,llm
+S0013,R0174,2024-09-24T20:31:56.129759,5,This document explained genetics really well. Reading is my preferred way to learn.,llm
+S0013,R0053,2024-11-08T22:25:18.209118,4,"The video on genetics was okay, but I usually learn better by reading. Still a good topic.",llm
+S0013,R0157,2025-01-28T18:25:18.398950,3,"The simulation for classification was a bit confusing. I like the topic, but this format wasn't the best.",llm
+S0013,R0075,2024-11-04T14:20:40.798827,4,The quiz on biology basics was a good review. I like testing my knowledge on topics I enjoy.,llm
+S0013,R0124,2025-01-29T08:23:43.098335,5,This document about poetry was excellent. It really helped me understand the concepts.,llm
+S0013,R0188,2025-01-16T07:41:30.280814,5,The article on literary elements was very clear and helpful. Great resource for this topic.,llm
+S0013,R0059,2025-01-12T04:54:12.588798,4,This video was pretty good! It covered the novel genre well and was easy to follow.,llm
+S0013,R0043,2024-10-16T13:57:38.116297,3,"The quiz on poetry was okay. It helped check my understanding, but I prefer reading about it.",llm
+S0013,R0156,2025-01-11T00:54:37.044766,5,Loved this video on cell division! It explained everything clearly and was interesting.,llm
+S0013,R0172,2025-01-11T08:46:49.493808,2,I didn't really like the podcast format for the novel genre. I'd rather read about it.,llm
+S0013,R0142,2024-09-15T02:15:50.774115,3,The map was a bit confusing for cell division. I think a diagram or video would be better.,llm
+S0013,R0003,2024-10-25T10:13:04.185954,4,This quiz was helpful for practicing cell division concepts. It was a good way to review.,llm
+S0013,R0158,2024-09-13T10:41:31.211796,5,Excellent video introduction to genetics! It made a complicated topic easy to understand.,llm
+S0014,R0045,2024-12-10T08:10:47.757215,5,This podcast was perfect for learning about sets. I liked being able to just listen.,llm
+S0014,R0038,2024-12-07T23:39:15.199023,3,"The slideshow on energy was alright, but I usually prefer listening to explanations.",llm
+S0014,R0150,2024-09-08T19:40:37.505195,4,The video on logic was pretty good. It was visual and explained the ideas well.,llm
+S0014,R0167,2024-12-04T11:11:23.602466,5,This podcast was great! It was easy to follow and helped me understand sets better.,llm
+S0014,R0046,2024-12-19T14:58:54.585181,4,Pretty good podcast on logic. I liked the examples used.,llm
+S0015,R0001,2024-12-24T00:57:40.813966,3,"The video was okay, but I prefer doing things hands-on to learn about matter and properties.",llm
+S0015,R0183,2024-11-04T19:31:58.545471,2,A map didn't really help me understand matter and properties. It wasn't very engaging.,llm
+S0015,R0042,2024-09-14T18:30:21.076106,5,The quiz was a good way to test what I learned about history. I like interactive stuff.,llm
+S0015,R0093,2024-09-15T08:56:44.336391,2,Reading an article isn't my favorite way to learn. I'd rather watch a video or do something interactive.,llm
+S0015,R0025,2024-10-03T05:26:18.042911,3,"The video explained force and motion alright, but I think I need to try some experiments to really get it.",llm
+S0015,R0209,2024-09-12T18:26:59.737125,4,This quiz was a solid way to review the Middle Ages. It made me think about what I knew.,llm
+S0015,R0165,2024-11-29T15:29:40.187587,5,The simulation for force and motion was awesome! It made the concepts much clearer by letting me experiment.,llm
+S0015,R0206,2024-11-18T10:27:57.523691,5,This simulation was really helpful for understanding force and motion. I learned a lot by trying different things.,llm
+S0015,R0006,2024-11-07T04:55:20.501205,2,"Reading isn't my favorite way to learn, even though I like the topic. It was a bit hard to focus.",llm
+S0015,R0202,2024-09-02T05:13:07.500452,3,"The map was okay, but I learn best by doing stuff. It helped a little with the history topic.",llm
+S0015,R0121,2024-10-22T21:06:45.791005,2,Another article. It's hard to get into history when I'm just reading about it.,llm
+S0015,R0128,2024-09-19T05:01:54.771645,2,I prefer hands-on activities. Reading this article wasn't very engaging for me.,llm
+S0015,R0041,2025-01-08T21:52:23.597526,5,This simulation was awesome! It really helped me understand heat and temperature better because I could interact with it.,llm
+S0015,R0088,2024-12-14T19:10:06.053040,3,"The slideshow was visual, which is better than just text, but I still prefer activities where I can move around.",llm
+S0015,R0140,2024-11-12T03:11:08.429894,4,Taking the quiz was a good way to check what I learned. It felt more active than just reading.,llm
+S0016,R0085,2024-10-05T13:42:12.411618,3,"It was an interesting topic, but reading isn't my main learning style. I would have liked an audio version.",llm
+S0016,R0008,2024-09-14T11:44:09.015077,4,Doing the quiz helped me think about the short story. It was a good way to test myself.,llm
+S0016,R0132,2024-12-31T16:47:15.236850,3,"Reading about short stories is okay, but I prefer listening or discussing them.",llm
+S0016,R0054,2024-09-16T14:00:08.482850,5,Loved the podcast! It was easy to follow and the topic was really interesting.,llm
+S0016,R0106,2024-10-26T12:02:36.827493,3,"The slideshow was okay, but I learn better by listening. The content was good though.",llm
+S0016,R0076,2024-10-16T04:30:04.703547,3,The video was a bit hard to focus on since I prefer audio. The poetry topic was still cool.,llm
+S0017,R0093,2024-10-28T18:58:51.905231,5,This article was perfect for me. It was exactly how I like to learn about history.,llm
+S0017,R0176,2025-01-01T19:38:43.280349,5,Great article on triangles. I understood it really well because I like reading.,llm
+S0017,R0149,2025-01-11T01:10:41.514941,3,"The podcast was okay, but I'd rather read about history. It was a good topic though.",llm
+S0017,R0062,2024-12-06T21:04:19.064012,3,The map was kind of confusing for chemistry. I prefer reading about these concepts.,llm
+S0017,R0150,2024-12-12T05:56:41.173363,4,"The video was pretty good for learning about logic, even though I prefer reading. It was clear.",llm
+S0017,R0191,2024-09-11T07:55:25.196383,2,"The simulation was not my thing at all. I learn best by reading and writing, not doing this.",llm
+S0017,R0125,2024-11-25T01:22:02.500457,3,Didn't really like learning about chemistry through a podcast. I'd rather read about bonding.,llm
+S0018,R0165,2024-12-02T03:47:48.923262,2,"This simulation was okay, but I prefer learning by reading. It was a bit hard to follow along.",llm
+S0018,R0147,2024-09-25T18:45:30.155189,4,I liked reading this document. It helped me understand the states of matter better.,llm
+S0018,R0190,2024-10-24T00:42:15.454902,3,The timeline was visually interesting. It gave a good overview of ancient Greece and Rome.,llm
+S0018,R0090,2024-10-03T04:06:46.641452,2,Quizzes aren't my favorite way to learn. I'd rather read about physics.,llm
+S0018,R0204,2024-12-22T23:43:34.546875,4,This document on classification was easy to read and understand. It explained the topic clearly.,llm
+S0018,R0202,2025-01-17T21:41:46.707896,3,The map was helpful for seeing where things were. It added to what I know about ancient times.,llm
+S0018,R0016,2024-12-03T00:39:34.090794,3,The slideshow had some good pictures. It was a decent way to learn about cell structure.,llm
+S0018,R0089,2024-11-06T19:11:56.914250,4,Reading about chemical reactions was good. The document explained the basics well.,llm
+S0018,R0001,2024-10-03T19:17:40.965644,3,"The video was okay, but I think I would learn more from reading. It was a bit fast.",llm
+S0018,R0113,2025-01-14T09:15:10.205593,3,This timeline was informative. It helped me see the sequence of events related to cell structure.,llm
+S0018,R0088,2024-09-22T03:24:27.450254,3,"The slideshow was okay, but I prefer reading about stuff. It was a little hard to follow.",llm
+S0018,R0146,2024-09-19T14:19:18.387511,3,The video was alright. I still like reading more than watching videos for learning.,llm
+S0018,R0158,2024-12-20T05:33:11.360156,3,It was an average video. I'd rather read the information myself to understand it better.,llm
+S0018,R0160,2024-10-24T01:57:54.578694,2,I didn't like the quiz. I don't really learn well by doing quizzes right away.,llm
+S0018,R0052,2024-11-04T20:06:17.277261,3,"Another video. It was okay, but I really prefer to read the material instead.",llm
+S0019,R0017,2024-12-29T10:51:42.552654,4,The video was pretty good. I enjoyed learning about the Age of Exploration.,llm
+S0019,R0060,2024-10-08T09:58:40.162325,5,The simulation was awesome! It helped me really understand early civilizations.,llm
+S0019,R0181,2024-12-07T08:06:17.780807,3,"The podcast was okay, but I usually like doing things more hands-on.",llm
+S0019,R0155,2024-10-08T11:21:26.303477,3,"Reading the document was fine, but I learn better by doing stuff myself.",llm
+S0019,R0044,2024-11-30T18:01:14.159389,4,Looking at the map was interesting. It was a good way to see the geography.,llm
+S0019,R0141,2024-12-18T21:33:18.040418,5,This quiz was a fun way to practice sets. It matched how I like to learn.,llm
+S0019,R0202,2024-10-14T00:33:10.855667,3,"The map was okay for learning about Greece and Rome, but I prefer more hands-on activities.",llm
+S0019,R0004,2025-01-21T03:11:45.543234,3,"The video about novels was interesting, but I wish there was something more interactive.",llm
+S0020,R0166,2024-09-05T01:12:41.932346,2,Reading an article isn't my favorite way to learn. I'd rather listen to something.,llm
+S0020,R0076,2025-01-06T21:46:54.320310,3,"The video was alright, but I think I would have learned more if it was a podcast.",llm
+S0020,R0161,2025-01-11T05:59:51.826268,3,"The quiz was okay, but it wasn't the best way for me to understand the topic. I learn better by listening.",llm
+S0020,R0073,2024-10-02T00:32:07.017304,3,"The slideshow was visually clear, but I prefer resources I can listen to.",llm
+S0020,R0065,2024-12-01T15:30:10.712488,5,This podcast was perfect for learning about short stories. It's exactly how I like to study.,llm
+S0020,R0159,2024-09-29T11:39:18.001136,3,The simulation was a bit confusing for me. I think I'd grasp functions better through audio.,llm
+S0020,R0172,2024-10-30T03:42:20.453814,5,Listening to this podcast about novels was great. It made the topic much easier to understand.,llm
+S0020,R0151,2024-12-07T13:43:09.347875,3,"The topic was interesting, but I prefer learning by listening.  Slideshows aren't my favorite way to understand things.",llm
+S0020,R0127,2024-12-28T08:29:49.188714,4,"I like reading about novels. This article was pretty good, even though I usually like audio resources more.",llm
+S0020,R0017,2024-12-29T20:39:05.713119,2,"This topic wasn't something I was interested in. The video was okay, but it didn't really grab my attention.",llm
+S0021,R0168,2024-10-07T03:22:19.419476,4,"I enjoyed learning about human geography. The podcast was a different format than I usually use, but it was pretty informative.",llm
+S0021,R0188,2024-10-29T06:26:57.562596,5,"This article was perfect for me. I love reading about literature, and the reading format works best for how I learn.",llm
+S0021,R0180,2024-10-07T09:40:49.016328,3,"The topic of maps is okay. The slideshow was alright, but I'd rather read about it or write notes.",llm
+S0021,R0138,2024-12-06T08:24:37.308594,2,I don't understand why this was a map about drama. It didn't really help me learn about the topic.,llm
+S0021,R0117,2024-09-11T17:20:50.978919,1,A map for poetry? This didn't make any sense to me at all. I couldn't learn anything from it.,llm
+S0021,R0010,2025-01-13T04:44:15.683233,5,"This document on maps was really helpful. Reading is my preferred way to learn, and the information was clear.",llm
+S0021,R0099,2024-09-02T19:43:51.070459,3,"The timeline for maps was interesting visually. It was okay, but I still prefer reading about the topic.",llm
+S0021,R0184,2024-10-25T12:37:11.648340,3,"The topic was okay, but I prefer reading about history than listening to it.",llm
+S0021,R0201,2024-10-18T18:53:48.788235,2,"Biology isn't really my favorite subject, even though I like reading.",llm
+S0021,R0035,2024-10-29T09:54:06.529473,4,"I liked the topic since I enjoy geography, but audio isn't my usual way to learn.",llm
+S0021,R0145,2025-01-05T16:26:21.299002,5,Great resource! I really like geography and the article format works best for me.,llm
+S0021,R0068,2024-11-03T13:12:34.013271,3,"History is alright, but I would have liked to read about the Middle Ages instead of listening.",llm
+S0021,R0040,2024-11-22T11:59:41.803759,4,Geography is a good topic for me. The visuals helped understand the introduction.,llm
+S0021,R0043,2024-09-27T02:07:10.600444,5,Poetry is fun and I liked the quiz format. It helped me test what I know.,llm
+S0021,R0080,2024-11-11T02:57:25.216448,4,Learning about drama was interesting and the simulation was a different way to do it.,llm
+S0022,R0204,2025-01-28T02:12:55.237579,3,"The document was fine, but I don't have strong feelings about biology topics.",llm
+S0022,R0207,2024-09-12T00:31:20.750061,1,I really dislike physics and looking at a map didn't help me understand it.,llm
+S0022,R0025,2024-11-28T16:36:19.126294,4,The video was pretty clear and helped me understand force and motion better. It wasn't too boring.,llm
+S0022,R0100,2024-09-03T01:59:14.549382,3,"The quiz was okay, but some questions were confusing.  It did make me think about cell structure though.",llm
+S0022,R0171,2024-10-03T13:51:08.673071,4,Good video about heat and temperature. It explained things in a way that made sense.,llm
+S0022,R0047,2025-01-18T07:25:38.435138,2,Reading about novels isn't really my thing. It was kind of dry.,llm
+S0022,R0165,2025-01-22T06:00:58.712171,5,The simulation was awesome! It really helped me see how force and motion work.,llm
+S0022,R0050,2024-10-31T02:15:41.351615,3,"Another quiz. It was fine for practicing cell division, I guess.",llm
+S0022,R0183,2024-10-14T06:13:54.435169,3,The map for matter and properties was a little weird.  Not sure it helped much.,llm
+S0022,R0026,2024-12-17T14:34:03.978447,4,The math quiz on functions was challenging but good practice.  I felt like I learned something.,llm
+S0022,R0117,2024-12-25T20:00:23.912685,1,A map about poetry? That didn't make any sense to me at all.,llm
+S0022,R0104,2024-11-03T23:02:11.948144,2,Reading articles isn't my preferred way to learn about cells. It was hard to stay focused.,llm
+S0023,R0195,2024-10-31T17:51:12.010232,5,This video explained equations really well.  It was easy to follow along visually.,llm
+S0023,R0188,2024-12-06T17:18:25.678238,3,"The article was okay, but I prefer learning about literature visually. It was a bit dry.",llm
+S0023,R0153,2024-11-21T04:27:46.864386,3,Reading about triangles is not my favorite way to learn.  I wish there were more diagrams.,llm
+S0023,R0086,2024-09-24T01:18:50.142051,5,Great video on logic! The visuals helped me understand the concepts much better.,llm
+S0023,R0204,2024-09-13T14:57:20.863335,3,"The document on classification was informative, but I learn better with pictures and diagrams.",llm
+S0023,R0156,2024-09-12T22:22:26.906152,5,This video on cell division was excellent.  The animations made it really clear.,llm
+S0023,R0027,2025-01-18T01:25:54.077493,4,"The video on chemical reactions was interesting, even though it's not a topic I usually focus on.  The visuals were good.",llm
+S0023,R0109,2025-01-26T02:54:42.137643,5,The timeline was a really helpful way to see the stages of cell division. Very visual and easy to understand.,llm
+S0023,R0120,2024-09-24T11:05:12.204835,2,I don't really like listening to podcasts to learn.  It was hard to pay attention without anything to look at.,llm
+S0023,R0012,2024-10-20T08:08:35.065456,1,This simulation was confusing and not visual at all. I didn't understand how to use it.,llm
+S0023,R0106,2024-11-28T13:14:53.803525,5,This slideshow was great! The pictures helped me understand cell structure way better. Good topic too.,llm
+S0023,R0031,2024-12-25T05:55:27.304324,3,"The slideshow was okay, visually it worked for me. But I'm not really into history topics like Ancient Greece.",llm
+S0023,R0158,2024-12-08T03:01:06.483060,5,Loved this video on genetics! It matched my visual style and is one of my favorite topics. Super helpful.,llm
+S0023,R0069,2024-12-07T02:47:31.775039,2,"This podcast wasn't really for me. I prefer visual stuff, and listening to someone talk about novels is kinda boring.",llm
+S0024,R0016,2024-10-17T20:03:15.278657,3,"The slideshow on cell structure was alright. I like biology, but slideshows aren't my favorite way to learn.",llm
+S0024,R0107,2024-11-06T01:26:57.912055,5,"This quiz was awesome! I learn best by doing, and testing myself on bonding basics was perfect. Really enjoyed it.",llm
+S0024,R0205,2025-01-22T23:13:22.755429,3,"The map resource was okay for bonding basics, which I like. But maps are more visual than kinaesthetic, so it wasn't ideal for my learning style.",llm
+S0024,R0155,2024-10-07T00:49:18.821203,2,"Reading this document on triangles was tough. I don't really learn well by just reading text, I need to move or interact.",llm
+S0024,R0199,2024-10-07T21:59:40.658924,4,"The video on sets was pretty good. It was visual, which is okay, and I like math topics. Clear explanations.",llm
+S0024,R0061,2025-01-18T14:51:03.534341,4,This video about functions was helpful. I like math and the visual format worked well enough to understand the concepts.,llm
+S0024,R0021,2024-09-18T12:20:07.337460,3,"It was okay, but I learn better when I can actually do things, not just read about them.",llm
+S0024,R0116,2024-12-02T10:57:48.898731,4,The quiz was a good way to check what I learned. I like activities that let me move around.,llm
+S0024,R0002,2024-09-09T07:25:25.383877,5,This simulation was awesome! It really helped me understand logic by letting me play with the concepts.,llm
+S0024,R0015,2024-12-10T13:52:20.617630,2,Listening to a podcast isn't really my thing. I prefer doing stuff hands-on.,llm
+S0025,R0165,2024-12-09T08:46:54.316932,5,Loved this simulation! It was fun to see force and motion in action.,llm
+S0025,R0186,2024-09-27T12:32:26.717285,5,This simulation for chemistry was really helpful. It made the concepts easier to grasp.,llm
+S0025,R0074,2024-09-02T21:53:52.284954,4,The quiz was a good way to test myself on energy. I like interactive activities.,llm
+S0025,R0039,2024-09-21T17:15:19.993568,4,Taking the quiz on force and motion was good practice. It helped me remember the details.,llm
+S0025,R0002,2024-09-02T17:08:04.508704,5,Another great simulation for logic! These really make learning active and fun.,llm
+S0025,R0206,2024-11-14T23:00:01.682864,5,This simulation on force and motion was fantastic. It's way better than just reading a book.,llm
+S0025,R0078,2024-10-23T08:27:33.777749,2,I didn't really like listening to this. I'd rather do something hands-on.,llm
+S0025,R0207,2024-11-18T02:24:56.091705,3,"It was okay, the map was helpful but I still prefer doing things myself.",llm
+S0025,R0133,2025-01-03T04:45:53.664245,3,"The video was pretty good, but I learn best by doing activities.",llm
+S0025,R0086,2024-10-10T03:30:39.558857,3,"Watching the video helped a little, but I like to work through problems myself.",llm
+S0025,R0052,2024-10-27T03:39:17.343185,4,This video was helpful for understanding energy. It had some good visuals.,llm
+S0025,R0167,2024-12-23T05:11:22.617441,1,"Podcasts are not my favorite way to learn, especially about math. I need to see and do it.",llm
+S0025,R0189,2025-01-10T21:25:09.279817,5,I loved the quiz! It was a great way to practice and see what I know about bonding.,llm
+S0026,R0180,2024-12-20T16:09:34.111078,4,This slideshow was pretty interesting. Maps are okay and this wasn't a subject I dislike.,llm
+S0026,R0110,2024-09-18T19:50:15.195492,3,"The map was alright, but atomic structure is not my favorite topic.",llm
+S0026,R0182,2025-01-14T21:13:41.786205,2,Listening to a podcast about chemistry is not for me. I didn't really get much out of it.,llm
+S0026,R0148,2024-10-21T14:04:47.853732,3,"It was okay. Reading about sets was a bit dry, but I got through it.",llm
+S0026,R0128,2024-11-04T19:52:20.061494,4,This article was pretty interesting. It made me think about history in a new way.,llm
+S0026,R0152,2024-11-19T02:26:51.584244,3,"The podcast was alright. It covered the topic well, but I prefer other formats.",llm
+S0026,R0004,2024-10-10T16:55:46.324543,4,I liked this video. It gave a good overview of the novel genre.,llm
+S0027,R0202,2025-01-26T05:34:59.988389,5,The map was super helpful for visualizing ancient Greece and Rome. It made the history easier to understand.,llm
+S0027,R0099,2024-12-04T18:10:44.351130,5,This timeline was great! It showed the progression of mapmaking clearly.,llm
+S0027,R0137,2024-11-14T22:02:19.643355,3,"Reading about biology isn't my favorite, but the article was informative.",llm
+S0027,R0122,2024-11-17T03:04:24.711743,4,The simulation was cool. It helped me understand regional geography better by doing something.,llm
+S0027,R0189,2024-09-09T08:54:40.815695,4,Taking the quiz was a good way to check if I understood bonding basics. It was interactive.,llm
+S0027,R0079,2025-01-08T18:19:11.468854,5,This timeline was really visual and easy to follow. It made the intro to chemistry less intimidating.,llm
+S0027,R0034,2024-09-26T04:46:41.401140,4,The document was clear and easy to understand. It helped me learn about logic.,llm
+S0028,R0132,2024-09-24T18:05:28.937438,3,"The article was okay, but I prefer learning about short stories in a different way than just reading.",llm
+S0028,R0188,2024-12-26T18:32:38.855785,3,"It was good to read about literature elements, but I think hearing it would help me more.",llm
+S0028,R0008,2025-01-14T00:49:43.516570,4,Taking the quiz was a good way to check what I know about short stories.,llm
+S0028,R0080,2024-12-11T19:00:44.798345,4,The simulation was a fun way to learn about drama. It made it feel more real.,llm
+S0028,R0197,2024-09-18T09:58:08.325148,2,I didn't really get much from looking at the map about novels. It wasn't how I learn best.,llm
+S0028,R0094,2024-12-21T20:35:11.702191,3,"The video was alright, but I still think audio would be better for me to understand short stories analysis.",llm
+S0029,R0106,2024-09-01T09:18:29.757103,4,The slideshow was helpful for seeing the cell structures. Biology is a subject I enjoy.,llm
+S0029,R0075,2025-01-08T15:53:20.288609,5,I liked taking the quiz on biology basics. It was a good test of my knowledge and I like biology.,llm
+S0029,R0050,2024-09-02T20:31:55.116073,5,The quiz on cell division was great. I enjoyed testing myself on this topic.,llm
+S0029,R0188,2024-09-07T22:38:13.431553,2,"This wasn't about biology, so I wasn't really into it. Reading about literature isn't my favorite.",llm
+S0029,R0142,2024-10-25T23:03:02.961736,4,I liked the map for cell division. It helped me see how the steps connect.,llm
+S0029,R0157,2025-01-17T22:54:03.600080,5,The simulation on classification was awesome! It was fun to try and classify things myself.,llm
+S0029,R0115,2024-09-28T00:33:15.926317,4,The article on biology basics was pretty good. It was easy to understand.,llm
+S0029,R0109,2025-01-24T00:16:47.765674,3,The timeline for cell division was okay. I prefer more interactive ways to learn this.,llm
+S0029,R0022,2024-09-06T08:09:27.331506,4,The map for biology overview was helpful. It gave a good visual of the main ideas.,llm
+S0029,R0053,2024-12-31T06:29:25.882520,5,This video on genetics was really interesting. It made the topic easier to grasp.,llm
+S0030,R0139,2024-12-17T19:36:40.986497,5,The slideshow on sets was great. I learn best with visuals like this.,llm
+S0030,R0151,2024-12-09T00:16:07.460341,5,Another good slideshow! It made understanding functions much clearer for me.,llm
+S0030,R0155,2024-10-04T21:38:36.590190,3,"Reading about triangles was alright, but I'd rather see diagrams or videos.",llm
+S0030,R0026,2024-10-08T11:42:20.795352,4,"I like quizzes for practicing math, even though my style is visual. This helped me check what I know about functions.",llm
+S0030,R0176,2025-01-17T07:03:27.604542,3,"Triangles are interesting, but reading isn't my favorite way to learn. I prefer seeing diagrams or videos.",llm
+S0031,R0209,2024-10-19T07:26:41.778720,4,The quiz was a good way to test myself on the Middle Ages. It kept me engaged.,llm
+S0031,R0031,2025-01-03T17:24:47.202777,5,The slideshow was really helpful for learning about Ancient Greece and Rome. The pictures made it easier to understand.,llm
+S0031,R0139,2024-11-26T07:14:46.782692,5,I liked the slideshow for learning about sets. It was visual and clear.,llm
+S0031,R0037,2024-09-19T00:42:32.288909,2,Reading about chemistry reactions is hard for me. I didn't understand a lot from this document.,llm
+S0031,R0180,2024-12-11T16:07:56.630597,5,"Maps and mapmaking are cool, and the slideshow was a good way to see how it works. Very visual.",llm
+S0032,R0036,2024-10-04T16:49:21.579187,2,A map for equations didn't make much sense to me. I don't see how that modality fits the topic.,llm
+S0032,R0174,2024-11-17T21:09:55.618539,2,"Genetics isn't my thing, and reading about it wasn't very engaging. I prefer visual resources.",llm
+S0032,R0053,2024-09-07T22:26:42.849311,4,This video was pretty good. It was easy to follow along with the visuals.,llm
+S0032,R0121,2024-10-31T12:57:05.924468,2,Reading articles isn't really my thing. I prefer watching videos or looking at pictures.,llm
+S0032,R0117,2025-01-11T10:12:58.489856,3,"The map was okay, but I'm not really into poetry. It didn't help me understand the topic much.",llm
+S0032,R0115,2025-01-09T18:30:02.885174,2,I didn't like reading this article. It was hard to focus on the text.,llm
+S0032,R0060,2024-12-26T19:15:48.908626,3,"The simulation was different. It was kind of interesting to interact with it, but I still like visual stuff more.",llm
+S0032,R0020,2024-10-17T21:58:07.439332,2,Another article. I didn't get much out of it because I don't learn well by just reading.,llm
+S0032,R0113,2024-09-14T01:03:40.079874,4,The timeline was helpful for seeing how things fit together. I like looking at visual things like this.,llm
+S0032,R0199,2024-11-08T23:14:53.309843,3,"The video was alright. Math isn't my favorite, but the video format made it a little easier to watch.",llm
+S0032,R0022,2024-10-26T16:57:49.527248,4,I liked looking at the map about living things. It was a good visual way to see information.,llm
+S0032,R0204,2024-10-15T00:44:26.190735,2,This document was just a lot of reading. I didn't really learn anything from it.,llm
+S0032,R0187,2024-12-28T11:03:14.959618,5,The video was helpful and kept my attention. It's a good way to learn about this topic.,llm
+S0032,R0209,2024-12-21T16:13:24.153319,3,"Quizzes aren't my favorite way to learn, but this one was okay. It helped me check what I knew.",llm
+S0033,R0140,2024-10-07T15:07:27.813497,3,"It was a quiz, which isn't my preferred learning style. It was alright for testing knowledge though.",llm
+S0033,R0137,2024-10-26T14:37:25.056375,5,"This article was perfect for me. I really enjoy reading about biology, and this explained things clearly.",llm
+S0033,R0012,2025-01-25T18:00:44.886337,4,"The simulation was pretty cool for understanding physics. I like physics, so this was interesting.",llm
+S0033,R0123,2025-01-29T15:58:49.833625,4,"This simulation helped me visualize the geography concepts. I enjoy geography, so this was a good way to learn.",llm
+S0033,R0092,2024-12-27T03:48:38.535775,4,"The quiz was a good way to review heat and temperature. I like physics, so I didn't mind this.",llm
+S0033,R0101,2024-12-20T14:26:49.676435,3,"The video was okay, but I prefer reading about geography. It wasn't bad, just not my favorite way to learn.",llm
+S0033,R0180,2024-11-22T12:43:50.502784,3,"The slideshow was alright, but I think I learn better from articles or hands-on activities. Maps are interesting though.",llm
+S0033,R0111,2024-12-30T04:36:29.207635,4,The simulation for regional geography was helpful. It made the topic more engaging than just reading.,llm
+S0033,R0006,2024-09-23T17:39:09.178195,5,This article was really helpful for understanding matter and its properties. It matched my reading style perfectly.,llm
+S0033,R0072,2025-01-19T19:00:31.168502,5,I found this article on classification very engaging. It was easy to read and understand.,llm
+S0033,R0183,2024-09-04T14:39:02.763565,3,"The map was okay for visualizing some concepts, but I prefer reading about physics topics.",llm
+S0033,R0053,2024-11-21T18:33:35.296611,4,"The video on genetics was interesting and helped explain the topic visually, even though I usually prefer reading.",llm
+S0033,R0010,2024-12-06T00:39:11.615022,5,This document was great for learning about maps. It was exactly the kind of resource I like to use.,llm
+S0033,R0021,2024-12-14T17:06:07.063173,5,Another good document on classification. It reinforced what I learned from the other resource.,llm
+S0033,R0052,2024-09-02T10:46:17.860622,4,"The video on energy was pretty good. It explained the topic clearly, although I usually stick to reading.",llm
+S0034,R0135,2024-10-21T14:06:10.592593,4,The quiz was a good way to test my knowledge of geography. It was interactive which I liked.,llm
+S0034,R0008,2024-12-24T14:21:33.304487,3,"The quiz on short stories was okay, but I'm not really into analyzing literature right now.",llm
+S0034,R0200,2024-10-27T19:37:11.948218,2,Listening to a podcast about math sets wasn't really my thing. I prefer hands-on activities.,llm
+S0034,R0099,2024-12-21T10:48:41.617934,3,"It was okay. I learn better when I can do things, not just look at stuff.",llm
+S0034,R0157,2024-10-17T10:25:06.781359,5,This simulation was great! I like activities where I can actually do stuff.,llm
+S0034,R0188,2024-10-01T23:37:27.866680,2,Reading articles is hard for me. I prefer learning in ways where I'm more active.,llm
+S0034,R0011,2025-01-27T10:48:41.215058,4,The quiz was good for practicing. I like quick ways to check what I know.,llm
+S0035,R0182,2024-11-03T09:24:45.401106,4,The podcast was interesting and on a topic I like. Listening is pretty good.,llm
+S0035,R0131,2025-01-24T03:20:04.778366,3,"Reading this document was alright. It was on a topic I'm interested in, but I'd rather do something hands-on.",llm
+S0035,R0092,2025-01-25T20:33:16.816125,5,"Loved the quiz! It's a fun way to learn about heat and temperature, which I find cool.",llm
+S0035,R0183,2024-09-22T11:57:41.437378,3,"Looking at the map was okay, but I didn't get to really interact with it. I like the topic though.",llm
+S0035,R0147,2024-10-13T06:05:12.413866,2,Reading about states of matter isn't my favorite. I wish there was a different way to learn this.,llm
+S0035,R0146,2024-09-07T15:05:40.426470,4,"The video was pretty good and helped me understand the topic. I still like doing things more, but this was decent.",llm
+S0035,R0039,2024-10-05T22:51:23.781725,5,This quiz was perfect for practicing. I like quizzes for learning physics topics.,llm
+S0035,R0027,2025-01-06T16:06:26.459638,3,The video was okay. I prefer more hands-on activities for chemistry.,llm
+S0036,R0209,2024-11-02T08:55:04.281195,2,I didn't really enjoy this quiz. I find history quizzes difficult.,llm
+S0036,R0101,2025-01-14T05:34:28.038241,3,The video was alright. Visuals help a bit with geography.,llm
+S0036,R0040,2024-11-09T05:27:06.823598,3,The slideshow was okay. It was a decent introduction to the topic.,llm
+S0036,R0075,2024-12-22T22:23:14.717029,2,I didn't like this quiz on biology. It wasn't engaging for me.,llm
+S0036,R0017,2024-11-27T16:42:45.913002,2,The video about the Age of Exploration wasn't very interesting to me.,llm
+S0036,R0120,2024-11-16T07:40:12.778433,2,I didn't like listening to this podcast. I prefer other ways to learn.,llm
+S0036,R0105,2024-12-06T05:16:10.647979,4,This article was helpful for understanding geography. I like reading about these topics.,llm
+S0036,R0180,2024-10-30T13:07:44.659860,3,The slideshow on maps was okay. It was a basic overview.,llm
+S0036,R0037,2024-11-29T09:01:48.886790,4,This document was pretty clear and easy to follow. It helped me understand the basics of reactions.,llm
+S0036,R0160,2024-09-10T09:42:47.150627,2,Doing a quiz wasn't my favorite way to learn about this topic. I prefer reading about it.,llm
+S0036,R0093,2024-12-10T00:41:48.464268,4,I liked reading this article. It gave good information on early civilizations.,llm
+S0036,R0107,2024-09-20T17:41:12.588213,2,The quiz format wasn't the best for me. I'd rather read about bonding.,llm
+S0036,R0030,2024-10-15T01:02:02.080256,3,"The slideshow was okay, but I learn better by reading.  It was a bit too visual for me.",llm
+S0037,R0140,2025-01-07T11:42:40.571201,4,The quiz was a good way to check what I knew about history. I like this topic.,llm
+S0037,R0112,2025-01-18T19:58:33.719724,1,"I really dislike physics, and a quiz didn't make it any better. I didn't understand much.",llm
+S0037,R0180,2024-10-30T08:03:37.725727,3,"The slideshow was alright, but I prefer listening. Maps are kind of interesting though.",llm
+S0037,R0103,2025-01-04T14:48:18.003269,3,"Looking at a map was okay, but I'd rather hear about regional geography. It wasn't bad though.",llm
+S0037,R0149,2024-10-20T06:20:08.466929,5,"This podcast was great! I love history, and listening is how I learn best. Super engaging.",llm
+S0037,R0209,2024-11-08T08:47:40.044450,3,"The quiz was okay, but I prefer audio resources. The topic was interesting though.",llm
+S0038,R0126,2024-10-06T06:36:25.507214,4,"The simulation for States of Matter was pretty cool. It helped visualize things, even though I prefer reading.",llm
+S0038,R0078,2025-01-21T11:26:31.855823,5,I really liked the podcast on Cell Division. It was easy to follow and understand.,llm
+S0038,R0135,2024-09-21T13:16:09.593091,3,"The geography quiz was fine, but I'm not super into geography topics.",llm
+S0038,R0175,2024-12-26T07:00:40.865251,3,"A map for cell division was a bit weird, not super helpful for me.",llm
+S0038,R0050,2024-09-17T10:55:03.177824,4,The quiz on Cell Division was a good way to check what I learned.,llm
+S0038,R0133,2024-09-16T22:54:13.270940,4,The video on Atomic Structure was helpful. Seeing the visuals made it easier.,llm
+S0038,R0151,2024-11-07T21:13:47.617719,2,"I don't really like math, so this slideshow wasn't my favorite.",llm
+S0038,R0137,2024-10-18T10:03:23.886112,5,This article was great! It was exactly what I needed to understand biology basics.,llm
+S0038,R0022,2024-09-19T05:32:59.766535,3,A map for biology wasn't the most useful resource for this topic.,llm
+S0038,R0097,2024-10-25T02:26:01.334677,5,This document was really helpful for understanding cell division. It matched how I like to learn.,llm
+S0039,R0174,2024-12-26T07:42:01.358455,3,"The topic was interesting, but reading a document isn't my favorite way to learn about it.",llm
+S0039,R0086,2024-11-08T05:44:50.952300,4,"The video was okay, but I prefer doing things myself. The topic was good though.",llm
+S0039,R0209,2024-11-09T23:10:05.017744,5,The quiz was a great way to check what I knew about the Middle Ages. It was fun and active.,llm
+S0039,R0061,2025-01-07T17:23:43.587010,4,The video helped me understand functions. I like watching videos even though I prefer hands-on stuff.,llm
+S0039,R0080,2024-09-14T15:41:07.073836,3,The simulation was a bit confusing and the topic wasn't something I'm into right now.,llm
+S0040,R0023,2024-12-31T22:43:52.257224,3,"Reading about functions was okay, but I learn best by doing things. The topic was good.",llm
+S0040,R0073,2024-10-16T22:28:30.352711,4,The slideshow explained triangles well. It was easy to follow visually.,llm
+S0040,R0199,2024-12-16T09:51:00.754256,4,The video on sets was pretty clear. It helped me understand the concepts.,llm
+S0040,R0026,2024-12-01T02:22:05.560413,5,Doing the quiz on functions was a great way to practice. I like interactive activities.,llm
+S0040,R0032,2024-10-03T11:14:07.227790,5,"This was great! The quiz format is perfect for practicing equations, and it matches how I like to learn.",llm
+S0040,R0195,2025-01-08T08:13:17.525559,3,"The video was okay for equations, but I usually prefer doing something more hands-on than just watching.",llm
+S0040,R0061,2024-09-23T09:31:31.589996,4,"Functions are interesting, and the video explained them pretty well. Still, I'd like to try some practice problems too.",llm
+S0040,R0150,2024-12-17T09:14:03.880987,4,"Logic is a cool topic. The video was a good introduction, even though I like doing things more than just watching.",llm
+S0040,R0153,2025-01-25T05:28:53.814487,2,Reading about triangles isn't really my thing. I find it hard to stay focused just reading text.,llm
+S0040,R0158,2024-10-30T19:59:23.757905,1,"I really don't enjoy biology topics, and this video didn't help. It was hard to pay attention.",llm
+S0040,R0148,2024-09-08T09:23:49.337332,2,"Sets are interesting, but reading about them is boring. I wish there was a more interactive way to learn.",llm
+S0040,R0141,2024-10-16T02:59:55.451586,5,"The quiz on sets was fantastic! It let me actually work through problems, which helps me understand better.",llm
+S0040,R0036,2025-01-02T20:00:17.163729,3,"The map was an interesting idea for equations, but it wasn't as helpful as actually doing problems myself.",llm
+S0041,R0027,2024-09-27T06:05:47.985523,4,"I like learning about reactions, and this video was pretty good. It explained things clearly.",llm
+S0041,R0148,2025-01-22T18:23:53.171265,2,"This was okay, but reading isn't really my favorite way to learn. I prefer doing things.",llm
+S0041,R0128,2025-01-08T01:04:30.460621,3,"It was interesting because I like history, but reading isn't the best way for me to learn.",llm
+S0041,R0120,2024-11-23T22:46:35.154665,3,"Listening is better than reading, and I like history. It was pretty good.",llm
+S0041,R0173,2024-11-23T01:38:17.205416,3,"Another history article. The topic is cool, but I wish there was a more hands-on way to learn about it.",llm
+S0041,R0126,2024-09-15T07:17:03.853749,5,This simulation was awesome! I love being able to actually see and interact with the states of matter. This is how I learn best.,llm
+S0041,R0068,2024-09-16T09:18:44.033582,4,I liked listening to this podcast about the Middle Ages. It was easier to pay attention than reading.,llm
+S0041,R0149,2024-12-29T20:45:59.428166,4,This podcast was good. I enjoyed learning about Ancient Greece and Rome while just listening.,llm
+S0041,R0042,2024-09-19T08:08:47.752608,5,Taking a quiz was a good way to test myself on the history topic. I like doing things to learn.,llm
+S0041,R0107,2024-09-10T07:29:20.848580,5,This quiz helped me understand the bonding basics better. It's good practice and a hands-on way to learn.,llm
+S0041,R0155,2024-12-27T22:11:56.458820,2,Reading about triangles wasn't very engaging for me. I'd rather solve problems or build something.,llm
+S0041,R0015,2024-10-04T13:34:19.894298,3,"The topic was interesting, but I prefer learning chemistry with more hands-on activities than just listening.",llm
+S0041,R0209,2024-09-30T22:02:02.830179,5,"I liked this quiz! It helped me check what I knew about the Middle Ages, and it was interactive.",llm
+S0042,R0112,2024-10-31T11:42:30.521699,4,This quiz was a good way to review the heat and temperature stuff. It felt pretty helpful.,llm
+S0042,R0146,2024-12-13T15:05:52.042621,4,The video explained heat and temperature pretty well. It was easy to follow along.,llm
+S0042,R0025,2025-01-20T13:46:17.149782,5,This video on force and motion was really good. It made the concepts clear.,llm
+S0042,R0052,2024-09-13T16:33:31.944249,5,Great video about energy! It was interesting and easy to understand.,llm
+S0042,R0012,2024-11-28T12:05:39.688735,5,The simulation was awesome! It was a fun way to learn about the introduction to physics.,llm
+S0042,R0039,2025-01-17T12:45:40.245833,4,This quiz was okay for practicing force and motion. It was a decent review.,llm
+S0042,R0165,2024-09-12T07:45:12.754199,5,Loved the simulation for force and motion! It really helped me get it.,llm
+S0042,R0088,2025-01-29T13:42:46.829869,4,The slideshow explained matter and properties well. It was a good visual resource.,llm
+S0042,R0051,2024-09-30T20:38:49.992663,2,"This wasn't really my favorite topic, so it was hard to stay focused on reading about it.",llm
+S0042,R0091,2024-12-07T13:03:23.434583,5,Loved this video! Energy is a cool topic and the video explained it well.,llm
+S0042,R0154,2025-01-01T04:53:54.106853,4,Pretty good document on physics intro. It covered the basics clearly.,llm
+S0042,R0163,2024-09-14T21:19:50.111375,5,The simulation for energy was awesome! It made it much easier to understand.,llm
+S0042,R0186,2025-01-06T22:31:34.230659,3,"Chemistry isn't really my thing, but the simulation was okay. It was a bit confusing though.",llm
+S0042,R0144,2025-01-01T03:24:26.076821,4,The slideshow was decent for learning about heat and temperature. Easy to follow.,llm
+S0043,R0053,2024-09-19T12:02:24.853737,4,Good video on genetics. The visuals helped explain some tricky parts.,llm
+S0043,R0187,2025-01-21T06:49:30.415985,3,The video on the Age of Exploration was alright. It was a lot of information to take in.,llm
+S0043,R0184,2024-09-08T15:30:39.701221,4,Listened to the podcast about early civilizations. It was interesting to hear about it.,llm
+S0043,R0176,2025-01-18T13:03:12.144006,5,This article on triangles was really helpful. It explained the concepts clearly and I like reading.,llm
+S0043,R0086,2024-11-05T09:45:31.360007,4,The video was clear and easy to follow. It helped me understand the topic better.,llm
+S0043,R0018,2024-12-19T09:20:14.604006,5,"I really liked this video! Ancient Greece and Rome is one of my favorite topics, and the visuals were great.",llm
+S0044,R0151,2024-11-14T21:57:43.350325,3,"The slideshow was okay, but I prefer doing things hands-on. It was a bit too much just looking at slides.",llm
+S0044,R0153,2024-10-28T19:00:41.347324,2,Reading a document isn't really how I learn best. I found it hard to stay focused.,llm
+S0044,R0034,2024-11-04T10:13:49.450024,2,This document was a bit boring. I learn better when I can move around or do activities.,llm
+S0044,R0161,2024-10-24T10:41:25.251675,5,I loved this quiz! It was a fun way to test what I knew about sets.,llm
+S0044,R0199,2025-01-16T03:41:40.121951,3,"The video was alright. It explained the concepts, but I still prefer doing practice problems.",llm
+S0044,R0148,2024-10-12T12:32:02.151398,2,Reading this document was difficult for me. I wish there was something more interactive.,llm
+S0044,R0139,2024-11-07T08:20:43.528789,3,"The slideshow was okay, but not as helpful as actually working with sets.",llm
+S0044,R0185,2024-09-23T10:38:24.815275,1,A map for logic? That didn't make any sense to me and wasn't helpful at all.,llm
+S0044,R0195,2024-12-02T17:31:20.056319,3,"The video was okay for learning about equations, which I like. I usually prefer to do things more hands-on though.",llm
+S0044,R0159,2024-12-03T03:55:30.878808,5,This simulation was great! It really helped me understand functions by letting me play around with them. Perfect for how I like to learn.,llm
+S0045,R0200,2024-12-07T17:44:12.923945,4,"The podcast was a decent way to review sets. It's a topic I enjoy, and audio works well for me sometimes.",llm
+S0045,R0166,2024-11-15T07:58:59.500658,4,"The article about early civilizations was interesting. I enjoy history, and reading is fine for getting information.",llm
+S0045,R0139,2025-01-12T07:11:22.389907,4,The slideshow on sets was pretty good. Visuals help me process the information easily.,llm
+S0045,R0209,2024-11-12T08:00:29.124632,5,Taking the quiz made learning about the Middle Ages more active. It was a fun way to test what I knew about a topic I find interesting.,llm
+S0045,R0066,2024-09-14T05:54:10.443736,4,The video explained triangles clearly. It was a good visual resource for a math topic I like.,llm
+S0045,R0095,2024-10-28T20:02:50.497120,5,Doing the quiz on equations was a great way to practice. I really like interactive ways to learn math.,llm
+S0046,R0110,2024-11-03T07:18:25.171256,4,"The map was a cool visual for atomic structure. I like chemistry, and seeing things laid out helps even if I prefer hands-on.",llm
+S0046,R0188,2024-12-07T00:58:21.910489,3,"The article on literature elements was okay. Reading isn't my favorite way to learn, even for a topic I enjoy.",llm
+S0046,R0182,2024-12-30T09:02:43.228983,3,"It was okay, but listening isn't my favorite way to learn. I prefer doing things myself.",llm
+S0046,R0133,2024-10-08T14:54:41.272616,4,The video was pretty good. Seeing the visuals helped me understand the atomic structure better.,llm
+S0046,R0105,2025-01-29T02:34:20.255466,3,"Reading the article was alright. I usually like geography, but just reading isn't the most engaging for me.",llm
+S0046,R0177,2024-11-22T02:12:42.548175,2,"Didn't really like this one. I'm not into physics, and just looking at slides wasn't helpful.",llm
+S0046,R0162,2024-09-03T22:46:35.974417,3,"The document on poetry was fine. It wasn't super exciting, but it covered the basics.",llm
+S0046,R0010,2024-10-28T18:10:23.001453,3,"Reading about maps was okay. I like geography, but I'd rather look at actual maps or try making one.",llm
+S0046,R0013,2024-12-17T17:15:19.090607,3,"The podcast was informative about physical geography. Still, I'd rather see pictures or do something hands-on.",llm
+S0047,R0010,2024-11-12T10:22:35.063510,2,"I didn't like reading this document much. I'm an audio learner, so this wasn't a good fit.",llm
+S0047,R0035,2024-12-27T23:55:14.964772,5,"Loved this podcast! It was about geography, which I enjoy, and the audio format is perfect for me.",llm
+S0047,R0063,2024-10-22T22:46:46.740427,3,"The timeline was interesting, but I prefer listening to learn. Physics is also not my favorite topic.",llm
+S0047,R0171,2024-11-25T09:55:10.707361,3,"The video was okay, but I learn better when I can just listen. The topic was interesting though.",llm
+S0047,R0180,2024-10-19T13:29:39.887710,3,The slideshow was a bit hard to follow since I like audio. The topic about maps was pretty good.,llm
+S0047,R0144,2024-10-11T20:03:32.117770,3,"It was a slideshow, so not my favorite way to learn. I did like the topic about heat and temperature.",llm
+S0047,R0183,2024-09-04T22:27:07.902700,3,Looking at a map isn't the best for me since I like audio. But I do enjoy learning about matter.,llm
+S0047,R0099,2024-11-30T03:56:58.784641,3,"A timeline is visual, and I prefer audio. The map topic was okay though.",llm
+S0047,R0135,2024-09-05T10:11:44.667545,4,"The quiz was fun and active, which I liked. Introduction to Geography is a good topic.",llm
+S0047,R0188,2025-01-01T09:56:17.740719,2,Reading articles is not my favorite way to learn. I also don't really enjoy literature topics.,llm
+S0048,R0121,2024-10-13T10:05:59.924671,3,"I liked the topic about the Age of Exploration, but reading an article wasn't the best for me.",llm
+S0048,R0105,2025-01-01T02:33:42.026645,3,The article was okay since the topic was interesting. I still prefer audio though.,llm
+S0048,R0203,2024-11-11T05:23:03.164513,3,"The slideshow was alright, but I wish it had audio. I liked learning about physical geography.",llm
+S0049,R0042,2025-01-22T02:50:10.251845,3,"The quiz was okay, but I'm not really into history topics. The interactive format was good though.",llm
+S0049,R0126,2024-11-26T22:18:29.525900,5,"This simulation was great! It was really helpful to interact with the states of matter, and I enjoy chemistry.",llm
+S0049,R0007,2025-01-27T09:10:35.903954,3,"The video was fine, but I learn better when I can actually do things. I prefer simulations for this topic.",llm
+S0050,R0191,2024-10-29T15:38:35.585960,4,"The simulation was pretty cool and helped me understand the reactions. I usually like visual stuff, but this was good too.",llm
+S0050,R0131,2025-01-20T05:11:11.977079,3,"The document was informative, but I would have preferred something more visual. Reading isn't my favorite way to learn.",llm
+S0050,R0024,2025-01-28T17:20:52.517342,5,The slideshow was awesome! It made bonding basics easy to understand with the visuals.,llm
+S0050,R0067,2024-09-27T05:31:56.646003,3,"Reading about bonding basics was okay, but I really like seeing diagrams and pictures more.",llm
+S0050,R0125,2024-10-06T17:15:40.698211,2,I didn't really like the podcast. It's hard for me to pay attention without anything to look at.,llm
+S0050,R0107,2024-10-19T00:26:52.190483,4,The quiz was a good way to test myself on bonding basics. It was a bit different from my usual style but still useful.,llm

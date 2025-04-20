@@ -16,12 +16,12 @@ logger = logging.getLogger(__name__)
 REGENERATE_BASE_DATA = False # Set to True to regenerate students, topics, resources
 
 # --- Simulation Parameters ---
-NUM_STUDENTS = 50; NUM_TOPICS = 20; NUM_RESOURCES = 150
+NUM_STUDENTS = 50; NUM_RESOURCES = 210
 MIN_INITIAL_INTERACTIONS = 5; MAX_INITIAL_INTERACTIONS = 15
 LEARNING_STYLES = ['Visual', 'Audio', 'Kinaesthetic', 'Reading/Writing', 'Mixed']
-AVG_LOVED_SUBJECTS = 1; AVG_DISLIKED_SUBJECTS = 1
+AVG_LOVED_SUBJECTS = 2; AVG_DISLIKED_SUBJECTS = 2
 OUTPUT_DIR = "synthetic_data" # Ensure this matches where files should be read/written
-LLM_BATCH_SIZE = 8; MAX_WORKERS = 5
+LLM_BATCH_SIZE = 10; MAX_WORKERS = 5
 PROBABILITY_INITIAL_PARTICIPATION = 0.05
 
 # --- File Paths ---
@@ -49,9 +49,46 @@ curriculum_topics = {
     "MAT": [ # Mathematics
         "MAT01: Logic", "MAT02: Sets", "MAT03: Equations",
         "MAT04: Functions Intro", "MAT05: Triangles",
+    ],
+    "HIS": [ # History
+        "HIS01: What is History?", "HIS02: Early Civilizations",
+        "HIS03: Ancient Greece & Rome", "HIS04: Middle Ages Overview", "HIS05: Age of Exploration",
+    ],
+    "GEO": [ # Geography
+        "GEO01: Introduction to Geography", "GEO02: Maps and Mapmaking",
+        "GEO03: Physical Geography (Landforms, Climate)", "GEO04: Human Geography (Population, Culture)", "GEO05: Regional Geography Intro",
+    ],
+    "LIT": [ # Literature
+        "LIT01: Elements of Literature (Plot, Character)", "LIT02: Introduction to Poetry",
+        "LIT03: Short Stories Analysis", "LIT04: Introduction to Drama", "LIT05: The Novel Genre",
     ]
 }
+# SUBJECT_CODES will now automatically include "HIS", "GEO", "LIT"
 SUBJECT_CODES = list(curriculum_topics.keys())
+
+# --- Declare variables needed in both branches ---
+resource_info_map_internal = {}
+student_profiles = {}
+all_resource_ids = []
+all_student_ids = []
+
+# The rest of the topic processing logic remains the same:
+all_curriculum_topics_list = []
+topic_id_map = {} # ID -> Name
+topic_subject_map = {} # ID -> Subject Code (PHY, BIO, etc.)
+topic_id_counter = 1
+for subject_code, topics in curriculum_topics.items():
+    for topic_name in topics:
+        # Use subject code and counter for ID
+        topic_id = f"{subject_code}{topic_id_counter:03d}" # IDs will now mix subjects, e.g., PHY001, BIO006, HIS026...
+        all_curriculum_topics_list.append({"topicId": topic_id, "name": topic_name})
+        topic_id_map[topic_id] = topic_name
+        topic_subject_map[topic_id] = subject_code
+        topic_id_counter += 1
+
+NUM_TOPICS = len(all_curriculum_topics_list) # Automatically updated
+all_topic_ids = list(topic_id_map.keys())
+
 # --- End Curriculum ---
 
 # --- Initialization ---
@@ -180,14 +217,6 @@ def process_feedback_batch(batch_data):
 # --- End LLM ---
 
 
-# --- Declare variables needed in both branches ---
-topic_id_map = {}
-resource_info_map_internal = {}
-student_profiles = {}
-all_topic_ids = []
-all_resource_ids = []
-all_student_ids = []
-
 
 # --- 1. Generate or Load Base Nodes ---
 if REGENERATE_BASE_DATA or not all(os.path.exists(f) for f in [STUDENTS_FILE, TOPICS_FILE, RESOURCES_FILE, RESOURCE_TOPIC_FILE]):
@@ -214,8 +243,20 @@ if REGENERATE_BASE_DATA or not all(os.path.exists(f) for f in [STUDENTS_FILE, TO
     # --- Generate Resources ---
     logger.info("Generating Resources with Modality...")
     resources_data = []; resource_topic_rels = []
-    resource_types = ['Article', 'Video', 'Podcast', 'Quiz', 'Simulation', 'Slideshow']
-    type_modality_map = {'Article': 'Reading/Writing', 'Video': 'Visual', 'Podcast': 'Audio', 'Quiz': 'Kinaesthetic', 'Simulation': 'Kinaesthetic', 'Slideshow': 'Visual'}
+    resource_types = ['Article', 'Video', 'Podcast', 'Quiz', 'Simulation',
+                  'Slideshow', 'Map', 'Timeline', 'Document']
+    # Map types to likely modalities
+    type_modality_map = {
+        'Article': 'Reading/Writing',
+        'Video': 'Visual',
+        'Podcast': 'Audio',
+        'Quiz': 'Kinaesthetic', # Or Reading/Writing depending on quiz type
+        'Simulation': 'Kinaesthetic', # Also Visual
+        'Slideshow': 'Visual',
+        'Map': 'Visual', # Primarily visual
+        'Timeline': 'Visual', # Primarily visual, some Reading/Writing
+        'Document': 'Reading/Writing' # e.g., primary source document
+    }
     for i in range(NUM_RESOURCES):
         resource_id = f"R{i+1:04d}"; resource_type = random.choice(resource_types); assigned_topic_id = random.choice(all_topic_ids)
         assigned_topic_name = topic_id_map[assigned_topic_id]; modality = type_modality_map.get(resource_type, 'Mixed'); resource_title = f"{resource_type} on {assigned_topic_name}"

@@ -140,6 +140,40 @@ def chat_with_llm(prompt: str, system_prompt: str = None, schema: dict = None): 
         logger.exception(f"Error during LLM generation call: {e}") # Use logger.exception to include traceback
         return None
 
+# Add this function after fetch_student_data_from_neo4j
+
+def fetch_resource_metrics_from_neo4j(graph: Graph) -> dict:
+    """Fetches aggregate ratings and recommendation counts for all resources."""
+    resource_metrics = {}
+    logger.info("Fetching resource aggregate metrics (ratings, recommendation counts)...")
+    try:
+        # Query for ratings and recommendation counts
+        # Using OPTIONAL MATCH allows resources with no ratings/recs to still be included
+        query = """
+        MATCH (r:Resource)
+        OPTIONAL MATCH (r)<-[c:CONSUMED]-()
+        WITH r, avg(c.rating) AS avgRating, count(c) AS ratingCount
+        OPTIONAL MATCH (r)<-[rec:LLM_RECOMMENDED]-()
+        RETURN r.resourceId AS resourceId,
+               avgRating,
+               ratingCount,
+               count(rec) AS recommendationCount
+        """
+        results = graph.run(query)
+        for record in results:
+            res_id = record['resourceId']
+            # Convert py2neo Float to Python float, handle None
+            avg_rating = record['avgRating']
+            resource_metrics[res_id] = {
+                'avgRating': float(avg_rating) if avg_rating is not None else None,
+                'ratingCount': int(record['ratingCount']), # Convert to int
+                'recommendationCount': int(record['recommendationCount']) # Convert to int
+            }
+        logger.info(f"Fetched metrics for {len(resource_metrics)} resources.")
+        return resource_metrics
+    except Exception as e:
+        logger.error(f"Error fetching resource metrics from Neo4j: {e}")
+        return {} # Return empty dict on error
 
 # --- Helper: Format History (unchanged) ---
 def format_history_for_prompt(history, resource_info_map, topic_id_map, max_items=5):
@@ -160,10 +194,10 @@ def format_history_for_prompt(history, resource_info_map, topic_id_map, max_item
     return "\n".join(formatted_lines)
 
 
-# --- Main Recommender Logic (Updated signature & prompt) ---
-def recommend_to_student(student_data, all_resource_info_map, topic_id_map,
-                         num_recommendations=3, adapt_prompt: bool = False): # Added adapt_prompt flag
-    """Generates recommendations using an LLM, grounded by candidate resources, optionally adapting prompt."""
+# --- Main Recommender Logic ---
+def recommend_to_student(student_data, all_resource_info_map, topic_id_map, resource_metrics_map, 
+                         num_recommendations=3, adapt_prompt: bool = False):
+    """Generates recommendations using an LLM, grounded by candidate resources and metrics, optionally adapting prompt."""
     student_id = student_data.get("studentId", "Unknown")
     profile = student_data.get("profile", {})
     history = student_data.get("history", [])
@@ -178,39 +212,65 @@ def recommend_to_student(student_data, all_resource_info_map, topic_id_map,
     consumed_resource_ids = {item['resourceId'] for item in history}
     candidate_ids = set(all_resource_info_map.keys()) - consumed_resource_ids
 
+    # --- Format candidate list WITH metrics ---
     candidate_list_str = ""
     selected_candidate_ids = [] # Keep track of IDs sent to LLM
-    if not candidate_ids: candidate_list_str = "No candidate resources available."
+    if not candidate_ids:
+        candidate_list_str = "No candidate resources available."
     else:
         candidate_lines = []
-        max_candidates_in_prompt = 50
+        max_candidates_in_prompt = 40 # Adjust if needed, metrics add length
         selected_candidate_ids = random.sample(list(candidate_ids), k=min(len(candidate_ids), max_candidates_in_prompt))
+
         for res_id in selected_candidate_ids:
             res_info = all_resource_info_map.get(res_id, {})
-            title = res_info.get('title', res_id); topic_id = res_info.get('topicId')
-            topic_name = topic_id_map.get(topic_id, "N/A"); modality = res_info.get('modality', 'N/A')
-            candidate_lines.append(f"- ID: {res_id}, Title: '{title}', Topic: {topic_name}, Modality: {modality}")
+            metrics = resource_metrics_map.get(res_id, {'avgRating': None, 'ratingCount': 0, 'recommendationCount': 0}) # Get metrics
+
+            title = res_info.get('title', res_id)
+            topic_id = res_info.get('topicId')
+            topic_name = topic_id_map.get(topic_id, "N/A")
+            modality = res_info.get('modality', 'N/A')
+
+            # Format metrics string
+            rating_str = f"AvgRating: {metrics['avgRating']:.1f}" if metrics['avgRating'] is not None else "AvgRating: N/A"
+            rating_count_str = f"({metrics['ratingCount']} ratings)"
+            rec_count_str = f"TimesRecommended: {metrics['recommendationCount']}"
+
+            candidate_lines.append(f"- ID: {res_id}, Title: '{title}', Topic: {topic_name}, Modality: {modality}, "
+                                   f"{rating_str} {rating_count_str}, {rec_count_str}") # Added metrics
+
         candidate_list_str = "\n".join(candidate_lines)
-        if len(candidate_ids) > max_candidates_in_prompt: candidate_list_str += f"\n- ... (and {len(candidate_ids) - max_candidates_in_prompt} more)"
+        if len(candidate_ids) > max_candidates_in_prompt:
+             candidate_list_str += f"\n- ... (and {len(candidate_ids) - max_candidates_in_prompt} more available resources)"
 
     history_summary = format_history_for_prompt(history, all_resource_info_map, topic_id_map)
 
-    # Define the desired JSON output schema
-    output_schema = {"type": "array", "items": {"type": "object", "properties": {"resource_id": {"type": "string"}, "reason": {"type": "string"}}, "required": ["resource_id", "reason"]}}
+    # Define the desired JSON output schema (using 'resource_id' as key)
+    output_schema = {
+        "type": "array",
+        "description": f"A list of exactly {num_recommendations} resource recommendations.",
+        "items": {
+            "type": "object",
+            "properties": {
+                "resource_id": {"type": "string", "description": "The unique ID of the recommended resource, chosen ONLY from the candidate list provided."},
+                "reason": {"type": "string", "description": "A brief (1 sentence) justification for recommending this resource to this specific student."}
+            },
+            "required": ["resource_id", "reason"]
+        }
+    }
 
-    # --- Adaptation Instruction ---
+    # --- Adaptation Instruction (same as before) ---
     adaptation_instruction = ""
+    output_format_instruction = "" # Define base instruction
     if adapt_prompt:
-        adaptation_instruction = ("\n4.  **Promote Diversity:** The student's recent interactions seem narrow. "
-                                  "Prioritize suggesting resources from topics the student *hasn't* interacted with recently, "
-                                  "even if they are neutral or slightly disliked, especially if the modality matches their style. "
-                                  "Explain this exploration benefit in the reason.")
+        adaptation_instruction = ("\n4.  **Promote Diversity:** Student's recent interactions seem narrow. Prioritize suggesting candidate resources from topics the student *hasn't* interacted with recently, balancing this with profile alignment and resource metrics. Explain this exploration benefit.")
+        output_format_instruction = ("\n5.  **Output Format:** Provide the recommendations as a JSON array of objects matching the schema. Keys must be 'resource_id' and 'reason'.")
     else:
-        adaptation_instruction = ("\n4.  **Output Format:** Provide the recommendations as a JSON array of objects, matching the schema provided. "
-                                  "Each object must have a 'resource_id' key (with a value from the candidate list) and a 'reason' key (1 sentence justification referencing the student's profile/history/candidate details).")
+        # Instruction 4 becomes Output Format if not adapting
+        output_format_instruction = ("\n4.  **Output Format:** Provide the recommendations as a JSON array of objects matching the schema. Keys must be 'resource_id' and 'reason'. Justify based on profile/history and resource metrics.")
 
 
-    # --- Construct the REVISED prompt ---
+    # --- Construct the **UPDATED** prompt ---
     prompt = f"""You are an expert AI Tutor designing a personalized learning path for a 9th-grade student (ID: {student_id}).
 
 Student Profile:
@@ -222,58 +282,103 @@ Recent Interaction History (last {len(history[-5:])} items):
 {history_summary}
 
 --- Candidate Resources ---
-Below is a list of available resources the student has NOT yet consumed. You MUST choose recommendations ONLY from this list.
+Below is a list of available resources the student has NOT yet consumed, along with community feedback and system recommendation frequency. You MUST choose recommendations ONLY from this list.
 
 {candidate_list_str}
 --- End of Candidate Resources ---
 
 Task:
-Based *only* on the provided profile, interaction history, and the candidate resource list, recommend exactly {num_recommendations} specific resources for this student to engage with next.
+Based *only* on the student's profile, interaction history, and the candidate resource list (including their metrics), recommend exactly {num_recommendations} specific resources for this student to engage with next.
 
 Instructions for Recommendation:
-1.  **Select ONLY from Candidates:** Choose Resource IDs strictly from the 'Candidate Resources' list provided above. Do NOT invent resource IDs.
-2.  **Prioritize Alignment:** Suggest resources that align with the student's learning style ({learning_style}) and topics they enjoy ({loved_str}), if suitable candidates exist.
-3.  **Avoid Exploration:** Do NOT suggest resources outside the student's narrow band of recent/liked topics unless explicitly instructed by an adaptation flag.
+1.  **Select ONLY from Candidates:** Choose 'ID' values strictly from the 'Candidate Resources' list. Do NOT invent IDs.
+2.  **Consider Multiple Factors:** Balance the student's profile (style, affinities) with resource metrics:
+    *   **AvgRating:** Generally prefer resources with higher average ratings, especially if based on a reasonable number of ratings (e.g., ratingCount > 3). Treat low/no ratings as neutral or requiring caution.
+    *   **TimesRecommended:** Be cautious about suggesting resources recommended very frequently unless they are an exceptionally good fit for the student's immediate need or profile. Consider less recommended items if they align well.
+3.  **Justify Choices:** Briefly explain *why* each resource is recommended for *this student* in the 'reason' field, potentially mentioning alignment, rating, or exploration goals.{adaptation_instruction}{output_format_instruction}
 
-{adaptation_instruction }  # Keep adaptation logic separate
-
-output schema is this:
-{output_schema}
-
-Begin Recommendation (JSON output only):
+Begin Recommendation (JSON output only, matching schema with 'resource_id' and 'reason' keys):
 """
 
-    # System prompt can also be adjusted based on adaptation
+    # System prompt (can remain the same or be tweaked)
     system_prompt = """
-    You are an expert AI Tutor generating personalized resource recommendations.
+    You are an expert AI Tutor generating personalized resource recommendations considering student profiles and community feedback.
     You MUST strictly adhere to the output format specified and only use Resource IDs provided in the prompt's candidate list.
     """
     if adapt_prompt:
-         system_prompt += "\nYour primary goal now is to encourage topic diversity and exploration for this student."
+         system_prompt += "\nYour primary goal now is to encourage topic diversity and exploration."
 
     # --- Call LLM ---
-    llm_response = chat_with_llm(prompt, system_prompt=system_prompt)
+    # Pass the schema defined above to ensure correct output structure
+    llm_response = chat_with_llm(prompt, system_prompt=system_prompt, schema=output_schema)
 
-    # --- Return parsed JSON or None (with validation) ---
+    # --- Return parsed JSON or None (with validation using 'resource_id') ---
     if llm_response and isinstance(llm_response, list):
         validated_response = []
         candidate_id_set = set(selected_candidate_ids) # Use the IDs actually sent
         for item in llm_response:
+            # Check for correct keys based on the schema requested
             if isinstance(item, dict) and "resource_id" in item and "reason" in item:
-                 rec_id = item["resource_id"]
+                 rec_id = item["resource_id"] # Use the key defined in the schema
                  if rec_id in candidate_id_set: validated_response.append(item)
                  else: logger.warning(f"LLM recommended invalid/consumed ID '{rec_id}'. Discarding.")
-            else: logger.warning(f"LLM response item format incorrect: {item}. Discarding.")
-        # Return only validated recommendations, up to the requested number
-        # If fewer valid recs than requested, return what's valid
+            else: logger.warning(f"LLM response item format incorrect (expected 'resource_id', 'reason'): {item}. Discarding.")
         return validated_response[:num_recommendations]
     else:
         logger.warning(f"LLM response was not a list or failed: {llm_response}")
         return None
 
-# This block is now just for testing this specific file,
-# the simulation loop will be in simulation.py
+# --- Main Execution Block ---
 if __name__ == "__main__":
+    logger.info("Testing recommendation engine functions with resource metrics...")
+    try:
+        db = connect_neo4j()
+        if not db: exit()
+        # Fetch ALL necessary data upfront for testing
+        topic_map, resource_map = fetch_lookup_maps_from_neo4j(db)
+        resource_metrics = fetch_resource_metrics_from_neo4j(db) # Fetch metrics
+        if not topic_map or not resource_map: exit() # Metrics can be empty initially
+
+        # Merge metrics into resource_map for easier passing
+        for res_id, metrics in resource_metrics.items():
+            if res_id in resource_map:
+                resource_map[res_id].update(metrics)
+            else:
+                 # Should not happen if resource_map is comprehensive, but handle just in case
+                 logger.warning(f"Metrics found for resource {res_id} not present in basic resource info map.")
+                 # resource_map[res_id] = metrics # Option to add it if missing
+
+
+        example_student_id = "S0001"
+        student_data = fetch_student_data_from_neo4j(db, example_student_id)
+
+        if student_data:
+            print("\n--- Testing Standard Recommendation with Metrics ---")
+            recommendations = recommend_to_student(
+                student_data,
+                resource_map, # Pass combined map
+                topic_map,
+                resource_metrics, # Also pass separately if needed elsewhere, but map is main carrier now
+                num_recommendations=3,
+                adapt_prompt=False
+            )
+            if recommendations: print(json.dumps(recommendations, indent=2))
+            else: print("Failed to get standard recommendations.")
+
+            print("\n--- Testing Adaptive Recommendation with Metrics ---")
+            adapt_recommendations = recommend_to_student(
+                student_data,
+                resource_map, # Pass combined map
+                topic_map,
+                resource_metrics,
+                num_recommendations=3,
+                adapt_prompt=True
+            )
+            if adapt_recommendations: print(json.dumps(adapt_recommendations, indent=2))
+            else: print("Failed to get adaptive recommendations.")
+
+        else: print(f"Could not fetch data for student {example_student_id}.")
+    except Exception as e: logger.exception(f"Error during testing: {e}")
     logger.info("Testing recommendation engine functions...")
     try:
         db = connect_neo4j()
@@ -286,12 +391,12 @@ if __name__ == "__main__":
 
         if student_data:
             print("\n--- Testing Standard Recommendation ---")
-            recommendations = recommend_to_student(student_data, resource_map, topic_map, num_recommendations=3, adapt_prompt=False)
+            recommendations = recommend_to_student(student_data, resource_map, topic_map, resource_metrics, num_recommendations=3, adapt_prompt=False)
             if recommendations: print(json.dumps(recommendations, indent=2))
             else: print("Failed to get standard recommendations.")
 
             print("\n--- Testing Adaptive Recommendation ---")
-            adapt_recommendations = recommend_to_student(student_data, resource_map, topic_map, num_recommendations=3, adapt_prompt=True)
+            adapt_recommendations = recommend_to_student(student_data, resource_map, topic_map, resource_metrics, num_recommendations=3, adapt_prompt=True)
             if adapt_recommendations: print(json.dumps(adapt_recommendations, indent=2))
             else: print("Failed to get adaptive recommendations.")
 
