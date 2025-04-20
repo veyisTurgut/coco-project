@@ -1,5 +1,6 @@
 import pandas as pd
 import networkx as nx
+from pyvis.network import Network
 import community as community_louvain
 import numpy as np
 import time
@@ -10,8 +11,9 @@ from dotenv import load_dotenv
 from py2neo import Graph
 from scipy.stats import entropy as shannon_entropy
 from sklearn.cluster import SpectralClustering
-# Optional: For sentiment analysis
+import webbrowser 
 
+# Optional: For sentiment analysis
 try:
     from textblob import TextBlob
     TEXTBLOB_AVAILABLE = True
@@ -111,6 +113,21 @@ def get_student_interaction_graph_corrected(graph_db):
         # largest_cc = max(nx.connected_components(G), key=len)
         # G = G.subgraph(largest_cc).copy()
         # logger.info(f"Using largest connected component: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges.")
+
+    # --- EXPORT EDGES FOR GEPHI ---
+    if G.number_of_edges() > 0:
+        try:
+            edges_for_export = []
+            for u, v, data in G.edges(data=True):
+                # Gephi typically needs Source, Target, Weight, Type (Undirected/Directed)
+                edges_for_export.append({'Source': u, 'Target': v, 'Weight': data.get('weight', 1), 'Type': 'Undirected'})
+            edges_df_export = pd.DataFrame(edges_for_export)
+            edges_filepath = 'gephi_edges.csv'
+            edges_df_export.to_csv(edges_filepath, index=False)
+            logger.info(f"Exported {len(edges_df_export)} edges to {edges_filepath}")
+        except Exception as e:
+            logger.error(f"Failed to export edges for Gephi: {e}")
+    # --- END EXPORT ---
 
     return G
 
@@ -321,6 +338,80 @@ def analyze_comment_sentiment(interactions_df: pd.DataFrame):
 
     logger.info("----------------------------------------\n")
 
+
+def visualize_network_pyvis(G: nx.Graph, results_df: pd.DataFrame, output_filename="student_network.html"):
+    """Creates an interactive Pyvis visualization."""
+    if G.number_of_edges() == 0:
+        logger.warning("Cannot generate Pyvis graph: NetworkX graph has no edges.")
+        return
+
+    logger.info(f"Generating Pyvis visualization: {output_filename}...")
+    net = Network(notebook=False, height='800px', width='100%', heading='Student Interaction Network')
+    net.set_options("""
+            var options = {
+            "physics": {
+                "enabled": false
+            }
+            }
+            """)
+    #net = Network(height='800px', width='100%') # Remove notebook=False and heading initially
+
+    # Map results data to node attributes
+    results_dict = results_df.set_index('studentId').to_dict('index')
+
+    # Add nodes with attributes
+    for node in G.nodes():
+        data = results_dict.get(node, {})
+        community = data.get('louvainCommunity', -1)
+        entropy = data.get('shannonEntropy', 0)
+        pagerank = data.get('pageRank', 0)
+        betweenness = data.get('betweenness', 0)
+
+        # Basic color map for communities (add more colors if needed)
+        colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+        color = colors[community % len(colors)] if community != -1 else '#cccccc' # Grey for unclassified
+
+        # Scale size based on centrality or inverse entropy
+        # Example: Size by betweenness (add baseline size)
+        size = 10 + betweenness * 200 # Adjust multiplier for visual scaling
+        # Example: Size by inverse entropy (higher entropy = smaller size)
+        # max_entropy = 4.32 # log2(20 topics) approx
+        # size = 10 + (max_entropy - entropy) * 10 if entropy > 0 else 10
+
+        title = (f"Student: {node}<br>"
+                 f"Community (Louvain): {community}<br>"
+                 f"Entropy: {entropy:.3f}<br>"
+                 f"PageRank: {pagerank:.4f}<br>"
+                 f"Betweenness: {betweenness:.4f}")
+
+        net.add_node(node, label=node, title=title, color=color, size=size)
+
+    # Add edges with weights
+    for u, v, data in G.edges(data=True):
+        weight = data.get('weight', 1)
+        # Scale edge width - needs careful tuning
+        width = 1 + weight * 0.5
+        net.add_edge(u, v, value=width, title=f"Weight: {weight}")
+
+    try:
+        # Try saving directly first
+        net.save_graph(output_filename)
+        logger.info(f"Pyvis graph saved to {output_filename}")
+        try:
+            # Construct absolute path for webbrowser
+            abs_path = os.path.abspath(output_filename)
+            webbrowser.open(f'file://{abs_path}') # Use file:// protocol
+            logger.info("Attempted to open the graph in your default browser.")
+        except Exception as e_web:
+            logger.warning(f"Could not automatically open browser: {e_web}")
+    except Exception as e:
+        logger.error(f"Error during Pyvis save/show: {e}")
+        # If save_graph works but show fails, the issue might be webbrowser related
+        # If save_graph fails, the template issue is likely still present.
+
+
+
+
 # --- Main Execution Area ---
 if __name__ == "__main__":
     logger.info("Starting Rich Data Analysis...")
@@ -365,6 +456,12 @@ if __name__ == "__main__":
     results_df.to_csv(OUTPUT_RESULTS_FILE, index=False)
     logger.info("Results saved.")
 
-    # --- (Neo4j Update Section Removed as UPDATE_NEO4J is False) ---
+    # --- Generate Visualization ---
+    # Check if results_df was loaded/created successfully
+    if 'results_df' in locals() and not results_df.empty:
+         visualize_network_pyvis(G_interaction, results_df)
+    else:
+         logger.warning("results_df not available, skipping Pyvis visualization.")
+
 
     logger.info(f"\nAnalysis Complete. Total time: {time.time() - analysis_start_time:.2f} seconds.")

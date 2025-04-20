@@ -22,7 +22,7 @@ LEARNING_STYLES = ['Visual', 'Audio', 'Kinaesthetic', 'Reading/Writing', 'Mixed'
 AVG_LOVED_SUBJECTS = 1; AVG_DISLIKED_SUBJECTS = 1
 OUTPUT_DIR = "synthetic_data" # Ensure this matches where files should be read/written
 LLM_BATCH_SIZE = 8; MAX_WORKERS = 5
-PROBABILITY_INITIAL_PARTICIPATION = 0.15
+PROBABILITY_INITIAL_PARTICIPATION = 0.05
 
 # --- File Paths ---
 STUDENTS_FILE = os.path.join(OUTPUT_DIR, "students.csv")
@@ -317,7 +317,7 @@ for i, student_id in enumerate(all_student_ids):
         chosen_resource_id = None; attempts = 0; MAX_ATTEMPTS = 5
         while not chosen_resource_id and attempts < MAX_ATTEMPTS:
             potential_topics = list(set(all_topic_ids) - set(profile['dislikedTopics'])); potential_topics = potential_topics or all_topic_ids
-            if profile['lovedTopics'] and random.random() < 0.6: chosen_topic_id = random.choice(profile['lovedTopics'])
+            if profile['lovedTopics'] and random.random() < 0.8: chosen_topic_id = random.choice(profile['lovedTopics'])
             else: chosen_topic_id = random.choice(potential_topics)
             resources_in_topic = [rid for rid, res_info in resource_info_map_internal.items() if res_info.get("topicId") == chosen_topic_id]
             if not resources_in_topic: attempts += 1; continue

@@ -4,6 +4,7 @@ from datetime import datetime
 from py2neo import Graph
 from scipy.stats import entropy as shannon_entropy
 from dotenv import load_dotenv
+from concurrent.futures import ThreadPoolExecutor, as_completed # For parallelism
 
 
 # Import functions from the engine
@@ -21,19 +22,20 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 logger = logging.getLogger(__name__)
 
 # --- Simulation Parameters ---
-NUM_TURNS = 10
-STUDENTS_PER_TURN = 5
-DIVERSITY_THRESHOLD = 2.0 # Example: If Shannon entropy drops below this, trigger adaptation
-HISTORY_LIMIT_FOR_ENTROPY = 20 # How far back to look for entropy calculation
-HISTORY_LIMIT_FOR_PROMPT = 5 # How far back to show LLM in prompt
+MAX_WORKERS = 20 # Number of concurrent LLM calls (for recs AND feedback)
+NUM_TURNS = 20
+STUDENTS_PER_TURN = 30
+DIVERSITY_THRESHOLD = 0.5 # Example: If Shannon entropy drops below this, trigger adaptation
+HISTORY_LIMIT_FOR_ENTROPY = 10 # How far back to look for entropy calculation
+HISTORY_LIMIT_FOR_PROMPT = 3 # How far back to show LLM in prompt
 NUM_RECOMMENDATIONS_PER_STUDENT = 3
 # Student Choice Model Params
 BASE_SCORE = 1.0
-LOVED_TOPIC_BONUS = 1.5
-DISLIKED_TOPIC_PENALTY = -1.0
-MODALITY_MATCH_BONUS = 1.0
-PROBABILITY_CHOOSE_NOTHING = 0.3 # 30% chance student ignores recommendations
-PROBABILITY_PARTICIPATE_AFTER_CONSUME = 0.20 # 20% chance to also participate in the topic
+LOVED_TOPIC_BONUS = 10.0
+DISLIKED_TOPIC_PENALTY = -5.0
+MODALITY_MATCH_BONUS = 4
+PROBABILITY_CHOOSE_NOTHING = 0.2 # 20% chance student ignores recommendations
+PROBABILITY_PARTICIPATE_AFTER_CONSUME = 0.05 # 5% chance to also participate in the topic
 
 
 LLM_FEEDBACK_SYSTEM_PROMPT = """
@@ -250,22 +252,53 @@ def add_llm_recommendation_to_neo4j(graph: Graph, student_id: str, resource_id: 
 # --- End Persistence ---
 
 
-# --- Main Simulation Loop ---
+# --- NEW: Wrapper Functions for Parallel Execution ---
+def process_student_recommendation(args):
+    """Wrapper to generate recommendations for one student."""
+    student_id, student_data, resource_map, topic_map, num_recs, needs_adapt = args
+    logger.debug(f"Thread {os.getpid()} starting recommendations for {student_id} (Adapt: {needs_adapt})...")
+    try:
+        recommendations = recommend_to_student(
+            student_data,
+            resource_map,
+            topic_map,
+            num_recommendations=num_recs,
+            adapt_prompt=needs_adapt
+        )
+        logger.debug(f"Thread {os.getpid()} finished recommendations for {student_id}.")
+        # Return student ID along with results for mapping later
+        return student_id, recommendations
+    except Exception as e:
+        logger.error(f"Error generating recommendations for {student_id} in thread {os.getpid()}: {e}")
+        return student_id, None # Return None on error
+
+def process_student_feedback(args):
+    """Wrapper to generate feedback for one student's choice."""
+    student_id, chosen_resource_id, student_profile, resource_info, topic_map = args
+    logger.debug(f"Thread {os.getpid()} starting feedback for {student_id} on {chosen_resource_id}...")
+    try:
+        feedback = generate_student_feedback_llm(
+            student_profile,
+            resource_info,
+            topic_map
+        )
+        logger.debug(f"Thread {os.getpid()} finished feedback for {student_id} on {chosen_resource_id}.")
+        # Return identifiers along with result
+        return student_id, chosen_resource_id, feedback
+    except Exception as e:
+        logger.error(f"Error generating feedback for {student_id}/{chosen_resource_id} in thread {os.getpid()}: {e}")
+        return student_id, chosen_resource_id, None # Return None on error
+
+
+# --- Main Simulation Loop (Parallelized) ---
 if __name__ == "__main__":
-    logger.info("Starting Simulation...")
+    logger.info("Starting Parallel Simulation...")
     start_time = time.time()
-
-    # Create output directory if it doesn't exist
-    if not os.path.exists(OUTPUT_DIR_SIM):
-        os.makedirs(OUTPUT_DIR_SIM)
-        logger.info(f"Created simulation output directory: {OUTPUT_DIR_SIM}")
-
-    # --- Initialize log lists ---
-    all_llm_recommendations_log = []
-    all_simulated_consumptions_log = []
+    if not os.path.exists(OUTPUT_DIR_SIM): os.makedirs(OUTPUT_DIR_SIM); logger.info(f"Created dir: {OUTPUT_DIR_SIM}")
+    all_llm_recommendations_log = []; all_simulated_consumptions_log = []
 
     try:
-        db = connect_neo4j()
+        db = connect_neo4j();
         if not db: exit()
         logger.info("Fetching initial lookup maps...")
         topic_map, resource_map = fetch_lookup_maps_from_neo4j(db)
@@ -275,122 +308,127 @@ if __name__ == "__main__":
         if not all_student_ids: exit()
         logger.info(f"Found {len(all_student_ids)} students.")
 
-        # --- Simulation Loop ---
-        for turn in range(1, NUM_TURNS + 1):
-            logger.info(f"===== Starting Simulation Turn {turn}/{NUM_TURNS} =====")
-            turn_start_time = time.time()
-            students_this_turn = random.sample(all_student_ids, k=min(STUDENTS_PER_TURN, len(all_student_ids)))
-            logger.info(f"Simulating for students: {students_this_turn}")
+        # Create a ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            # --- Simulation Loop ---
+            for turn in range(1, NUM_TURNS + 1):
+                logger.info(f"===== Starting Simulation Turn {turn}/{NUM_TURNS} =====")
+                turn_start_time = time.time()
+                students_this_turn = random.sample(all_student_ids, k=min(STUDENTS_PER_TURN, len(all_student_ids)))
+                logger.info(f"Simulating for students: {students_this_turn}")
 
-            for student_id in students_this_turn:
-                logger.info(f"--- Simulating for Student: {student_id} ---")
-                sim_step_start = time.time()
-                recommendation_ts = datetime.now().isoformat() # Timestamp for recommendation event
+                # --- Phase 1: Fetch Data, Calc Entropy, Prep Rec Tasks ---
+                rec_tasks_args = []
+                student_states = {} # Store fetched data and entropy results
+                logger.info("Phase 1: Fetching data and preparing recommendation tasks...")
+                for student_id in students_this_turn:
+                    student_data = fetch_student_data_from_neo4j(db, student_id, history_limit=HISTORY_LIMIT_FOR_ENTROPY)
+                    if not student_data: logger.warning(f"Skip {student_id}: Could not fetch data."); continue
+                    current_entropy = calculate_topic_entropy(student_data['history'], resource_map, HISTORY_LIMIT_FOR_ENTROPY)
+                    needs_adaptation = current_entropy < DIVERSITY_THRESHOLD
+                    student_states[student_id] = {'data': student_data, 'entropy': current_entropy, 'needs_adapt': needs_adaptation}
+                    rec_tasks_args.append((student_id, student_data, resource_map, topic_map, NUM_RECOMMENDATIONS_PER_STUDENT, needs_adaptation))
+                    logger.debug(f"Prepared rec task for {student_id} (Entropy: {current_entropy:.3f}, Adapt: {needs_adaptation})")
 
-                # 1. Fetch State
-                student_data = fetch_student_data_from_neo4j(db, student_id, history_limit=HISTORY_LIMIT_FOR_ENTROPY)
-                if not student_data: continue
+                # --- Phase 2: Parallel Recommendation Generation ---
+                recommendation_results = {} # student_id -> list_of_recs or None
+                logger.info(f"Phase 2: Submitting {len(rec_tasks_args)} recommendation tasks to {MAX_WORKERS} workers...")
+                rec_futures = {executor.submit(process_student_recommendation, args): args[0] for args in rec_tasks_args} # map future to student_id
+                for future in as_completed(rec_futures):
+                    s_id = rec_futures[future]
+                    try:
+                        _, recs = future.result() # Unpack result
+                        recommendation_results[s_id] = recs
+                        logger.debug(f"Received recommendations for {s_id}")
+                    except Exception as exc:
+                        logger.error(f'Rec task for {s_id} generated an exception: {exc}')
+                        recommendation_results[s_id] = None
 
-                # 2. Calculate Diversity & Check Adaptation
-                current_entropy = calculate_topic_entropy(student_data['history'], resource_map, HISTORY_LIMIT_FOR_ENTROPY)
-                needs_adaptation = current_entropy < DIVERSITY_THRESHOLD
-                logger.info(f"Student {student_id} entropy: {current_entropy:.3f} (Adapt: {needs_adaptation})")
+                # --- Phase 3: Simulate Choice & Prep Feedback Tasks ---
+                feedback_tasks_args = []
+                student_choices = {} # student_id -> chosen_resource_id or None
+                logger.info("Phase 3: Simulating choices and preparing feedback tasks...")
+                recommendation_ts = datetime.now().isoformat() # Single timestamp for all recs in this turn/batch
+                for student_id in students_this_turn:
+                    if student_id not in student_states: continue # Skipped earlier
+                    recs = recommendation_results.get(student_id)
+                    # -- Log/Persist ALL Recommendations --
+                    if recs:
+                        logger.info(f"LLM Recommendations for {student_id}: {[r['resource_id'] for r in recs]}")
+                        for rec in recs:
+                            rec_id = rec.get('resource_id'); reason = rec.get('reason', '')
+                            if rec_id:
+                                add_llm_recommendation_to_neo4j(db, student_id, rec_id, reason, recommendation_ts) # Persist now
+                                all_llm_recommendations_log.append({ "turn": turn, "studentId": student_id, "resourceId": rec_id, "reason": reason, "timestamp": recommendation_ts })
+                    else:
+                         logger.warning(f"No recommendations available for {student_id} to make a choice.")
+                         student_choices[student_id] = None
+                         continue # Cannot choose if no recs
 
-                # 3. Generate Recommendations
-                recommendations = recommend_to_student(student_data, resource_map, topic_map,
-                                                       num_recommendations=NUM_RECOMMENDATIONS_PER_STUDENT,
-                                                       adapt_prompt=needs_adaptation)
+                    # Simulate choice
+                    chosen_resource_id = simulate_student_choice(student_states[student_id]['data']['profile'], recs, resource_map, topic_map)
+                    student_choices[student_id] = chosen_resource_id
 
-                # 4. --- NEW: Log & Persist *ALL* Recommendations ---
-                if recommendations:
-                    logger.info(f"LLM Recommendations for {student_id}: {[r['resource_id'] for r in recommendations]}")
-                    for rec in recommendations:
-                        rec_id = rec.get('resource_id')
-                        reason = rec.get('reason', '')
-                        if rec_id:
-                            # Add to Neo4j
-                            add_llm_recommendation_to_neo4j(db, student_id, rec_id, reason, recommendation_ts)
-                            # Add to CSV log list
-                            all_llm_recommendations_log.append({
-                                "turn": turn,
-                                "studentId": student_id,
-                                "resourceId": rec_id,
-                                "reason": reason,
-                                "timestamp": recommendation_ts
-                            })
-                else:
-                    logger.warning(f"No recommendations generated for {student_id}.")
-                    continue # Skip choice/consumption if no recommendations
+                    if chosen_resource_id:
+                        logger.info(f"Student {student_id} chose: {chosen_resource_id}")
+                        chosen_resource_info = resource_map.get(chosen_resource_id)
+                        if chosen_resource_info:
+                            # Prep feedback task arguments
+                            feedback_tasks_args.append((student_id, chosen_resource_id, student_states[student_id]['data']['profile'], chosen_resource_info, topic_map))
+                        else:
+                            logger.warning(f"Info missing for chosen resource {chosen_resource_id} for {student_id}. Cannot generate feedback.")
+                    else:
+                        logger.info(f"Student {student_id} chose not to interact.")
 
-                # 5. Simulate Choice
-                chosen_resource_id = simulate_student_choice(student_data['profile'], recommendations, resource_map, topic_map)
+                # --- Phase 4: Parallel Feedback Generation ---
+                feedback_results = {} # (student_id, resource_id) -> feedback_dict or None
+                logger.info(f"Phase 4: Submitting {len(feedback_tasks_args)} feedback tasks to {MAX_WORKERS} workers...")
+                feedback_futures = {executor.submit(process_student_feedback, args): (args[0], args[1]) for args in feedback_tasks_args} # map future to (s_id, r_id)
+                for future in as_completed(feedback_futures):
+                    s_id, r_id = feedback_futures[future]
+                    try:
+                        _, _, feedback = future.result() # Unpack result
+                        feedback_results[(s_id, r_id)] = feedback
+                        logger.debug(f"Received feedback for {s_id} on {r_id}")
+                    except Exception as exc:
+                        logger.error(f'Feedback task for {s_id}/{r_id} generated an exception: {exc}')
+                        feedback_results[(s_id, r_id)] = None
 
-                # 6. If Choice Made
-                if chosen_resource_id:
-                    logger.info(f"Student {student_id} chose: {chosen_resource_id}")
-                    chosen_resource_info = resource_map.get(chosen_resource_id)
-                    consumption_ts = datetime.now().isoformat() # Timestamp for consumption event
+                # --- Phase 5: Persist Choices and Feedback ---
+                logger.info("Phase 5: Persisting simulation results...")
+                for student_id in students_this_turn:
+                    if student_id not in student_choices: continue # Should not happen if handled above
+                    chosen_resource_id = student_choices[student_id]
 
-                    if chosen_resource_info:
-                        # 7. Generate Feedback (LLM)
-                        feedback = generate_student_feedback_llm(student_data['profile'], chosen_resource_info, topic_map)
+                    if chosen_resource_id:
+                        feedback = feedback_results.get((student_id, chosen_resource_id))
+                        consumption_ts = datetime.now().isoformat() # Timestamp for this specific consumption
 
                         if feedback:
-                            logger.info(f"Generated feedback for {student_id}: {feedback}")
-                            # 8. Persist CONSUMED Interaction
-                            consumed_persisted = add_consumed_interaction_to_neo4j(
-                                db, student_id, chosen_resource_id,
-                                feedback['rating'], feedback['comment'], consumption_ts,
-                                source="simulation" # Mark as simulation-generated
-                            )
-
-                            # --- NEW: Add to simulated consumption log list ---
+                            consumed_persisted = add_consumed_interaction_to_neo4j(db, student_id, chosen_resource_id, feedback['rating'], feedback['comment'], consumption_ts, source="simulation")
                             if consumed_persisted:
-                                all_simulated_consumptions_log.append({
-                                    "turn": turn,
-                                    "studentId": student_id,
-                                    "resourceId": chosen_resource_id,
-                                    "rating": feedback['rating'],
-                                    "comment": feedback['comment'],
-                                    "timestamp": consumption_ts,
-                                    "feedback_generated_by": "llm" # Assume LLM feedback succeeded if we got here
-                                })
+                                all_simulated_consumptions_log.append({"turn": turn, "studentId": student_id, "resourceId": chosen_resource_id, "rating": feedback['rating'], "comment": feedback['comment'], "timestamp": consumption_ts, "feedback_generated_by": "llm"})
+                                # Optional Participation
+                                if random.random() < PROBABILITY_PARTICIPATE_AFTER_CONSUME:
+                                    chosen_resource_info = resource_map.get(chosen_resource_id)
+                                    topic_id = chosen_resource_info.get('topicId') if chosen_resource_info else None
+                                    if topic_id: add_participation_to_neo4j(db, student_id, topic_id, consumption_ts)
+                        else:
+                             logger.warning(f"Feedback generation failed for {student_id} on {chosen_resource_id}. CONSUMED interaction not persisted.")
+                    # No else needed here, already logged if student chose nothing
 
-                            # 9. Optional Participation
-                            if consumed_persisted and random.random() < PROBABILITY_PARTICIPATE_AFTER_CONSUME:
-                                topic_id = chosen_resource_info.get('topicId')
-                                if topic_id:
-                                    logger.info(f"Student {student_id} will also participate in topic {topic_id}.")
-                                    add_participation_to_neo4j(db, student_id, topic_id, consumption_ts) # Use consumption timestamp
-                                # else: (logging handled in function)
+                logger.info(f"===== Finished Turn {turn} in {time.time() - turn_start_time:.2f}s =====")
 
-                        else: logger.warning(f"Feedback generation failed for {student_id}. Consumed interaction not fully persisted.")
-                    else: logger.warning(f"Info missing for chosen resource {chosen_resource_id}. Consumed interaction not persisted.")
-                else:
-                    logger.info(f"Student {student_id} chose not to interact.")
-
-                logger.debug(f"Processing time for {student_id}: {time.time() - sim_step_start:.2f}s")
-
-            logger.info(f"===== Finished Turn {turn} in {time.time() - turn_start_time:.2f}s =====")
-
+        # End simulation loop
         total_time = time.time() - start_time
         logger.info(f"Simulation finished {NUM_TURNS} turns in {total_time:.2f} seconds.")
 
     except Exception as e:
         logger.exception("An critical error occurred during the simulation:")
     finally:
-        # --- NEW: Write log files at the end ---
+        # Write log files
         logger.info("Saving simulation log files...")
-        try:
-            recs_df = pd.DataFrame(all_llm_recommendations_log)
-            recs_df.to_csv(RECOMMENDATION_LOG_CSV, index=False)
-            logger.info(f"Saved {len(recs_df)} LLM recommendations to {RECOMMENDATION_LOG_CSV}")
-        except Exception as e:
-            logger.error(f"Failed to save recommendation log CSV: {e}")
-
-        try:
-            consumptions_df = pd.DataFrame(all_simulated_consumptions_log)
-            consumptions_df.to_csv(CONSUMPTION_LOG_CSV, index=False)
-            logger.info(f"Saved {len(consumptions_df)} simulated consumptions to {CONSUMPTION_LOG_CSV}")
-        except Exception as e:
-            logger.error(f"Failed to save consumption log CSV: {e}")
+        try: pd.DataFrame(all_llm_recommendations_log).to_csv(RECOMMENDATION_LOG_CSV, index=False); logger.info(f"Saved recommendations log.")
+        except Exception as e: logger.error(f"Failed to save recommendation log CSV: {e}")
+        try: pd.DataFrame(all_simulated_consumptions_log).to_csv(CONSUMPTION_LOG_CSV, index=False); logger.info(f"Saved consumptions log.")
+        except Exception as e: logger.error(f"Failed to save consumption log CSV: {e}")

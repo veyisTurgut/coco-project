@@ -207,7 +207,7 @@ def recommend_to_student(student_data, all_resource_info_map, topic_id_map,
                                   "Explain this exploration benefit in the reason.")
     else:
         adaptation_instruction = ("\n4.  **Output Format:** Provide the recommendations as a JSON array of objects, matching the schema provided. "
-                                  "Each object must have a 'Resource ID' key (with a value from the candidate list) and a 'Reason' key (1 sentence justification referencing the student's profile/history/candidate details).")
+                                  "Each object must have a 'resource_id' key (with a value from the candidate list) and a 'reason' key (1 sentence justification referencing the student's profile/history/candidate details).")
 
 
     # --- Construct the REVISED prompt ---
@@ -233,7 +233,9 @@ Based *only* on the provided profile, interaction history, and the candidate res
 Instructions for Recommendation:
 1.  **Select ONLY from Candidates:** Choose Resource IDs strictly from the 'Candidate Resources' list provided above. Do NOT invent resource IDs.
 2.  **Prioritize Alignment:** Suggest resources that align with the student's learning style ({learning_style}) and topics they enjoy ({loved_str}), if suitable candidates exist.
-3.  **Consider Exploration:** If appropriate, select a candidate resource in a topic related to their liked topics or gently re-introduce a disliked topic ({disliked_str}) using a preferred modality, explaining the rationale.{adaptation_instruction}
+3.  **Avoid Exploration:** Do NOT suggest resources outside the student's narrow band of recent/liked topics unless explicitly instructed by an adaptation flag.
+
+{adaptation_instruction }  # Keep adaptation logic separate
 
 output schema is this:
 {output_schema}
