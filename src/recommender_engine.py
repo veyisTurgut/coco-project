@@ -1,10 +1,71 @@
 import json
 import pandas as pd
 
-students_df = pd.read_csv('synthetic_data_rich/students.csv')
-resources_df = pd.read_csv('synthetic_data_rich/resources.csv')
-consumed_df = pd.read_csv('synthetic_data_rich/consumed.csv')
-topics_df = pd.read_csv('synthetic_data_rich/topics.csv')
+students_df = pd.read_csv('synthetic_data/students.csv')
+resources_df = pd.read_csv('synthetic_data/resources.csv')
+consumed_df = pd.read_csv('synthetic_data/consumed.csv')
+topics_df = pd.read_csv('synthetic_data/topics.csv')
+
+from llm.curl_vertex import CurlVertex, vertex_credentials
+from llm.mylib import *
+from datetime import datetime, timedelta
+import logging
+logger = logging.getLogger(__name__)
+
+
+def chat_with_llm(prompt: str, system_prompt: str = None, schema: str = None):
+    if not system_prompt:
+        system_prompt = """
+        You are an expert AI Tutor designing a personalized learning path for a 9th-grade student using resources from a curriculum covering Physics, Biology, Chemistry, and Mathematics.
+        """
+    global vertex_last_initialized
+    if vertex_last_initialized < datetime.now() - timedelta(minutes=30):
+        vertex_credentials.initialize()
+        vertex_last_initialized = datetime.now()
+    # Step 1: Configure LLM
+    llm_config = LLMConfig({
+        "model_arch": ChatMainLLM.VERTEXLLM.value,
+        "model_name": ChatMainLLMName.VERTEX_GEMINI_25_FLASH_PREVIEW,  # Correct: Pass enum, not string
+        "temperature": 0.7,
+        "top_k": 10,
+        "top_p": 0.95,
+        "max_output_tokens": 500,
+        "llm_region": "us-central1",  # Adjust the region as necessary
+        "response_mimetype": "application/json",
+        "responseSchema": schema
+    })
+
+    # Initialize the CurlVertex instance
+    curl_vertex = CurlVertex(llm_config=llm_config, logger=logger)
+
+    # Step 2: Define chat history
+    chat_history = [
+        Message(
+            role="user",
+            message=prompt,
+            message_content_type=ChatInputContentType.TEXT,
+            message_uri=None,
+            message_type=None
+        )
+    ]
+
+    # Step 3: Generate response
+    response_content = ""
+    for response in curl_vertex.generate(
+        instruction_prompt=system_prompt,  # Include the system prompt here
+        chat_history=chat_history,
+        is_streaming=True,  # Enable streaming for token-by-token responses
+        return_tokens=True,  # Retrieve token usage info
+        timeout=60
+    ):
+        response_content += response.content
+
+    # Step 4: Print and return final response
+    print("Final Response:")
+    print(response_content)
+    return response_content
+
+
 
 
 def format_history_for_prompt(history, resource_info_map, topic_id_map, max_items=5):
@@ -96,15 +157,8 @@ Recommended Resources:
 Begin Recommendation:
 """
 
-    # --- LLM Call Placeholder ---
-    # print("--- Generated Prompt ---")
-    # print(prompt)
-    # print("----------------------")
-    # res = llm.generate(prompt) # User handles this part
-    # parsed_res = ... # User handles parsing
-    # return parsed_res
-    # --- For this function, we just return the prompt ---
-    return prompt
+    res = chat_with_llm(prompt)
+    return res
 
 
 # --- Example Usage (Illustrative) ---
