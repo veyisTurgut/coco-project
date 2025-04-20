@@ -1,16 +1,130 @@
-import json
-import pandas as pd
-
-students_df = pd.read_csv('synthetic_data/students.csv')
-resources_df = pd.read_csv('synthetic_data/resources.csv')
-consumed_df = pd.read_csv('synthetic_data/consumed.csv')
-topics_df = pd.read_csv('synthetic_data/topics.csv')
-
+import json, logging, os, random, pandas as pd
+from py2neo import Graph # Import Neo4j driver
 from llm.curl_vertex import CurlVertex, vertex_credentials
 from llm.mylib import *
 from datetime import datetime, timedelta
-import logging
+from dotenv import load_dotenv
+
+load_dotenv()
+
 logger = logging.getLogger(__name__)
+
+# Best practice: Use environment variables or a config file
+NEO4J_URI = os.getenv("NEO4J_URI", "bolt://gcloud.madlen.io:7687") # Default if env var not set
+NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD") 
+
+graph_db = None
+
+def connect_neo4j():
+    """Establishes connection to Neo4j."""
+    global graph_db
+    if graph_db is None:
+        try:
+            graph_db = Graph(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
+            # Test connection
+            graph_db.run("RETURN 1")
+            logger.info(f"Successfully connected to Neo4j at {NEO4J_URI}")
+        except Exception as e:
+            logger.error(f"Failed to connect to Neo4j: {e}")
+            graph_db = None # Ensure it's None if connection fails
+            raise # Re-raise exception to halt execution if connection is critical
+    return graph_db
+
+
+def fetch_lookup_maps_from_neo4j(graph: Graph):
+    """Fetches topic and resource information from Neo4j."""
+    topic_id_map = {}
+    resource_info_map = {}
+
+    try:
+        # Fetch Topics
+        topic_query = "MATCH (t:Topic) RETURN t.topicId AS topicId, t.name AS name"
+        topic_results = graph.run(topic_query)
+        for record in topic_results:
+            topic_id_map[record['topicId']] = record['name']
+        logger.info(f"Fetched {len(topic_id_map)} topics.")
+
+        # Fetch Resources
+        resource_query = """
+        MATCH (r:Resource)
+        OPTIONAL MATCH (r)-[:ABOUT_TOPIC]->(t:Topic) // Use OPTIONAL MATCH in case some resources aren't linked
+        RETURN r.resourceId AS resourceId, r.title AS title, r.type AS type,
+               r.modality AS modality, t.topicId AS topicId
+        """
+        resource_results = graph.run(resource_query)
+        for record in resource_results:
+            resource_info_map[record['resourceId']] = {
+                'resourceId': record['resourceId'],
+                'title': record['title'],
+                'type': record['type'],
+                'modality': record['modality'],
+                'topicId': record['topicId'] # Will be None if not linked
+            }
+        logger.info(f"Fetched {len(resource_info_map)} resources.")
+
+    except Exception as e:
+        logger.error(f"Error fetching lookup maps from Neo4j: {e}")
+        # Depending on requirements, you might want to raise the error or return empty maps
+        raise
+
+    return topic_id_map, resource_info_map
+
+
+def fetch_student_data_from_neo4j(graph: Graph, student_id: str, history_limit=15):
+    """Fetches profile and recent interaction history for a specific student."""
+    student_data = {"studentId": student_id, "profile": {}, "history": []}
+
+    try:
+        # Fetch Profile
+        profile_query = """
+        MATCH (s:Student {studentId: $studentId})
+        RETURN s.learningStyle AS learningStyle,
+               s.lovedTopicIds AS lovedTopicIds,    // Assuming these are stored as JSON strings
+               s.dislikedTopicIds AS dislikedTopicIds // Assuming these are stored as JSON strings
+        LIMIT 1
+        """
+        profile_result = graph.run(profile_query, studentId=student_id).data()
+
+        if not profile_result:
+            logger.warning(f"Student profile not found for ID: {student_id}")
+            return None # Or raise an error
+
+        profile_record = profile_result[0]
+        student_data["profile"]["learningStyle"] = profile_record.get("learningStyle", "Unknown")
+        # Parse JSON strings back into lists
+        try:
+            student_data["profile"]["lovedTopics"] = json.loads(profile_record.get("lovedTopicIds") or '[]')
+        except (json.JSONDecodeError, TypeError):
+             logger.warning(f"Could not parse lovedTopicIds for student {student_id}. Defaulting to empty list.")
+             student_data["profile"]["lovedTopics"] = []
+        try:
+            student_data["profile"]["dislikedTopics"] = json.loads(profile_record.get("dislikedTopicIds") or '[]')
+        except (json.JSONDecodeError, TypeError):
+             logger.warning(f"Could not parse dislikedTopicIds for student {student_id}. Defaulting to empty list.")
+             student_data["profile"]["dislikedTopics"] = []
+
+
+        # Fetch History (Consumed relationships with properties)
+        history_query = """
+        MATCH (s:Student {studentId: $studentId})-[c:CONSUMED]->(r:Resource)
+        RETURN r.resourceId AS resourceId,
+               c.rating AS rating,
+               c.comment AS comment,
+               c.timestamp AS timestamp // Make sure timestamp was loaded correctly
+        ORDER BY c.timestamp DESC
+        LIMIT $limit
+        """
+        history_result = graph.run(history_query, studentId=student_id, limit=history_limit)
+        student_data["history"] = [dict(record) for record in history_result] # Convert records to list of dicts
+
+        logger.info(f"Fetched profile and {len(student_data['history'])} history items for student {student_id}.")
+
+    except Exception as e:
+        logger.error(f"Error fetching data for student {student_id} from Neo4j: {e}")
+        return None # Indicate failure
+
+    return student_data
 
 
 def chat_with_llm(prompt: str, system_prompt: str = None, schema: str = None):
@@ -18,10 +132,7 @@ def chat_with_llm(prompt: str, system_prompt: str = None, schema: str = None):
         system_prompt = """
         You are an expert AI Tutor designing a personalized learning path for a 9th-grade student using resources from a curriculum covering Physics, Biology, Chemistry, and Mathematics.
         """
-    global vertex_last_initialized
-    if vertex_last_initialized < datetime.now() - timedelta(minutes=30):
-        vertex_credentials.initialize()
-        vertex_last_initialized = datetime.now()
+    vertex_credentials.initialize()
     # Step 1: Configure LLM
     llm_config = LLMConfig({
         "model_arch": ChatMainLLM.VERTEXLLM.value,
@@ -61,11 +172,9 @@ def chat_with_llm(prompt: str, system_prompt: str = None, schema: str = None):
         response_content += response.content
 
     # Step 4: Print and return final response
-    print("Final Response:")
-    print(response_content)
+    #print("Final Response:")
+    #print(response_content)
     return response_content
-
-
 
 
 def format_history_for_prompt(history, resource_info_map, topic_id_map, max_items=5):
@@ -90,20 +199,21 @@ def format_history_for_prompt(history, resource_info_map, topic_id_map, max_item
         modality = resource_info.get('modality', 'Unknown')
 
         formatted_lines.append(
-            f"- Resource: '{title}' (Topic: {topic_name}, Modality: {modality})\n"
+            f"- Resource: '{title}' (ID: {resource_id}, Topic: {topic_name}, Modality: {modality})\n"
             f"  Rating: {rating}/5\n"
             f"  Comment: \"{comment}\""
         )
     return "\n".join(formatted_lines)
 
-def recommend_to_student(student_data, resource_info_map, topic_id_map, num_recommendations=3):
+
+def recommend_to_student(student_data, all_resource_info_map, topic_id_map, num_recommendations=3):
     """
     Generates a prompt for an LLM to recommend resources based on student profile and history.
 
     Args:
         student_data (dict): Containing 'studentId', 'profile' (with 'learningStyle',
                              'lovedTopics', 'dislikedTopics'), and 'history' (list of interactions).
-        resource_info_map (dict): Lookup map for resource details (title, topicId, modality).
+        all_resource_info_map (dict): Lookup map for resource details (title, topicId, modality).
         topic_id_map (dict): Lookup map for topic names.
         num_recommendations (int): Number of recommendations to ask for.
 
@@ -123,9 +233,47 @@ def recommend_to_student(student_data, resource_info_map, topic_id_map, num_reco
     loved_str = ", ".join(loved_topics) if loved_topics else "None specified"
     disliked_str = ", ".join(disliked_topics) if disliked_topics else "None specified"
 
-    # Format history
-    history_summary = format_history_for_prompt(history, resource_info_map, topic_id_map)
+ # --- Filter candidate resources ---
+    consumed_resource_ids = {item['resourceId'] for item in history}
+    candidate_ids = set(all_resource_info_map.keys()) - consumed_resource_ids
 
+    # Format candidate list for the prompt
+    candidate_list_str = ""
+    if not candidate_ids:
+        candidate_list_str = "No candidate resources available (student consumed all?)."
+    else:
+        candidate_lines = []
+        max_candidates_in_prompt = 50
+        selected_candidate_ids = random.sample(list(candidate_ids), k=min(len(candidate_ids), max_candidates_in_prompt))
+
+        for res_id in selected_candidate_ids:
+            res_info = all_resource_info_map.get(res_id, {})
+            title = res_info.get('title', res_id)
+            topic_id = res_info.get('topicId')
+            topic_name = topic_id_map.get(topic_id, "Unknown Topic")
+            modality = res_info.get('modality', 'Unknown')
+            candidate_lines.append(f"- ID: {res_id}, Title: '{title}', Topic: {topic_name}, Modality: {modality}")
+        candidate_list_str = "\n".join(candidate_lines)
+        if len(candidate_ids) > max_candidates_in_prompt:
+             candidate_list_str += f"\n- ... (and {len(candidate_ids) - max_candidates_in_prompt} more available resources)"
+
+
+    # Format history
+    history_summary = format_history_for_prompt(history, all_resource_info_map, topic_id_map)
+
+  # --- Define the desired JSON output schema (unchanged) ---
+    output_schema = {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "Resource ID": {"type": "string"},
+                "Reason": {"type": "string"}
+            },
+            "required": ["Resource ID", "Reason"]
+        }
+    }
+    
     # Construct the prompt
     prompt = f"""You are an expert AI Tutor designing a personalized learning path for a 9th-grade student (ID: {student_id}) using resources from a curriculum covering Physics, Biology, Chemistry, and Mathematics.
 
@@ -137,24 +285,24 @@ Student Profile:
 Recent Interaction History (last {len(history[-5:])} items):
 {history_summary}
 
-Available resource modalities include: Visual (Video, Slideshow, Simulation), Audio (Podcast), Reading/Writing (Article), Kinaesthetic (Quiz, Simulation), Mixed.
+--- Candidate Resources ---
+Below is a list of available resources the student has NOT yet consumed. You MUST choose recommendations ONLY from this list.
+
+{candidate_list_str}
+--- End of Candidate Resources ---
+
+Available resource modalities mentioned in the candidate list include: Visual (Video, Slideshow, Simulation), Audio (Podcast), Reading/Writing (Article), Kinaesthetic (Quiz, Simulation), Mixed.
 
 Task:
-Based *only* on the provided profile and interaction history, recommend {num_recommendations} specific resources for this student to engage with next.
+Based *only* on the provided profile, interaction history, and the candidate resource list, recommend exactly {num_recommendations} specific resources for this student to engage with next.
 
 Instructions for Recommendation:
-1.  **Prioritize Alignment:** Suggest resources that align with the student's learning style ({learning_style}) and topics they enjoy ({loved_str}).
-2.  **Consider Exploration:** If appropriate, suggest resources in topics related to their liked topics or gently re-introduce a disliked topic ({disliked_str}) using a preferred modality or a different angle, explaining why it might be useful.
-3.  **Avoid Poorly Rated:** Do not recommend resources the student has already interacted with and rated poorly (e.g., 1 or 2 stars).
-4.  **Output Format:** Provide the recommendations as a list, including the Resource ID and a *brief* justification (1 sentence) for why each resource is suitable for *this specific student*, referencing their profile/history.
+1.  **Select ONLY from Candidates:** Choose Resource IDs strictly from the 'Candidate Resources' list provided above. Do NOT invent resource IDs like R0XXX.
+2.  **Prioritize Alignment:** Suggest resources that align with the student's learning style ({learning_style}) and topics they enjoy ({loved_str}), if suitable candidates exist.
+3.  **Consider Exploration:** If appropriate, select a candidate resource in a topic related to their liked topics or gently re-introduce a disliked topic ({disliked_str}) using a preferred modality, explaining the rationale.
+4.  **Output Format:** Provide the recommendations as a JSON array of objects, matching the schema provided. Each object must have a 'Resource ID' key (with a value from the candidate list) and a 'Reason' key (1 sentence justification referencing the student's profile/history/candidate details).
 
-Example Output Format:
-Recommended Resources:
-1.  Resource ID: R0XXX - Reason: This video matches your visual learning style and covers [Liked Topic Name], which you enjoy.
-2.  Resource ID: R0YYY - Reason: Since you found [Resource Title] confusing, this interactive simulation on [Related Topic] might offer a different, more engaging approach.
-3.  Resource ID: R0ZZZ - Reason: Exploring [Adjacent Topic] could build upon your interest in [Liked Topic Name]; this article provides a solid introduction.
-
-Begin Recommendation:
+Begin Recommendation (JSON output only):
 """
 
     res = chat_with_llm(prompt)
@@ -163,29 +311,42 @@ Begin Recommendation:
 
 # --- Example Usage (Illustrative) ---
 if __name__ == "__main__":
-    # In a real scenario, load these from CSV or Neo4j
-    topic_id_map = {t['topicId']: t['name'] for t in topics_df.to_dict('records')}
-    resource_info_map = {r['resourceId']: r for r in resources_df.to_dict('records')}
+    logger.info("Starting recommendation engine...")
 
-    # Example: Fetch or construct data for one student (S0001)
-    example_student_id = "S0001"
-    student_row = students_df[students_df['studentId'] == example_student_id].iloc[0]
-    student_history_df = consumed_df[consumed_df['studentId'] == example_student_id]
+    try:
+        # Connect to Neo4j
+        db = connect_neo4j()
+        if not db:
+             exit() # Stop if connection failed
 
-    example_student_data = {
-        "studentId": student_row["studentId"],
-        "profile": {
-            "learningStyle": student_row["learningStyle"],
-            # Load JSON strings back to lists
-            "lovedTopics": json.loads(student_row["lovedTopicIds"]),
-            "dislikedTopics": json.loads(student_row["dislikedTopicIds"])
-        },
-        "history": student_history_df.to_dict('records') # Pass interaction history
-    }
+        # Fetch lookup maps once
+        topic_map, resource_map = fetch_lookup_maps_from_neo4j(db)
+        if not topic_map or not resource_map:
+            logger.error("Failed to fetch necessary lookup maps from Neo4j. Exiting.")
+            exit()
 
-    # Generate the prompt
-    generated_prompt = recommend_to_student(example_student_data, resource_info_map, topic_id_map)
+        # --- Get recommendations for a specific student ---
+        example_student_id = "S0001" # Or get from input, loop, etc.
+        logger.info(f"Fetching data for student: {example_student_id}")
+        student_data = fetch_student_data_from_neo4j(db, example_student_id)
 
-    print("--- Example Generated Prompt for S0001 ---")
-    print(generated_prompt)
-    print("------------------------------------------")
+        if student_data:
+            logger.info(f"Generating recommendations for student: {example_student_id}")
+            recommendations = recommend_to_student(
+                student_data,
+                resource_map,
+                topic_map,
+                num_recommendations=3
+            )
+
+            print(f"\n--- LLM Recommendations for {example_student_id} ---")
+            if recommendations:
+                print(recommendations)
+            else:
+                print("Failed to get valid recommendations from LLM.")
+            print("------------------------------------")
+        else:
+            print(f"Could not fetch data for student {example_student_id}.")
+
+    except Exception as e:
+        logger.exception(f"An unexpected error occurred in the main execution block: {e}")

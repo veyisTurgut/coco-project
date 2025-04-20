@@ -1,2 +1,3 @@
 .venv
 vertex_keys.json
+.env
