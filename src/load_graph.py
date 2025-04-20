@@ -1,49 +1,69 @@
+# src/load_graph.py
 import pandas as pd
 from py2neo import Graph, Node, Relationship, Transaction, Subgraph
-import os, traceback, time, math
+import os, traceback, time, math, json # Added json
+import numpy as np # Added numpy
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # --- Configuration ---
-# !!! UPDATE THESE DETAILS !!!
-NEO4J_URI = "bolt://gcloud.madlen.io:7687"  # Your Neo4j server URI
-NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "madlen-is-the-future" # The password you set
+NEO4J_URI = os.getenv("NEO4J_URI", "bolt://gcloud.madlen.io:7687")
+NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
 # Directory containing the generated CSV files
-DATA_DIR = "synthetic_data" # Or "synthetic_data" if you used the first script
+DATA_DIR = "synthetic_data" # Make sure this matches generate_data output
 
-CLEAR_DB_BEFORE_LOADING = True # Set to False if you want to add to existing data
-BATCH_SIZE = 1000 # Process this many rows per transaction batch
+CLEAR_DB_BEFORE_LOADING = True
+BATCH_SIZE = 1000
 
 # --- Helper Functions ---
 def file_path(filename):
     return os.path.join(DATA_DIR, filename)
 
+def df_to_batches(df, batch_size):
+    """Yields successive batch_size chunks from DataFrame."""
+    for i in range(0, len(df), batch_size):
+        # Convert potential pandas Int64 types explicitly, handle NA/NaN
+        yield df.iloc[i:i + batch_size].fillna(np.nan).replace([np.nan], [None]).astype(object).where(pd.notnull(df), None).to_dict('records')
+
+
+# --- File Check ---
 def check_files_exist():
     """Checks if all necessary CSV files exist."""
+    # Core files for loading nodes and essential relationships
     required_files = [
         "students.csv", "topics.csv", "resources.csv",
-        "consumed.csv", "resource_topic.csv"
+        "consumed_initially.csv", # Use the initial consumption file
+        "resource_topic.csv"
     ]
-    all_exist = True
+    # Optional files
+    optional_files = [
+         "participated.csv",
+         # No longer loading recommended.csv here
+    ]
+    all_required_exist = True
     print("Checking for required CSV files...")
     for filename in required_files:
         path = file_path(filename)
         if not os.path.exists(path):
-            print(f"  ERROR: File not found: {path}")
-            all_exist = False
+            print(f"  ERROR: Required file not found: {path}")
+            all_required_exist = False
         else:
             print(f"  Found: {path}")
-    if not all_exist:
+
+    print("\nChecking for optional CSV files...")
+    for filename in optional_files:
+         path = file_path(filename)
+         if os.path.exists(path): print(f"  Found: {path}")
+         else: print(f"  Optional file not found: {path} (Will be skipped)")
+
+    if not all_required_exist:
         print("\nOne or more required CSV files are missing. Please run generate_data.py first.")
         exit()
-    print("All required files found.")
+    print("\nFile check complete.")
     return True
-
-def df_to_batches(df, batch_size):
-    """Yields successive batch_size chunks from DataFrame."""
-    for i in range(0, len(df), batch_size):
-        yield df.iloc[i:i + batch_size].replace({pd.NA: None, pd.NaT: None, float('nan'): None}).to_dict('records')
-
 
 # --- Main Loading Functions ---
 
@@ -72,22 +92,26 @@ def load_nodes(graph: Graph, label: str, filename: str, id_column: str, property
     filepath = file_path(filename)
     print(f"Loading nodes with label ':{label}' from {filename}...")
     start_time = time.time()
-    df = pd.read_csv(filepath)
+    try:
+        df = pd.read_csv(filepath)
+    except FileNotFoundError:
+        print(f"ERROR: File not found {filepath}. Skipping node type {label}.")
+        return
+
     total_rows = len(df)
     print(f"Read {total_rows} rows from {filepath}.")
 
     load_count = 0
-    # Prepare property string for Cypher query
-    # Example: ON CREATE SET n += { name: row.name, otherProp: row.otherProp }
     prop_set_parts = [f"{col}: row.{col}" for col in property_columns if col != id_column]
     prop_set_string = "{" + ", ".join(prop_set_parts) + "}" if prop_set_parts else ""
-    if prop_set_string:
-        prop_set_string = f" ON CREATE SET n += {prop_set_string}"
+    # Using SET n += ensures properties are updated if node already exists (e.g., learning style)
+    # Use ON CREATE SET n += if you only want properties added when node is new
+    set_clause = f" SET n += {prop_set_string}" if prop_set_string else ""
 
     query = f"""
     UNWIND $batch AS row
     MERGE (n:{label} {{ {id_column}: row.{id_column} }})
-    {prop_set_string}
+    {set_clause}
     """
 
     tx = None
@@ -100,57 +124,71 @@ def load_nodes(graph: Graph, label: str, filename: str, id_column: str, property
             load_count += len(batch)
             print(f"  Processed batch {batch_num}/{math.ceil(total_rows/BATCH_SIZE)}, loaded {load_count}/{total_rows} nodes...")
 
-            # Commit periodically within large files to manage memory/transaction size
-            if batch_num % 10 == 0: # Commit every 10 batches
+            if batch_num % 10 == 0:
                  tx.commit()
                  print(f"    Committed transaction at batch {batch_num}.")
-                 tx = None # Start new transaction for next batch
+                 tx = None
 
-        if tx: # Commit any remaining transaction
+        if tx:
             tx.commit()
             print("    Committed final transaction.")
 
     except Exception as e:
         print(f"\nError loading nodes from {filename}: {e}")
+        traceback.print_exc()
         if tx:
             try: tx.rollback()
-            except: pass # Ignore rollback errors
-        raise # Re-raise the exception to stop execution
+            except: pass
+        raise
 
     print(f"Finished loading {label} nodes in {time.time() - start_time:.2f} seconds.\n")
 
 
 def load_relationships(graph: Graph, start_node_label: str, start_id_col: str,
                        end_node_label: str, end_id_col: str,
-                       rel_type: str, filename: str, property_columns: list = None):
+                       rel_type: str, filename: str, property_columns: list = None,
+                       extra_rel_props: dict = None):
     """Loads relationships from a CSV file in batches."""
     filepath = file_path(filename)
+    if not os.path.exists(filepath):
+        print(f"Skipping relationship '{rel_type}': File not found {filepath}.")
+        return
+
     print(f"Loading ':{rel_type}' relationships from {filename}...")
     start_time = time.time()
-    df = pd.read_csv(filepath)
+    try:
+        df = pd.read_csv(filepath)
+    except Exception as e:
+        print(f"Error reading CSV {filepath}: {e}")
+        return
+
     total_rows = len(df)
     print(f"Read {total_rows} rows from {filepath}.")
-
     if total_rows == 0:
         print("Skipping relationship loading - file is empty.")
         return
 
     load_count = 0
-    # Prepare property string for Cypher query
-    prop_set_string = ""
-    if property_columns:
-        prop_set_parts = [f"{col}: row.{col}" for col in property_columns]
-        if prop_set_parts:
-             prop_set_string = "{" + ", ".join(prop_set_parts) + "}"
-             prop_set_string = f" ON CREATE SET rel += {prop_set_string}"
+    # Prepare property string for Cypher query from CSV columns
+    prop_set_parts = [f"{col}: row.{col}" for col in property_columns] if property_columns else []
 
+    # Add extra static properties
+    if extra_rel_props:
+        for key, value in extra_rel_props.items():
+             prop_set_parts.append(f"{key}: {json.dumps(value)}")
 
+    prop_set_string = "{" + ", ".join(prop_set_parts) + "}" if prop_set_parts else ""
+    set_clause = f" SET rel += {prop_set_string}" if prop_set_string else ""
+
+    # Using MERGE creates relationship if it doesn't exist based on start/end nodes.
+    # If you want multiple identical relationship types possible (e.g., multiple CONSUMED between same nodes), use CREATE instead of MERGE.
+    # However, MERGE is safer for preventing accidental duplicates during loading.
     query = f"""
     UNWIND $batch AS row
     MATCH (start:{start_node_label} {{ {start_id_col}: row.{start_id_col} }})
     MATCH (end:{end_node_label} {{ {end_id_col}: row.{end_id_col} }})
     MERGE (start)-[rel:{rel_type}]->(end)
-    {prop_set_string}
+    {set_clause}
     """
 
     tx = None
@@ -159,22 +197,28 @@ def load_relationships(graph: Graph, start_node_label: str, start_id_col: str,
         for batch in df_to_batches(df, BATCH_SIZE):
             batch_num += 1
             if not tx: tx = graph.begin()
-            tx.run(query, batch=batch)
+            try:
+                tx.run(query, batch=batch)
+            except Exception as run_e:
+                 print(f"\nError processing batch {batch_num} for {rel_type} from {filename}: {run_e}")
+                 print(f"Failed Batch Data (first row): {batch[0] if batch else 'N/A'}")
+                 continue # Skip this batch
+
             load_count += len(batch)
             print(f"  Processed batch {batch_num}/{math.ceil(total_rows/BATCH_SIZE)}, loaded {load_count}/{total_rows} relationships...")
 
-            # Commit periodically
             if batch_num % 10 == 0:
                  tx.commit()
                  print(f"    Committed transaction at batch {batch_num}.")
                  tx = None
 
-        if tx: # Commit any remaining transaction
+        if tx:
             tx.commit()
             print("    Committed final transaction.")
 
     except Exception as e:
-        print(f"\nError loading relationships from {filename}: {e}")
+        print(f"\nUnhandled error loading relationships from {filename}: {e}")
+        traceback.print_exc()
         if tx:
             try: tx.rollback()
             except: pass
@@ -186,19 +230,17 @@ def load_relationships(graph: Graph, start_node_label: str, start_id_col: str,
 # --- Main Execution ---
 if __name__ == "__main__":
     start_total_time = time.time()
-
     if not check_files_exist():
         exit()
 
     print(f"\nConnecting to Neo4j at {NEO4J_URI}...")
     try:
         graph = Graph(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
-        # Test connection
         graph.run("RETURN 1")
-        print("Successfully connected to Neo4j.")
+        print("Successfully connected.")
     except Exception as e:
         traceback.print_exc()
-        print(f"Failed to connect to Neo4j: {e}")
+        print(f"Failed to connect: {e}")
         exit()
 
     if CLEAR_DB_BEFORE_LOADING:
@@ -208,35 +250,48 @@ if __name__ == "__main__":
 
     # --- Load Nodes ---
     load_nodes(graph, "Topic", "topics.csv", "topicId", ["name"])
-    load_nodes(graph, "Resource", "resources.csv", "resourceId", ["title", "type"])
-    load_nodes(graph, "Student", "students.csv", "studentId", ["name"])
+    load_nodes(graph, "Resource", "resources.csv", "resourceId", ["title", "type", "modality"])
+    load_nodes(graph, "Student", "students.csv", "studentId", ["name", "learningStyle", "lovedTopicIds", "dislikedTopicIds"])
 
     # --- Load Relationships ---
-    # (Resource)-[:ABOUT_TOPIC]->(Topic)
     load_relationships(graph, "Resource", "resourceId", "Topic", "topicId",
                        "ABOUT_TOPIC", "resource_topic.csv")
 
-    # (Student)-[:CONSUMED]->(Resource)
+    # Load INITIAL consumption data - MARKED AS INITIAL
     load_relationships(graph, "Student", "studentId", "Resource", "resourceId",
-                       "CONSUMED", "consumed.csv", ["timestamp"])
+                       "CONSUMED", "consumed_initially.csv", # Use initial filename
+                       ["timestamp", "rating", "comment", "feedback_generated_by"],
+                       extra_rel_props={"source": "initial"}) # Mark source
 
+    # Load OPTIONAL participation data
+    load_relationships(graph, "Student", "studentId", "Topic", "topicId",
+                       "PARTICIPATED_IN", "participated.csv", ["timestamp", "interactionType"])
+
+    # NO LONGER LOADING recommended.csv
 
     print("\n--- Data Loading Complete ---")
-    # Final Verification Counts
+    # --- Final Verification Counts ---
     print("Verifying counts in Neo4j:")
     try:
-        student_count = graph.run("MATCH (n:Student) RETURN count(n) AS count").evaluate()
-        topic_count = graph.run("MATCH (n:Topic) RETURN count(n) AS count").evaluate()
-        resource_count = graph.run("MATCH (n:Resource) RETURN count(n) AS count").evaluate()
-        consumed_count = graph.run("MATCH ()-[r:CONSUMED]->() RETURN count(r) AS count").evaluate()
-        participated_count = graph.run("MATCH ()-[r:PARTICIPATED_IN]->() RETURN count(r) AS count").evaluate()
+        counts = {}
+        counts['Student'] = graph.run("MATCH (n:Student) RETURN count(n) AS c").evaluate()
+        counts['Topic'] = graph.run("MATCH (n:Topic) RETURN count(n) AS c").evaluate()
+        counts['Resource'] = graph.run("MATCH (n:Resource) RETURN count(n) AS c").evaluate()
+        counts['CONSUMED'] = graph.run("MATCH ()-[r:CONSUMED]->() RETURN count(r) AS c").evaluate()
+        counts['PARTICIPATED_IN'] = graph.run("MATCH ()-[r:PARTICIPATED_IN]->() RETURN count(r) AS c").evaluate()
+        counts['ABOUT_TOPIC'] = graph.run("MATCH ()-[r:ABOUT_TOPIC]->() RETURN count(r) AS c").evaluate()
+        # Add count for LLM_RECOMMENDED if needed for verification, but not loaded here
+        # counts['LLM_RECOMMENDED'] = graph.run("MATCH ()-[r:LLM_RECOMMENDED]->() RETURN count(r) AS c").evaluate()
 
-        print(f"  Student Nodes: {student_count}")
-        print(f"  Topic Nodes: {topic_count}")
-        print(f"  Resource Nodes: {resource_count}")
-        print(f"  CONSUMED Relationships: {consumed_count}")
-        print(f"  PARTICIPATED_IN Relationships: {participated_count}")
-        # Add other counts if desired
+        print(f"  Nodes:")
+        print(f"    Student: {counts.get('Student', 0)}")
+        print(f"    Topic: {counts.get('Topic', 0)}")
+        print(f"    Resource: {counts.get('Resource', 0)}")
+        print(f"  Relationships:")
+        print(f"    CONSUMED (Initial): {counts.get('CONSUMED', 0)}") # This count includes ONLY initial load
+        print(f"    PARTICIPATED_IN (Initial): {counts.get('PARTICIPATED_IN', 0)}")
+        print(f"    ABOUT_TOPIC: {counts.get('ABOUT_TOPIC', 0)}")
+        # print(f"    LLM_RECOMMENDED (Simulated): {counts.get('LLM_RECOMMENDED', 0)}") # Will be 0 after initial load
 
     except Exception as e:
         print(f"Could not verify counts: {e}")

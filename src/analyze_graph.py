@@ -1,388 +1,370 @@
 import pandas as pd
 import networkx as nx
-from py2neo import Graph
-import community as community_louvain # Louvain algorithm
-from sklearn.cluster import SpectralClustering
-from sklearn.metrics.pairwise import cosine_similarity # Potentially useful for affinity matrix
+import community as community_louvain
 import numpy as np
+import time
+import os
+import json # For parsing profile lists
+import logging
+from dotenv import load_dotenv
+from py2neo import Graph
 from scipy.stats import entropy as shannon_entropy
-import collections
-import time # To time computations
+from sklearn.cluster import SpectralClustering
+# Optional: For sentiment analysis
+
+try:
+    from textblob import TextBlob
+    TEXTBLOB_AVAILABLE = True
+except ImportError:
+    TEXTBLOB_AVAILABLE = False
+    logging.warning("TextBlob not found. Sentiment analysis will be skipped. (pip install textblob)")
+
+load_dotenv()
+
+# --- Logger Setup ---
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.StreamHandler())
 
 # --- Configuration ---
-NEO4J_URI = "bolt://gcloud.madlen.io:7687" # Or your AuraDB URI
-NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "madlen-is-the-future" # Use environment variables or a config file in practice!
+NEO4J_URI = os.getenv("NEO4J_URI", "bolt://gcloud.madlen.io:7687")
+NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
-OUTPUT_RESULTS_FILE = "analysis_results.csv"
-UPDATE_NEO4J = True # Flag to control writing results back to Neo4j
+OUTPUT_RESULTS_FILE = "analysis_results_rich.csv" # New output name
+UPDATE_NEO4J = False # Keep False for now unless explicitly needed
+RUN_PROFILE_ANALYSIS = True # Flag to run the new analyses
+RUN_SENTIMENT_ANALYSIS = TEXTBLOB_AVAILABLE # Run only if library is available
 
-# --- Connect to Neo4j ---
+# --- Neo4j Connection ---
+graph_db = None
 try:
     graph_db = Graph(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))
-    # Test connection
-    graph_db.run("MATCH (n) RETURN count(n) AS count")
-    print("Successfully connected to Neo4j.")
+    graph_db.run("RETURN 1")
+    logger.info(f"Successfully connected to Neo4j at {NEO4J_URI}")
 except Exception as e:
-    print(f"Failed to connect to Neo4j: {e}")
+    logger.exception(f"Failed to connect to Neo4j: {e}")
     exit()
-    
-    
-    
-def get_student_interaction_graph(graph_db):
-    """
-    Extracts student nodes and creates a weighted graph where edge weights
-    represent shared interactions (e.g., consuming same resource or participating in same topic).
-    """
-    print("Extracting student interaction data from Neo4j...")
+# ---
 
-    # Get all student nodes
+def get_student_interaction_graph_corrected(graph_db):
+    """
+    Corrected query: Extracts student nodes and creates a weighted graph based on
+    shared TOPIC interactions (via CONSUMED->Resource->Topic OR PARTICIPATED_IN->Topic).
+    """
+    logger.info("Extracting student interaction data from Neo4j (Corrected Query)...")
     students_query = "MATCH (s:Student) RETURN s.studentId AS studentId"
     students_df = graph_db.run(students_query).to_data_frame()
-    if students_df.empty:
-        print("No student nodes found.")
-        return None
+    if students_df.empty: logger.error("No student nodes found."); return None
     student_nodes = students_df['studentId'].tolist()
-    print(f"Found {len(student_nodes)} students.")
+    logger.info(f"Found {len(student_nodes)} students.")
 
-    # Query for shared interactions (this can be computationally intensive)
-    # Option 1: Shared resource consumption
-    shared_resource_query = """
-    MATCH (s1:Student)-[:CONSUMED]->(r:Resource)<-[:CONSUMED]-(s2:Student)
-    WHERE id(s1) < id(s2) // Avoid self-loops and duplicate pairs
-    RETURN s1.studentId AS student1, s2.studentId AS student2, count(r) AS weight
-    """
-    # Option 2: Shared topic participation
-    shared_topic_query = """
-    MATCH (s1:Student)-[:PARTICIPATED_IN]->(t:Topic)<-[:PARTICIPATED_IN]-(s2:Student)
-    WHERE id(s1) < id(s2)
-    RETURN s1.studentId AS student1, s2.studentId AS student2, count(t) AS weight
-    """
-    # Option 3: Combined - Interacted with same topic (via consumption or participation)
-    # This requires linking resources back to topics first.
+    # Corrected query combining consumption and participation paths to the same topic
     shared_topic_interaction_query = """
-    MATCH (s1:Student)-[:CONSUMED|PARTICIPATED_IN]->(item)
-    WHERE (item:Resource OR item:Topic) // Ensure item is Resource or Topic
-    // Find the topic associated with the item
-    WITH s1, item
-    OPTIONAL MATCH (item)-[:ABOUT_TOPIC]->(t_res:Topic) // For resources
-    WITH s1, COALESCE(t_res, item) AS topicNode // Use resource's topic or the topic itself
-    WHERE topicNode:Topic // Ensure we have a topic node
-    MATCH (topicNode)<-[:ABOUT_TOPIC|PARTICIPATED_IN]-(item2)<-[:CONSUMED|PARTICIPATED_IN]-(s2:Student)
-    WHERE id(s1) < id(s2) AND item2 = topicNode // Ensure interaction is with the same topic
-    RETURN s1.studentId AS student1, s2.studentId AS student2, count(DISTINCT topicNode) AS weight // Count shared topics
+    MATCH (s1:Student)-[:CONSUMED|PARTICIPATED_IN]->(item1)
+    // Get topic for item1
+    WITH s1, CASE WHEN item1:Resource THEN [(item1)-[:ABOUT_TOPIC]->(t) | t][0] ELSE item1 END AS topic1
+    WHERE topic1:Topic // Ensure we got a topic
+    // Find s2 interacting with the same topic
+    MATCH (s2:Student)-[:CONSUMED|PARTICIPATED_IN]->(item2) WHERE id(s1) < id(s2)
+    // Get topic for item2
+    WITH s1, topic1, s2, CASE WHEN item2:Resource THEN [(item2)-[:ABOUT_TOPIC]->(t) | t][0] ELSE item2 END AS topic2
+    WHERE topic1 = topic2 // The core condition: same topic
+    // Return pair and count of shared topics (which is just 1 per match pair here, aggregate later)
+    RETURN s1.studentId AS student1, s2.studentId AS student2, topic1.topicId AS sharedTopicId
     """
-    # Let's use Option 3 (Combined Interaction on Topic) as it's more comprehensive
-
+    # We need to aggregate the weights in pandas/networkx after getting pairs
     start_time = time.time()
-    print("Executing shared interaction query (this might take time)...")
-    # edges_df = graph_db.run(shared_resource_query).to_data_frame() # Use if only resource-based
-    # edges_df = graph_db.run(shared_topic_query).to_data_frame() # Use if only topic-participation-based
-    edges_df = graph_db.run(shared_topic_interaction_query).to_data_frame()
-    print(f"Query took {time.time() - start_time:.2f} seconds.")
+    logger.info("Executing corrected shared interaction query...")
+    try:
+        edges_data = graph_db.run(shared_topic_interaction_query).to_data_frame()
+        logger.info(f"Query successful, took {time.time() - start_time:.2f} seconds. Found {len(edges_data)} interaction pairs.")
+    except Exception as e:
+         logger.error(f"Error running shared interaction query: {e}")
+         return None # Cannot proceed if query fails
+
+    # Aggregate weights (count how many topics each pair shares)
+    if not edges_data.empty:
+        # Group by student pair and count distinct shared topics
+        edge_weights = edges_data.groupby(['student1', 'student2']).sharedTopicId.nunique().reset_index()
+        edge_weights.rename(columns={'sharedTopicId': 'weight'}, inplace=True)
+        logger.info(f"Aggregated weights for {len(edge_weights)} unique student pairs.")
+    else:
+        edge_weights = pd.DataFrame(columns=['student1', 'student2', 'weight']) # Empty DF if no edges
+        logger.warning("No shared topic interactions found between students.")
+
 
     # Build NetworkX Graph
     G = nx.Graph()
-    G.add_nodes_from(student_nodes) # Add all students, even if isolated
+    G.add_nodes_from(student_nodes) # Add all students
 
-    if not edges_df.empty:
-        print(f"Adding {len(edges_df)} edges to NetworkX graph...")
-        for _, row in edges_df.iterrows():
-            # Ensure nodes exist before adding edge (should be guaranteed by query)
-            if row['student1'] in student_nodes and row['student2'] in student_nodes:
-                 G.add_edge(row['student1'], row['student2'], weight=row['weight'])
-            else:
-                 print(f"Warning: Skipping edge with unknown node: {row['student1']} or {row['student2']}")
+    if not edge_weights.empty:
+        logger.info(f"Adding {len(edge_weights)} edges to NetworkX graph...")
+        for _, row in edge_weights.iterrows():
+            G.add_edge(row['student1'], row['student2'], weight=int(row['weight'])) # Ensure weight is int
 
-    print(f"Built NetworkX graph: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges.")
+    logger.info(f"Built NetworkX graph: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges.")
 
-     # Remove isolates if they are not meaningful for community detection (optional)
-    # isolates = list(nx.isolates(G))
-    # G.remove_nodes_from(isolates)
-    # print(f"Removed {len(isolates)} isolated nodes. New size: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges.")
-
-    # Ensure graph is connected for Spectral Clustering (or handle components separately)
-    if not nx.is_connected(G):
-        print("Warning: Graph is not connected. Spectral clustering might behave unexpectedly or apply to the largest component.")
-        # Option: work on the largest connected component
+    if G.number_of_edges() > 0 and not nx.is_connected(G):
+        logger.warning("Graph is not connected. Analysis might focus on components.")
+        # Optional: Use largest component?
         # largest_cc = max(nx.connected_components(G), key=len)
         # G = G.subgraph(largest_cc).copy()
-        # print(f"Using largest connected component: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges.")
+        # logger.info(f"Using largest connected component: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges.")
 
     return G
 
-# --- Main Execution Area ---
-G_interaction = get_student_interaction_graph(graph_db)
+# --- Analysis Functions ---
 
-if G_interaction is None or G_interaction.number_of_nodes() == 0:
-    print("Exiting: No graph data to analyze.")
-    exit()
-
-results = {} # Dictionary to store results: {studentId: {metric1: val1, ...}}
-for node in G_interaction.nodes():
-    results[node] = {}
-    
-    
-
-# --- Community Detection ---
-
-# Louvain
-print("Running Louvain community detection...")
-start_time = time.time()
-# Ensure the graph is not empty and has edges for Louvain
-if G_interaction.number_of_edges() > 0:
-    partition_louvain = community_louvain.best_partition(G_interaction, weight='weight', random_state=42)
-    num_louvain_communities = len(set(partition_louvain.values()))
-    print(f"Louvain found {num_louvain_communities} communities in {time.time() - start_time:.2f} seconds.")
-    for node, comm_id in partition_louvain.items():
-        if node in results:
-             results[node]['louvainCommunity'] = comm_id
-        else:
-             print(f"Warning: Node {node} from Louvain not in initial results dict.") # Should not happen if G nodes match results keys
-else:
-    print("Skipping Louvain: Graph has no edges.")
+def run_community_detection(G: nx.Graph, results: dict):
+    """Performs Louvain and Spectral clustering."""
     num_louvain_communities = 0
-    for node in results: # Assign default value if no communities detected
-        results[node]['louvainCommunity'] = -1 # Or None or 0
+    # Louvain
+    logger.info("Running Louvain community detection...")
+    start_time = time.time()
+    if G.number_of_edges() > 0:
+        partition_louvain = community_louvain.best_partition(G, weight='weight', random_state=42)
+        num_louvain_communities = len(set(partition_louvain.values()))
+        logger.info(f"Louvain found {num_louvain_communities} communities in {time.time() - start_time:.2f}s.")
+        for node, comm_id in partition_louvain.items():
+            if node in results: results[node]['louvainCommunity'] = comm_id
+    else:
+        logger.warning("Skipping Louvain: Graph has no edges.")
+        for node in results: results[node]['louvainCommunity'] = -1
 
-# Spectral Clustering
-# Needs number of clusters. Let's estimate based on Louvain or set a fixed number.
-# Note: Spectral clustering works best on connected graphs. Need adjacency matrix.
-N_CLUSTERS_SPECTRAL = max(2, min(num_louvain_communities, 10)) # Example: Use Louvain's count, capped at 10, minimum 2
-print(f"Running Spectral Clustering (k={N_CLUSTERS_SPECTRAL})...")
-start_time = time.time()
+    # Spectral Clustering
+    N_CLUSTERS_SPECTRAL = max(2, min(num_louvain_communities, 10)) if num_louvain_communities > 0 else 2
+    logger.info(f"Running Spectral Clustering (k={N_CLUSTERS_SPECTRAL})...")
+    start_time = time.time()
+    if G.number_of_nodes() > 1 and G.number_of_edges() > 0 :
+        try:
+            node_list = list(G.nodes())
+            adjacency_matrix = nx.to_numpy_array(G, nodelist=node_list, weight='weight')
+            sc = SpectralClustering(N_CLUSTERS_SPECTRAL, affinity='precomputed', assign_labels='kmeans', random_state=42)
+            spectral_labels = sc.fit_predict(adjacency_matrix)
+            logger.info(f"Spectral Clustering finished in {time.time() - start_time:.2f}s.")
+            for i, node in enumerate(node_list):
+                if node in results: results[node]['spectralCommunity'] = int(spectral_labels[i])
+        except Exception as e:
+             logger.error(f"Spectral Clustering failed: {e}. Assigning default.")
+             for node in results: results[node]['spectralCommunity'] = -1
+    else:
+        logger.warning("Skipping Spectral Clustering: Not enough nodes/edges.")
+        for node in results: results[node]['spectralCommunity'] = -1
 
-if G_interaction.number_of_nodes() > 1 and G_interaction.number_of_edges() > 0 :
-    # Get adjacency matrix
-    # Note: Ensure node order is consistent for matrix and results mapping
-    node_list = list(G_interaction.nodes())
-    adjacency_matrix = nx.to_numpy_array(G_interaction, nodelist=node_list, weight='weight')
 
-    # Handle disconnected graph: compute affinity matrix (e.g., using cosine similarity of something, or just use adjacency)
-    # Using 'precomputed' affinity allows handling non-connected graphs better sometimes.
-    # affinity_matrix = cosine_similarity(adjacency_matrix) # Example if features were available
-    affinity_matrix = 'precomputed' # Or 'rbf' if using features
+def run_centrality_metrics(G: nx.Graph, results: dict):
+    """Calculates PageRank and Betweenness Centrality."""
+    logger.info("Calculating Centrality metrics (PageRank, Betweenness)...")
+    start_time = time.time()
+    if G.number_of_edges() > 0: # Avoid errors on empty graph
+        try: pagerank = nx.pagerank(G, weight='weight'); logger.info("  - PageRank calculated.")
+        except Exception as e: logger.error(f"  - PageRank failed: {e}"); pagerank = {}
+        try: betweenness = nx.betweenness_centrality(G, weight='weight', normalized=True); logger.info("  - Betweenness calculated.")
+        except Exception as e: logger.error(f"  - Betweenness failed: {e}"); betweenness = {}
+    else:
+        logger.warning("Skipping centrality: Graph has no edges.")
+        pagerank = {}; betweenness = {}
 
-    # If using adjacency directly and graph might be disconnected, SpectralClustering might only cluster the largest component.
-    # Using affinity='nearest_neighbors' can sometimes handle disconnected better if connectivity is sparse.
-    try:
-        # Try with 'precomputed' if using adjacency directly on potentially disconnected graph
-        sc = SpectralClustering(N_CLUSTERS_SPECTRAL,
-                                affinity='precomputed', # Use adjacency directly as similarity
-                                assign_labels='kmeans', # Common assignment strategy
-                                random_state=42)
-        # Pass the adjacency matrix directly when affinity='precomputed'
-        spectral_labels = sc.fit_predict(adjacency_matrix)
-
-        print(f"Spectral Clustering finished in {time.time() - start_time:.2f} seconds.")
-        for i, node in enumerate(node_list):
-            if node in results:
-                 results[node]['spectralCommunity'] = int(spectral_labels[i]) # Ensure type is Python int
-            else:
-                 print(f"Warning: Node {node} from Spectral Clustering not in results dict.")
-
-    except Exception as e:
-         print(f"Spectral Clustering failed: {e}. Assigning default value.")
-         for node in results:
-             results[node]['spectralCommunity'] = -1 # Default value on failure
-else:
-    print("Skipping Spectral Clustering: Not enough nodes/edges or graph disconnected and unhandled.")
+    logger.info(f"Centrality calculations took {time.time() - start_time:.2f}s.")
     for node in results:
-        results[node]['spectralCommunity'] = -1 # Default value
-        
-        
-        
-        
-        
-
-# --- Calculate Metrics ---
-
-# Centrality Metrics (on the NetworkX graph G_interaction)
-print("Calculating Centrality metrics (PageRank, Betweenness)...")
-start_time = time.time()
-try:
-    pagerank = nx.pagerank(G_interaction, weight='weight')
-    print(f"  - PageRank calculated.")
-except Exception as e:
-    print(f"  - PageRank calculation failed: {e}")
-    pagerank = {node: 0.0 for node in G_interaction.nodes()} # Default value
-
-try:
-    # Betweenness centrality can be slow on large graphs. Consider sampling (k=...) if needed.
-    betweenness = nx.betweenness_centrality(G_interaction, weight='weight', normalized=True)
-    print(f"  - Betweenness Centrality calculated.")
-except Exception as e:
-    print(f"  - Betweenness Centrality calculation failed: {e}")
-    betweenness = {node: 0.0 for node in G_interaction.nodes()} # Default value
-
-print(f"Centrality calculations took {time.time() - start_time:.2f} seconds.")
-
-for node in G_interaction.nodes():
-    if node in results:
         results[node]['pageRank'] = pagerank.get(node, 0.0)
         results[node]['betweenness'] = betweenness.get(node, 0.0)
-    else:
-         print(f"Warning: Node {node} from Centrality not in results dict.")
 
 
-# Shannon Entropy (requires querying Neo4j per student for topic interactions)
-print("Calculating Shannon Entropy for topic diversity per student...")
-start_time = time.time()
-entropy_query = """
-MATCH (s:Student {studentId: $studentId})
-// Path 1: Consumed Resource -> Topic
-OPTIONAL MATCH (s)-[:CONSUMED]->(r:Resource)-[:ABOUT_TOPIC]->(t1:Topic)
-WITH s, collect(DISTINCT t1.topicId) AS consumed_topics
-// Path 2: Participated in Topic
-OPTIONAL MATCH (s)-[:PARTICIPATED_IN]->(t2:Topic)
-WITH s, consumed_topics, collect(DISTINCT t2.topicId) AS participated_topics
-// Combine and unwind topics
-WITH s, consumed_topics + participated_topics AS all_topic_ids
-UNWIND all_topic_ids AS topicId
-// Filter NULLs *before* the final aggregation
-WITH topicId
-WHERE topicId IS NOT NULL
-// Aggregate counts
-RETURN topicId, count(*) AS interaction_count
-"""
-
-entropies = {}
-processed_students = 0
-total_students = len(results)
-for student_id in results.keys():
-    topic_counts_df = graph_db.run(entropy_query, studentId=student_id).to_data_frame()
-
-    if not topic_counts_df.empty:
-        counts = topic_counts_df['interaction_count'].values
-        # Calculate probability distribution
-        probabilities = counts / counts.sum()
-        # Calculate Shannon Entropy
-        entropies[student_id] = shannon_entropy(probabilities, base=2) # Use base 2 typically
-    else:
-        entropies[student_id] = 0.0 # No interactions or no topics found -> zero entropy
-
-    processed_students += 1
-    if processed_students % (total_students // 10 + 1) == 0: # Print progress
-         print(f"  - Calculated entropy for {processed_students}/{total_students} students...")
-
-
-print(f"Shannon Entropy calculation took {time.time() - start_time:.2f} seconds.")
-
-for student_id, entropy_value in entropies.items():
-    if student_id in results:
-        results[student_id]['shannonEntropy'] = entropy_value
-    else:
-        print(f"Warning: Student {student_id} from Entropy not in results dict.")
-
-
-
-
-
-        
-# --- Store Results ---
-
-# Convert results dict to DataFrame for easier CSV export
-results_list = []
-for student_id, metrics in results.items():
-    row = {'studentId': student_id}
-    row.update(metrics)
-    results_list.append(row)
-
-results_df = pd.DataFrame(results_list)
-# Reorder columns for clarity
-cols_order = ['studentId', 'louvainCommunity', 'spectralCommunity', 'pageRank', 'betweenness', 'shannonEntropy']
-# Ensure all expected columns exist, adding missing ones with None or default values
-for col in cols_order:
-    if col not in results_df.columns:
-        results_df[col] = None # Or suitable default like -1 for communities, 0.0 for metrics
-
-results_df = results_df[cols_order]
-
-
-# Option 1: Save to CSV
-print(f"Saving analysis results to {OUTPUT_RESULTS_FILE}...")
-results_df.to_csv(OUTPUT_RESULTS_FILE, index=False)
-print("Results saved.")
-
-# Option 2: Update Neo4j Node Properties
-if UPDATE_NEO4J:
-    print("Updating Student nodes in Neo4j with computed metrics...")
-    update_query = """
-    UNWIND $results_list AS row
-    MERGE (s:Student {studentId: row.studentId})
-    SET s.louvainCommunity = toIntegerOrNull(row.louvainCommunity), // Ensure correct types
-        s.spectralCommunity = toIntegerOrNull(row.spectralCommunity),
-        s.pageRank = toFloatOrNull(row.pageRank),
-        s.betweenness = toFloatOrNull(row.betweenness),
-        s.shannonEntropy = toFloatOrNull(row.shannonEntropy)
+def run_shannon_entropy(graph_db: Graph, results: dict):
+    """Calculates Shannon Entropy for topic diversity per student."""
+    logger.info("Calculating Shannon Entropy for topic diversity per student...")
+    start_time = time.time()
+    # Combined query for both consumed and participated topics
+    entropy_query = """
+    MATCH (s:Student {studentId: $studentId})
+    // Path 1: Consumed Resource -> Topic
+    OPTIONAL MATCH (s)-[:CONSUMED]->(r:Resource)-[:ABOUT_TOPIC]->(t1:Topic)
+    WITH s, collect(DISTINCT t1.topicId) AS consumed_topic_ids
+    // Path 2: Participated in Topic
+    OPTIONAL MATCH (s)-[:PARTICIPATED_IN]->(t2:Topic)
+    WITH s, consumed_topic_ids, collect(DISTINCT t2.topicId) AS participated_topic_ids
+    // Combine, unwind, filter nulls, count
+    WITH consumed_topic_ids + participated_topic_ids AS all_topic_ids
+    UNWIND all_topic_ids AS topicId
+    WITH topicId WHERE topicId IS NOT NULL
+    RETURN topicId, count(*) AS interaction_count
     """
-    # Define helper functions in Cypher if needed, or handle type conversion in Python
-    # Simplified approach: ensure data types are correct before sending
-    # Convert DataFrame to list of dictionaries for UNWIND
-    results_dict_list = results_df.replace({np.nan: None}).to_dict('records') # Replace NaN with None for Neo4j compatibility
+    entropies = {}
+    total_students = len(results)
+    processed_students = 0
+    for student_id in results.keys():
+        try:
+            topic_counts_df = graph_db.run(entropy_query, studentId=student_id).to_data_frame()
+            if not topic_counts_df.empty and topic_counts_df['interaction_count'].sum() > 0:
+                counts = topic_counts_df['interaction_count'].values
+                probabilities = counts / counts.sum()
+                entropies[student_id] = shannon_entropy(probabilities, base=2)
+            else: entropies[student_id] = 0.0
+        except Exception as e:
+            logger.error(f"Error calculating entropy for {student_id}: {e}")
+            entropies[student_id] = -1.0 # Error indicator
 
-    # Define Cypher functions for safe type conversion (run these once or ensure they exist)
+        processed_students += 1
+        if processed_students % (max(1, total_students // 10)) == 0:
+            logger.info(f"  - Calculated entropy for {processed_students}/{total_students} students...")
+
+    logger.info(f"Shannon Entropy calculation took {time.time() - start_time:.2f}s.")
+    for student_id, entropy_value in entropies.items():
+        if student_id in results: results[student_id]['shannonEntropy'] = entropy_value
+
+
+# --- NEW: Profile and Feedback Analysis Functions ---
+def fetch_full_interaction_data(graph_db: Graph) -> pd.DataFrame:
+    """Fetches detailed interaction data for analysis."""
+    logger.info("Fetching detailed interaction data (students, resources, topics, consumed)...")
+    query = """
+    MATCH (s:Student)-[c:CONSUMED]->(r:Resource)
+    OPTIONAL MATCH (r)-[:ABOUT_TOPIC]->(t:Topic)
+    RETURN s.studentId AS studentId,
+           s.learningStyle AS learningStyle,
+           s.lovedTopicIds AS lovedTopicIds,    // Keep as JSON string for now
+           s.dislikedTopicIds AS dislikedTopicIds, // Keep as JSON string for now
+           r.resourceId AS resourceId,
+           r.modality AS modality,
+           t.topicId AS topicId,
+           t.name AS topicName,
+           c.rating AS rating,
+           c.comment AS comment,
+           c.timestamp AS timestamp,
+           c.feedback_generated_by AS feedback_source // Include source if available
+    ORDER BY s.studentId, c.timestamp
+    """
     try:
-        graph_db.run("""
-        CREATE FUNCTION toIntegerOrNull AS (input) -> 
-          CASE 
-            WHEN input IS NULL THEN null
-            WHEN input = apoc.convert.MISSING THEN null 
-            ELSE toInteger(input) 
-          END
-        """)
-        graph_db.run("""
-        CREATE FUNCTION toFloatOrNull AS (input) -> 
-          CASE 
-            WHEN input IS NULL THEN null 
-            WHEN input = apoc.convert.MISSING THEN null
-            ELSE toFloat(input) 
-          END
-        """)
-        print("Helper functions toIntegerOrNull/toFloatOrNull created or already exist.")
+        df = graph_db.run(query).to_data_frame()
+        # Convert rating to numeric, coercing errors
+        if 'rating' in df.columns:
+            df['rating'] = pd.to_numeric(df['rating'], errors='coerce')
+        # Parse JSON lists - handle potential errors
+        for col in ['lovedTopicIds', 'dislikedTopicIds']:
+            if col in df.columns:
+                df[col] = df[col].apply(lambda x: json.loads(x) if pd.notna(x) and isinstance(x, str) else [])
+        logger.info(f"Fetched {len(df)} CONSUMED interactions with profile data.")
+        return df
     except Exception as e:
-        # Ignore if functions already exist, handle other errors
-        if "already exists" not in str(e):
-             print(f"Could not create helper functions (APOC might be needed or permissions issue): {e}")
-             print("Proceeding without helper functions, ensure data types are correct.")
-             # If functions can't be created, ensure types in results_dict_list are correct
-             for row in results_dict_list:
-                 row['louvainCommunity'] = int(row['louvainCommunity']) if row['louvainCommunity'] is not None else None
-                 row['spectralCommunity'] = int(row['spectralCommunity']) if row['spectralCommunity'] is not None else None
-                 row['pageRank'] = float(row['pageRank']) if row['pageRank'] is not None else None
-                 row['betweenness'] = float(row['betweenness']) if row['betweenness'] is not None else None
-                 row['shannonEntropy'] = float(row['shannonEntropy']) if row['shannonEntropy'] is not None else None
+        logger.error(f"Error fetching detailed interaction data: {e}")
+        return pd.DataFrame() # Return empty DataFrame on error
 
 
-    # Batch update for performance
-    batch_size = 500
-    start_idx = 0
-    tx = None # Initialize transaction variable
-    print(f"Updating {len(results_dict_list)} nodes in batches of {batch_size}...")
-    try:
-        while start_idx < len(results_dict_list):
-            batch = results_dict_list[start_idx : start_idx + batch_size]
-            if not tx: # Start transaction if not already started
-                 tx = graph_db.begin()
-            tx.run(update_query, results_list=batch)
-            tx.process() # Send current batch operations
-            start_idx += batch_size
-            print(f"  Processed batch up to index {start_idx}")
-        if tx: # Commit the final transaction
-            tx.commit()
-        print("Neo4j update complete.")
-    except Exception as e:
-        print(f"Error updating Neo4j: {e}")
-        if tx: # Rollback on error
-             try:
-                 tx.rollback()
-                 print("Transaction rolled back.")
-             except: # Handle cases where rollback might fail
-                  pass
+def analyze_profile_correlations(interactions_df: pd.DataFrame):
+    """Performs basic correlation analysis."""
+    if interactions_df.empty or 'rating' not in interactions_df.columns:
+        logger.warning("Skipping profile correlation analysis: No interaction data or ratings available.")
+        return
+    print(interactions_df)
+    logger.info("\n--- Profile Correlation Analysis ---")
+
+    # 1. Rating by Learning Style / Modality Match
+    logger.info("Average Rating by Learning Style:")
+    print(interactions_df.groupby('learningStyle')['rating'].agg(['mean', 'count']).round(2))
+
+    # Create a modality match flag
+    def modality_match(row):
+        style = row['learningStyle']
+        modality = row['modality']
+        if not style or not modality or style == 'Unknown' or modality == 'Unknown' or style == 'Mixed':
+            return 'Unknown/Mixed'
+        elif style == modality:
+            return 'Match'
+        else:
+            return 'Mismatch'
+    interactions_df['modalityMatch'] = interactions_df.apply(modality_match, axis=1)
+    logger.info("\nAverage Rating by Modality Match:")
+    print(interactions_df.groupby('modalityMatch')['rating'].agg(['mean', 'count']).round(2))
+
+    # 2. Rating by Topic Affinity
+    def topic_affinity(row):
+        topic = row['topicId']
+        loved = row['lovedTopicIds']
+        disliked = row['dislikedTopicIds']
+        if not topic or not isinstance(loved, list) or not isinstance(disliked, list): return 'Unknown'
+        if topic in loved: return 'Loved'
+        if topic in disliked: return 'Disliked'
+        return 'Neutral'
+    interactions_df['topicAffinity'] = interactions_df.apply(topic_affinity, axis=1)
+    logger.info("\nAverage Rating by Topic Affinity:")
+    print(interactions_df.groupby('topicAffinity')['rating'].agg(['mean', 'count']).round(2))
+    logger.info("----------------------------------\n")
 
 
-print("\nPhase 2 Analysis Complete.")
-# You can add basic analysis here, e.g., print average entropy per Louvain community
-# community_entropy = results_df.groupby('louvainCommunity')['shannonEntropy'].mean()
-# print("\nAverage Shannon Entropy per Louvain Community:")
-# print(community_entropy)
+def analyze_comment_sentiment(interactions_df: pd.DataFrame):
+    """Performs basic sentiment analysis on comments."""
+    if not RUN_SENTIMENT_ANALYSIS:
+        logger.info("Skipping sentiment analysis (TextBlob not available or disabled).")
+        return
+    if interactions_df.empty or 'comment' not in interactions_df.columns:
+        logger.warning("Skipping sentiment analysis: No interaction data or comments available.")
+        return
+
+    logger.info("\n--- Comment Sentiment Analysis (Basic) ---")
+    interactions_df['comment_sentiment'] = interactions_df['comment'].apply(
+        lambda x: TextBlob(x).sentiment.polarity if pd.notna(x) else None
+    )
+    # Filter out rows where sentiment couldn't be calculated
+    valid_sentiment_df = interactions_df.dropna(subset=['comment_sentiment', 'rating'])
+
+    if not valid_sentiment_df.empty:
+        logger.info("Average Sentiment Polarity by Rating:")
+        print(valid_sentiment_df.groupby('rating')['comment_sentiment'].agg(['mean', 'count']).round(3))
+
+        # Correlation between rating and sentiment
+        correlation = valid_sentiment_df['rating'].corr(valid_sentiment_df['comment_sentiment'])
+        logger.info(f"\nCorrelation between Rating and Comment Sentiment Polarity: {correlation:.3f}")
+    else:
+        logger.warning("No valid comments with ratings found for sentiment analysis.")
+
+    logger.info("----------------------------------------\n")
+
+# --- Main Execution Area ---
+if __name__ == "__main__":
+    logger.info("Starting Rich Data Analysis...")
+    analysis_start_time = time.time()
+
+    # --- Graph Structure Analysis ---
+    G_interaction = get_student_interaction_graph_corrected(graph_db)
+    if G_interaction is None: exit()
+
+    # Initialize results dict
+    results = {node: {} for node in G_interaction.nodes()}
+    run_community_detection(G_interaction, results)
+    run_centrality_metrics(G_interaction, results)
+    run_shannon_entropy(graph_db, results)
+    # --- Fetch Detailed Data for Profile/Feedback Analysis ---
+    if RUN_PROFILE_ANALYSIS or RUN_SENTIMENT_ANALYSIS:
+        interactions_df = fetch_full_interaction_data(graph_db)
+    else:
+        interactions_df = pd.DataFrame() # Empty if not needed
+
+    # --- Run New Analyses ---
+    if RUN_PROFILE_ANALYSIS:
+        analyze_profile_correlations(interactions_df)
+
+    if RUN_SENTIMENT_ANALYSIS:
+        analyze_comment_sentiment(interactions_df)
+
+    # --- Store Student-Level Results ---
+    logger.info("Preparing student-level results CSV...")
+    results_list = []
+    for student_id, metrics in results.items():
+        row = {'studentId': student_id}
+        row.update(metrics)
+        results_list.append(row)
+    results_df = pd.DataFrame(results_list)
+    cols_order = ['studentId', 'louvainCommunity', 'spectralCommunity', 'pageRank', 'betweenness', 'shannonEntropy']
+    for col in cols_order:
+        if col not in results_df.columns: results_df[col] = None
+    results_df = results_df[cols_order]
+
+    logger.info(f"Saving student-level analysis results to {OUTPUT_RESULTS_FILE}...")
+    results_df.to_csv(OUTPUT_RESULTS_FILE, index=False)
+    logger.info("Results saved.")
+
+    # --- (Neo4j Update Section Removed as UPDATE_NEO4J is False) ---
+
+    logger.info(f"\nAnalysis Complete. Total time: {time.time() - analysis_start_time:.2f} seconds.")

@@ -1,34 +1,38 @@
-import pandas as pd
-import numpy as np
-import random
-from faker import Faker # Using Faker for student names and comments
+import pandas as pd, numpy as np, random, os, json, logging, time
+from faker import Faker
 from datetime import datetime, timedelta
-import os
-import json # To store lists in CSV cells properly
+from dotenv import load_dotenv
+from concurrent.futures import ThreadPoolExecutor, as_completed # Import for parallelism
+
+from llm.curl_vertex import CurlVertex, vertex_credentials
+from llm.mylib import * # Assuming this imports LLMConfig, ChatMainLLM, Message, etc.
+
+load_dotenv()
+
+# --- Logger Setup ---
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+REGENERATE_BASE_DATA = False # Set to True to regenerate students, topics, resources
 
 # --- Simulation Parameters ---
-NUM_STUDENTS = 50 # Smaller number to focus on richer profiles
-NUM_TOPICS = 20 # Determined by curriculum
-NUM_RESOURCES = 150 # Fewer resources initially
-NUM_INITIAL_INTERACTIONS_PER_STUDENT = random.randint(5, 15) # Fewer, richer interactions
-
-# Student Profile Parameters
+NUM_STUDENTS = 50; NUM_TOPICS = 20; NUM_RESOURCES = 150
+MIN_INITIAL_INTERACTIONS = 5; MAX_INITIAL_INTERACTIONS = 15
 LEARNING_STYLES = ['Visual', 'Audio', 'Kinaesthetic', 'Reading/Writing', 'Mixed']
-AVG_LOVED_SUBJECTS = 1
-AVG_DISLIKED_SUBJECTS = 1
+AVG_LOVED_SUBJECTS = 1; AVG_DISLIKED_SUBJECTS = 1
+OUTPUT_DIR = "synthetic_data" # Ensure this matches where files should be read/written
+LLM_BATCH_SIZE = 8; MAX_WORKERS = 5
+PROBABILITY_INITIAL_PARTICIPATION = 0.15
 
-# Interaction Parameters
-MIN_RATING = 1
-MAX_RATING = 5
+# --- File Paths ---
+STUDENTS_FILE = os.path.join(OUTPUT_DIR, "students.csv")
+TOPICS_FILE = os.path.join(OUTPUT_DIR, "topics.csv")
+RESOURCES_FILE = os.path.join(OUTPUT_DIR, "resources.csv")
+RESOURCE_TOPIC_FILE = os.path.join(OUTPUT_DIR, "resource_topic.csv")
+CONSUMED_FILE = os.path.join(OUTPUT_DIR, "consumed_initially.csv")
+PARTICIPATED_FILE = os.path.join(OUTPUT_DIR, "participated.csv")
 
-# Timestamps (Less critical now, but keep for structure)
-SIMULATION_START_DATE = datetime(2023, 9, 1)
-SIMULATION_END_DATE = datetime(2023, 9, 30) # Shorter period for initial interactions
-
-# Output directory
-OUTPUT_DIR = "synthetic_data"
-
-# --- Curriculum Definition (same as before) ---
+# --- Curriculum Definition ---
 curriculum_topics = {
     "PHY": [ # Physics
         "PHY01: Introduction to Physics", "PHY02: Matter and Properties",
@@ -48,30 +52,12 @@ curriculum_topics = {
     ]
 }
 SUBJECT_CODES = list(curriculum_topics.keys())
-
-# Flatten the list and create IDs/Map
-all_curriculum_topics_list = []
-topic_id_map = {} # ID -> Name
-topic_subject_map = {} # ID -> Subject Code (PHY, BIO, etc.)
-topic_id_counter = 1
-for subject_code, topics in curriculum_topics.items():
-    for topic_name in topics:
-        topic_id = f"{subject_code}{topic_id_counter:03d}"
-        all_curriculum_topics_list.append({"topicId": topic_id, "name": topic_name})
-        topic_id_map[topic_id] = topic_name
-        topic_subject_map[topic_id] = subject_code
-        topic_id_counter += 1
-
-NUM_TOPICS = len(all_curriculum_topics_list)
-all_topic_ids = list(topic_id_map.keys())
+# --- End Curriculum ---
 
 # --- Initialization ---
-fake = Faker()
-random.seed(42)
-np.random.seed(42)
-
-if not os.path.exists(OUTPUT_DIR):
-    os.makedirs(OUTPUT_DIR)
+fake = Faker(); random.seed(42); np.random.seed(42)
+if not os.path.exists(OUTPUT_DIR): os.makedirs(OUTPUT_DIR)
+# ---
 
 # --- Helper Functions ---
 def generate_random_timestamp(start_date, end_date):
@@ -79,201 +65,330 @@ def generate_random_timestamp(start_date, end_date):
     random_seconds = random.uniform(0, time_delta.total_seconds())
     return start_date + timedelta(seconds=random_seconds)
 
-# --- 1. Generate Nodes with Profiles ---
+# --- LLM Interaction Function (Revised response handling) ---
+def chat_with_llm(prompt: str, system_prompt: str = None, schema: dict = None):
+    # ... (Initialization and LLMConfig setup same as before) ...
+    if not system_prompt: system_prompt = "You are a helpful AI assistant."
+    try: vertex_credentials.initialize()
+    except Exception as e: logger.error(f"Vertex init failed: {e}"); return None
 
-# Topics (Same as before)
-print("Generating Curriculum Topics...")
-topics_df = pd.DataFrame(all_curriculum_topics_list)
-print(f"Generated {len(topics_df)} curriculum topics.")
+    llm_config = LLMConfig({ "model_arch": ChatMainLLM.VERTEXLLM.value, "model_name": ChatMainLLMName.VERTEX_GEMINI_25_FLASH_PREVIEW,
+                           "temperature": 0.7, "top_k": 10, "top_p": 0.95, "max_output_tokens": 2048, 
+                           "llm_region": "us-central1", "response_mimetype": "application/json", "responseSchema": schema })
+    curl_vertex = CurlVertex(llm_config=llm_config, logger=logger) 
 
-# Resources (Add Modality)
-print("Generating Resources with Modality...")
-resources_data = []
-resource_topic_map = {} # resourceId -> topicId
-resource_modality_map = {} # resourceId -> modality
-resource_topic_rels = []
-resource_types = ['Article', 'Video', 'Podcast', 'Quiz', 'Simulation', 'Slideshow']
-# Map types to likely modalities
-type_modality_map = {
-    'Article': 'Reading/Writing', 'Video': 'Visual', 'Podcast': 'Audio',
-    'Quiz': 'Kinaesthetic', 'Simulation': 'Kinaesthetic', 'Slideshow': 'Visual'
+    chat_history = [Message(
+            role="user",
+            message=prompt,
+            message_content_type=ChatInputContentType.TEXT,
+            message_uri=None,
+            message_type=None
+        )]
+    try:
+        # Call generate (non-streaming)
+        response = curl_vertex.generate( instruction_prompt=system_prompt, chat_history=chat_history,
+                                      is_streaming=False, return_tokens=False, timeout=20 )
+
+        # Accumulate content if generate returns an iterable
+        response_content = ""
+        for item in response:
+            response_content += item.content
+
+        logger.debug(f"Raw LLM Batch Response Length: {len(response_content)}")
+        try:
+            # Attempt to parse the accumulated string
+            return json.loads(response_content)
+        except json.JSONDecodeError as json_err: logger.error(f"LLM JSON parse fail: {json_err}. Resp: {response_content[:500]}..."); return None # Log truncated response
+        except TypeError as type_err: logger.error(f"LLM response content not string? Type: {type(response_content)}. Err: {type_err}"); return None
+    except Exception as e: logger.exception(f"LLM generation error: {e}"); return None
+
+# --- NEW: Function to Generate *Batch* Initial Feedback via LLM ---
+BATCH_LLM_FEEDBACK_SYSTEM_PROMPT = """
+You are simulating feedback from 9th-grade students for multiple learning resource interactions provided in a list.
+For EACH interaction in the list, generate a realistic feedback object containing a rating and comment, based ONLY on that interaction's student profile and resource details.
+Output ONLY a single JSON array where each element corresponds directly to an interaction in the input list, maintaining the order and including the provided 'interaction_id'.
+"""
+# Define the schema for the *output* of the batch call (an array)
+BATCH_LLM_FEEDBACK_SCHEMA = {
+    "type": "array",
+    "description": "A list of feedback objects, one for each interaction provided in the prompt.",
+    "items": {
+        "type": "object",
+        "properties": {
+            "interaction_id": {"type": "integer", "description": "The unique ID provided for the interaction in the prompt."},
+            "rating": {"type": "integer", "description": "A realistic integer rating from 1 to 5."},
+            "comment": {"type": "string", "description": "A brief (1-2 sentence) comment reflecting the student's likely initial reaction."}
+        },
+        "required": ["interaction_id", "rating", "comment"]
+    }
 }
 
-for i in range(NUM_RESOURCES):
-    resource_id = f"R{i+1:04d}"
-    resource_type = random.choice(resource_types)
-    assigned_topic_id = random.choice(all_topic_ids)
-    assigned_topic_name = topic_id_map[assigned_topic_id]
-    modality = type_modality_map.get(resource_type, 'Mixed') # Assign modality based on type
+def generate_batch_initial_feedback_llm(batch_scenarios: list, topic_id_map: dict) -> dict:
+    """
+    Generates simulated feedback for a batch of interactions using a single LLM call.
+    Args:
+        batch_scenarios: A list of dicts, each containing:
+                         {'interaction_id': int, 'profile': dict, 'resource_info': dict}
+        topic_id_map: Lookup map for topic names.
+    Returns:
+        A dictionary mapping interaction_id to {'rating': int, 'comment': str} or None if failed.
+    """
+    if not batch_scenarios: return {}
+    prompt_parts = ["Simulate initial feedback for each of the following student-resource interactions:", ""]
+    for i, scenario in enumerate(batch_scenarios): # ... (rest of prompt building is same) ...
+        interaction_id=scenario['interaction_id']; profile=scenario['profile']; resource_info=scenario['resource_info']
+        learning_style=profile.get('learningStyle', 'N/A'); loved_str=", ".join([topic_id_map.get(tid, tid) for tid in profile.get('lovedTopics', [])]) or "None"
+        disliked_str=", ".join([topic_id_map.get(tid, tid) for tid in profile.get('dislikedTopics', [])]) or "None"; res_title=resource_info.get('title', 'N/A')
+        res_topic_name=topic_id_map.get(resource_info.get('topicId'), "N/A"); res_modality=resource_info.get('modality', 'N/A')
+        prompt_parts.append(f"--- Interaction {i+1} (ID: {interaction_id}) ---")
+        prompt_parts.append(f"Student Profile: Style={learning_style}, Enjoys=[{loved_str}], Dislikes=[{disliked_str}]")
+        prompt_parts.append(f"Consumed Resource: Title='{res_title}', Topic={res_topic_name}, Modality={res_modality}")
+        prompt_parts.append("")
+    prompt_parts.append("Task: For EACH interaction above, generate a realistic integer rating (1-5) and a brief comment (1-2 sentences).")
+    prompt_parts.append("Consider the student's style/modality match and topic affinity.")
+    prompt_parts.append(f"Output Format (JSON array only, matching schema, {len(batch_scenarios)} items):")
+    full_prompt = "\n".join(prompt_parts)
+    batch_feedback_list = chat_with_llm(full_prompt, system_prompt=BATCH_LLM_FEEDBACK_SYSTEM_PROMPT, schema=BATCH_LLM_FEEDBACK_SCHEMA)
+    results = {} # ...(rest of result processing is same)...
+    if batch_feedback_list and isinstance(batch_feedback_list, list):
+        if len(batch_feedback_list) != len(batch_scenarios): logger.warning(f"LLM batch length mismatch! Exp {len(batch_scenarios)}, got {len(batch_feedback_list)}.")
+        for feedback_item in batch_feedback_list:
+            if isinstance(feedback_item, dict) and all(k in feedback_item for k in ["interaction_id", "rating", "comment"]):
+                try:
+                    interaction_id=int(feedback_item["interaction_id"]); rating=int(feedback_item["rating"]); comment=str(feedback_item["comment"])
+                    if 1 <= rating <= 5: results[interaction_id] = {"rating": rating, "comment": comment}
+                    else: logger.warning(f"LLM rating out of range {interaction_id}: {rating}.")
+                except (ValueError, TypeError) as e: logger.warning(f"Error processing item {feedback_item}: {e}")
+            else: logger.warning(f"Invalid feedback item format: {feedback_item}")
+    else: logger.error("LLM batch feedback failed or invalid format.")
+    return results
 
-    resource_title = f"{resource_type} on {assigned_topic_name}"
-    resources_data.append({
-        "resourceId": resource_id,
-        "title": resource_title,
-        "type": resource_type,
-        "modality": modality, # Added modality property
-    })
-    resource_topic_map[resource_id] = assigned_topic_id
-    resource_modality_map[resource_id] = modality
-    resource_topic_rels.append({
-        "resourceId": resource_id,
-        "topicId": assigned_topic_id
-    })
+# --- Wrapper function for parallel execution ---
+def process_feedback_batch(batch_data):
+    """Wrapper to call LLM feedback generation for use with ThreadPoolExecutor."""
+    batch_scenarios, topic_map = batch_data # Unpack arguments
+    # **Crucial:** Add error handling within the thread if needed
+    try:
+        logger.info(f"Thread {os.getpid()} processing batch of {len(batch_scenarios)}...")
+        result = generate_batch_initial_feedback_llm(batch_scenarios, topic_map)
+        logger.info(f"Thread {os.getpid()} finished batch.")
+        return result
+    except Exception as e:
+        logger.error(f"Error in thread {os.getpid()} processing batch: {e}")
+        return {} # Return empty dict on error to avoid crashing the main loop
 
-resources_df = pd.DataFrame(resources_data)
-resource_topic_df = pd.DataFrame(resource_topic_rels)
-all_resource_ids = resources_df["resourceId"].tolist()
-print(f"Generated {len(resources_df)} resources with modalities.")
-
-# Students (Add Learning Style and Affinities)
-print("Generating Students with Profiles (Style, Affinities)...")
-students_data = []
-student_profiles = {} # Store profile details for interaction generation
-
-for i in range(NUM_STUDENTS):
-    student_id = f"S{i+1:04d}"
-    learning_style = random.choice(LEARNING_STYLES)
-
-    # Determine loved/disliked subjects
-    loved_subjects = random.sample(SUBJECT_CODES, k=random.randint(0, AVG_LOVED_SUBJECTS + 1))
-    remaining_subjects = list(set(SUBJECT_CODES) - set(loved_subjects))
-    disliked_subjects = random.sample(remaining_subjects, k=random.randint(0, AVG_DISLIKED_SUBJECTS + 1)) if remaining_subjects else []
-
-    # Get corresponding topic IDs
-    loved_topic_ids = [tid for tid, subj in topic_subject_map.items() if subj in loved_subjects]
-    disliked_topic_ids = [tid for tid, subj in topic_subject_map.items() if subj in disliked_subjects]
-
-    students_data.append({
-        "studentId": student_id,
-        "name": fake.name(),
-        "learningStyle": learning_style,
-        # Store lists as JSON strings for CSV compatibility
-        "lovedTopicIds": json.dumps(loved_topic_ids),
-        "dislikedTopicIds": json.dumps(disliked_topic_ids)
-    })
-    # Store usable lists in memory for interaction generation
-    student_profiles[student_id] = {
-        "learningStyle": learning_style,
-        "lovedTopics": loved_topic_ids,
-        "dislikedTopics": disliked_topic_ids
-    }
-
-students_df = pd.DataFrame(students_data)
-all_student_ids = students_df["studentId"].tolist()
-print(f"Generated {len(students_df)} students with profiles.")
+# --- End LLM ---
 
 
-# --- 2. Simulate Initial Rich Interactions ---
-
-print("Simulating Initial Interactions with Ratings/Comments...")
-consumed_rels = []
-interactions_generated = 0
-
-# Generate comments based on rating and potential mismatches
-def generate_comment(rating, student_style, resource_modality, is_loved, is_disliked):
-    if rating >= 4:
-        templates = [
-            "Excellent explanation!", "Really helpful, thanks.", "Very clear.",
-            "Loved this resource.", "Well presented."
-        ]
-        if student_style == resource_modality or student_style == 'Mixed':
-            templates.append(f"Perfect for my {student_style.lower()} style.")
-        if is_loved:
-            templates.append("Great content on a topic I enjoy!")
-        return random.choice(templates)
-    elif rating <= 2:
-        templates = [
-            "Found this hard to follow.", "A bit confusing.", "Not very engaging.",
-            "Could be explained better.", "Didn't quite get it."
-        ]
-        if student_style != resource_modality and student_style != 'Mixed' and resource_modality != 'Mixed':
-             templates.append(f"As a {student_style.lower()} learner, this {resource_modality.lower()} format was tough.")
-        if is_disliked:
-            templates.append("Struggled with this topic.")
-        templates.append("More examples would be good.")
-        return random.choice(templates)
-    else: # Rating is 3
-        templates = [
-            "It was okay.", "Covered the basics.", "Decent overview.", "Neither good nor bad.",
-            "Helped a little."
-        ]
-        return random.choice(templates)
-
-for student_id in all_student_ids:
-    profile = student_profiles[student_id]
-    num_interactions = random.randint(5, 15)
-    interacted_resources = set() # Track resources interacted with by this student
-
-    for _ in range(num_interactions):
-        chosen_resource_id = None
-        # Bias selection towards loved/neutral topics, away from disliked
-        potential_topics = list(set(all_topic_ids) - set(profile['dislikedTopics']))
-        if not potential_topics: potential_topics = all_topic_ids # Fallback
-
-        # Higher chance for loved topics if any exist
-        if profile['lovedTopics'] and random.random() < 0.6: # 60% chance to pick from loved topics
-             chosen_topic_id = random.choice(profile['lovedTopics'])
-        else:
-             chosen_topic_id = random.choice(potential_topics)
-
-        # Find resources for this topic
-        resources_in_topic = [rid for rid, tid in resource_topic_map.items() if tid == chosen_topic_id]
-        if not resources_in_topic: continue # Skip if topic has no resources
-
-        # Select a resource, avoiding ones already interacted with
-        available_resources = list(set(resources_in_topic) - interacted_resources)
-        if not available_resources:
-            # If all resources in topic interacted with, try another topic
-            continue
-        chosen_resource_id = random.choice(available_resources)
-        interacted_resources.add(chosen_resource_id)
+# --- Declare variables needed in both branches ---
+topic_id_map = {}
+resource_info_map_internal = {}
+student_profiles = {}
+all_topic_ids = []
+all_resource_ids = []
+all_student_ids = []
 
 
-        # Generate rating based on affinity
-        is_loved = chosen_topic_id in profile['lovedTopics']
-        is_disliked = chosen_topic_id in profile['dislikedTopics'] # Should be rare due to selection bias
-        rating_bias = 0
-        if is_loved:
-            rating_bias = random.uniform(0.5, 1.5) # Higher ratings
-        elif is_disliked:
-             rating_bias = random.uniform(-1.5, -0.5) # Lower ratings
+# --- 1. Generate or Load Base Nodes ---
+if REGENERATE_BASE_DATA or not all(os.path.exists(f) for f in [STUDENTS_FILE, TOPICS_FILE, RESOURCES_FILE, RESOURCE_TOPIC_FILE]):
+    if not REGENERATE_BASE_DATA:
+        logger.warning(f"Base data files not found in {OUTPUT_DIR}. Regenerating base data even though REGENERATE_BASE_DATA is False.")
 
-        # Base rating + bias + noise, clamped
-        base_rating = random.uniform(2.5, 4.0) # Tend towards slightly positive baseline
-        rating = round(np.clip(base_rating + rating_bias + random.uniform(-0.5, 0.5), MIN_RATING, MAX_RATING))
+    logger.info("--- Regenerating Base Data (Students, Topics, Resources) ---")
 
-        # Generate comment
-        resource_modality = resource_modality_map[chosen_resource_id]
-        comment = generate_comment(rating, profile['learningStyle'], resource_modality, is_loved, is_disliked)
+    # --- Generate Topics ---
+    logger.info("Generating Curriculum Topics...")
+    all_curriculum_topics_list = []; topic_subject_map = {}; topic_id_counter = 1
+    for subject_code, topics in curriculum_topics.items():
+        for topic_name in topics:
+            topic_id = f"{subject_code}{topic_id_counter:03d}"
+            all_curriculum_topics_list.append({"topicId": topic_id, "name": topic_name})
+            topic_id_map[topic_id] = topic_name
+            topic_subject_map[topic_id] = subject_code
+            topic_id_counter += 1
+    topics_df = pd.DataFrame(all_curriculum_topics_list)
+    all_topic_ids = list(topic_id_map.keys())
+    logger.info(f"Generated {len(topics_df)} topics.")
+    topics_df.to_csv(TOPICS_FILE, index=False) # Save immediately
 
-        consumed_rels.append({
-            "studentId": student_id,
-            "resourceId": chosen_resource_id,
-            "timestamp": generate_random_timestamp(SIMULATION_START_DATE, SIMULATION_END_DATE).isoformat(),
-            "rating": rating,
-            "comment": comment
-        })
-        interactions_generated += 1
+    # --- Generate Resources ---
+    logger.info("Generating Resources with Modality...")
+    resources_data = []; resource_topic_rels = []
+    resource_types = ['Article', 'Video', 'Podcast', 'Quiz', 'Simulation', 'Slideshow']
+    type_modality_map = {'Article': 'Reading/Writing', 'Video': 'Visual', 'Podcast': 'Audio', 'Quiz': 'Kinaesthetic', 'Simulation': 'Kinaesthetic', 'Slideshow': 'Visual'}
+    for i in range(NUM_RESOURCES):
+        resource_id = f"R{i+1:04d}"; resource_type = random.choice(resource_types); assigned_topic_id = random.choice(all_topic_ids)
+        assigned_topic_name = topic_id_map[assigned_topic_id]; modality = type_modality_map.get(resource_type, 'Mixed'); resource_title = f"{resource_type} on {assigned_topic_name}"
+        resource_record = { "resourceId": resource_id, "title": resource_title, "type": resource_type, "modality": modality }
+        resources_data.append(resource_record)
+        resource_info_map_internal[resource_id] = {**resource_record, "topicId": assigned_topic_id}
+        resource_topic_rels.append({"resourceId": resource_id, "topicId": assigned_topic_id})
+    resources_df = pd.DataFrame(resources_data); resource_topic_df = pd.DataFrame(resource_topic_rels)
+    all_resource_ids = resources_df["resourceId"].tolist()
+    logger.info(f"Generated {len(resources_df)} resources.")
+    resources_df.to_csv(RESOURCES_FILE, index=False) # Save immediately
+    resource_topic_df.to_csv(RESOURCE_TOPIC_FILE, index=False) # Save immediately
 
-print(f"Simulated {interactions_generated} initial CONSUMED interactions with ratings/comments.")
+    # --- Generate Students ---
+    logger.info("Generating Students with Profiles...")
+    students_data = []
+    for i in range(NUM_STUDENTS):
+        student_id = f"S{i+1:04d}"; learning_style = random.choice(LEARNING_STYLES)
+        loved_subjects = random.sample(SUBJECT_CODES, k=random.randint(0, AVG_LOVED_SUBJECTS + 1))
+        remaining_subjects = list(set(SUBJECT_CODES) - set(loved_subjects)); disliked_subjects = random.sample(remaining_subjects, k=random.randint(0, AVG_DISLIKED_SUBJECTS + 1)) if remaining_subjects else []
+        loved_topic_ids = [tid for tid, subj in topic_subject_map.items() if subj in loved_subjects]; disliked_topic_ids = [tid for tid, subj in topic_subject_map.items() if subj in disliked_subjects]
+        students_data.append({ "studentId": student_id, "name": fake.name(), "learningStyle": learning_style, "lovedTopicIds": json.dumps(loved_topic_ids), "dislikedTopicIds": json.dumps(disliked_topic_ids) })
+        student_profiles[student_id] = { "learningStyle": learning_style, "lovedTopics": loved_topic_ids, "dislikedTopics": disliked_topic_ids }
+    students_df = pd.DataFrame(students_data)
+    all_student_ids = students_df["studentId"].tolist()
+    logger.info(f"Generated {len(students_df)} students.")
+    students_df.to_csv(STUDENTS_FILE, index=False) # Save immediately
 
-# --- 3. Convert Interaction Lists to DataFrames ---
+else:
+    logger.info(f"--- Loading Existing Base Data from {OUTPUT_DIR} ---")
+    try:
+        # --- Load Topics ---
+        logger.info(f"Loading topics from {TOPICS_FILE}...")
+        topics_df = pd.read_csv(TOPICS_FILE)
+        topic_subject_map = {}
+        for _, row in topics_df.iterrows():
+             topic_id = row['topicId']
+             topic_id_map[topic_id] = row['name']
+             # Infer subject code from topic ID prefix
+             subject_code = topic_id[:3]
+             if subject_code in SUBJECT_CODES:
+                 topic_subject_map[topic_id] = subject_code
+             else:
+                  logger.warning(f"Could not infer subject code for topic {topic_id}")
+        all_topic_ids = list(topic_id_map.keys())
+        logger.info(f"Loaded {len(topics_df)} topics.")
+
+        # --- Load Resources ---
+        logger.info(f"Loading resources from {RESOURCES_FILE} and {RESOURCE_TOPIC_FILE}...")
+        resources_df = pd.read_csv(RESOURCES_FILE)
+        resource_topic_df = pd.read_csv(RESOURCE_TOPIC_FILE)
+        # Merge to easily create the internal map
+        res_merged_df = pd.merge(resources_df, resource_topic_df, on='resourceId', how='left')
+        for _, row in res_merged_df.iterrows():
+            resource_info_map_internal[row['resourceId']] = row.to_dict()
+        all_resource_ids = resources_df["resourceId"].tolist()
+        logger.info(f"Loaded {len(resources_df)} resources.")
+
+        # --- Load Students ---
+        logger.info(f"Loading students from {STUDENTS_FILE}...")
+        students_df = pd.read_csv(STUDENTS_FILE)
+        all_student_ids = students_df["studentId"].tolist()
+        # Rebuild student_profiles map from loaded data
+        for _, row in students_df.iterrows():
+            student_id = row['studentId']
+            try: loved_topics = json.loads(row.get("lovedTopicIds") or '[]')
+            except: loved_topics = []
+            try: disliked_topics = json.loads(row.get("dislikedTopicIds") or '[]')
+            except: disliked_topics = []
+            student_profiles[student_id] = {
+                "learningStyle": row.get("learningStyle", "Unknown"),
+                "lovedTopics": loved_topics,
+                "dislikedTopics": disliked_topics
+            }
+        logger.info(f"Loaded {len(students_df)} students and reconstructed profiles.")
+
+    except FileNotFoundError as e:
+        logger.error(f"Error loading base data file: {e}. Cannot proceed with REGENERATE_BASE_DATA=False.")
+        exit()
+    except Exception as e:
+        logger.exception(f"An unexpected error occurred loading base data:")
+        exit()
+
+# --- End Generate/Load Base Nodes ---
+
+
+# --- 2. Simulate Initial Interactions (Pairs Only First) ---
+# This part runs regardless of the flag, using the loaded/generated maps
+logger.info("Simulating initial interaction pairs...")
+interaction_pairs_to_process = []
+interaction_counter = 0
+initial_participated_rels = []
+
+# ...(The loop to select pairs and potentially trigger participation is IDENTICAL to previous version)...
+for i, student_id in enumerate(all_student_ids):
+    profile = student_profiles[student_id]; num_interactions = random.randint(MIN_INITIAL_INTERACTIONS, MAX_INITIAL_INTERACTIONS); interacted_resources = set()
+    logger.debug(f"Planning {num_interactions} interactions for {student_id}...")
+    for interaction_num in range(num_interactions): # ...(Resource selection logic identical)...
+        chosen_resource_id = None; attempts = 0; MAX_ATTEMPTS = 5
+        while not chosen_resource_id and attempts < MAX_ATTEMPTS:
+            potential_topics = list(set(all_topic_ids) - set(profile['dislikedTopics'])); potential_topics = potential_topics or all_topic_ids
+            if profile['lovedTopics'] and random.random() < 0.6: chosen_topic_id = random.choice(profile['lovedTopics'])
+            else: chosen_topic_id = random.choice(potential_topics)
+            resources_in_topic = [rid for rid, res_info in resource_info_map_internal.items() if res_info.get("topicId") == chosen_topic_id]
+            if not resources_in_topic: attempts += 1; continue
+            available_resources = list(set(resources_in_topic) - interacted_resources)
+            if not available_resources: attempts += 1; continue
+            chosen_resource_id = random.choice(available_resources); attempts += 1
+        if chosen_resource_id: # ...(Storing context & probabilistic participation identical)...
+            interacted_resources.add(chosen_resource_id); chosen_resource_info = resource_info_map_internal.get(chosen_resource_id)
+            if chosen_resource_info:
+                interaction_counter += 1; interaction_pairs_to_process.append({ "interaction_id": interaction_counter, "student_id": student_id, "resource_id": chosen_resource_id, "profile": profile, "resource_info": chosen_resource_info })
+                if random.random() < PROBABILITY_INITIAL_PARTICIPATION:
+                    topic_id = chosen_resource_info.get('topicId')
+                    if topic_id: timestamp = generate_random_timestamp(datetime(2024,9,1), datetime(2025,1,30)); initial_participated_rels.append({"studentId": student_id, "topicId": topic_id, "timestamp": timestamp.isoformat(), "interactionType": random.choice(["initial_post", "initial_reply"]) }); logger.debug(f"  -> Student {student_id} will also initially participate in {topic_id}")
+            else: logger.error(f"Consistency error: Info missing for {chosen_resource_id}")
+        else: logger.warning(f"Could not find resource for {student_id} interaction {interaction_num+1}")
+logger.info(f"Planned {len(interaction_pairs_to_process)} initial CONSUMED interactions.")
+logger.info(f"Generated {len(initial_participated_rels)} initial PARTICIPATED_IN interactions.")
+
+# --- 3. Generate Feedback in Parallel Batches using LLM ---
+# ...(This section is IDENTICAL to previous version)...
+logger.info(f"Generating feedback for {len(interaction_pairs_to_process)} interactions concurrently...")
+all_feedback_results = {}; llm_feedback_failures = 0; start_batch_processing_time = time.time()
+tasks = [];
+for i in range(0, len(interaction_pairs_to_process), LLM_BATCH_SIZE): tasks.append((interaction_pairs_to_process[i : i + LLM_BATCH_SIZE], topic_id_map))
+with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+    future_to_batch_num = {executor.submit(process_feedback_batch, task_data): i for i, task_data in enumerate(tasks)}
+    total_batches = len(tasks)
+    for i, future in enumerate(as_completed(future_to_batch_num)):
+        batch_num = future_to_batch_num[future]
+        try: # ...(Result processing identical)...
+            batch_result = future.result(); all_feedback_results.update(batch_result); original_batch_size = len(tasks[batch_num][0]); failures_in_batch = original_batch_size - len(batch_result)
+            if failures_in_batch > 0: llm_feedback_failures += failures_in_batch; logger.warning(f"Batch {batch_num + 1}/{total_batches} completed with {failures_in_batch} failures.")
+            else: logger.info(f"Batch {batch_num + 1}/{total_batches} completed successfully.")
+        except Exception as exc: original_batch_size = len(tasks[batch_num][0]); llm_feedback_failures += original_batch_size; logger.error(f'Batch {batch_num + 1}/{total_batches} generated an exception: {exc}')
+logger.info(f"Finished generating feedback. Time: {time.time() - start_batch_processing_time:.2f}s. Failures: {llm_feedback_failures}")
+
+
+# --- 4. Create Final consumed_rels List ---
+# ...(This section is IDENTICAL to previous version)...
+consumed_rels = []; fallback_rating = 3; fallback_comment = "Feedback unavailable."
+for interaction_data in interaction_pairs_to_process:
+    interaction_id = interaction_data["interaction_id"]; feedback = all_feedback_results.get(interaction_id); rating = fallback_rating; comment = fallback_comment; feedback_source = "fallback"
+    if feedback: rating = feedback["rating"]; comment = feedback["comment"]; feedback_source = "llm"
+    consumed_rels.append({ "studentId": interaction_data["student_id"], "resourceId": interaction_data["resource_id"], "timestamp": generate_random_timestamp(datetime(2024,9,1), datetime(2025,1,30)).isoformat(), "rating": rating, "comment": comment, "feedback_generated_by": feedback_source })
+
+
+# --- 5. Convert and Export ---
+# Only export interactions if base data was reused
 consumed_df = pd.DataFrame(consumed_rels)
+participated_df = pd.DataFrame(initial_participated_rels)
 
-# --- 4. Export to CSV ---
-print(f"Exporting rich synthetic data to CSV files in {OUTPUT_DIR}...")
+if REGENERATE_BASE_DATA:
+    logger.info(f"Exporting ALL data (including base nodes) to CSV files in {OUTPUT_DIR}...")
+    students_df.to_csv(STUDENTS_FILE, index=False)
+    topics_df.to_csv(TOPICS_FILE, index=False)
+    resources_df.to_csv(RESOURCES_FILE, index=False)
+    resource_topic_df.to_csv(RESOURCE_TOPIC_FILE, index=False)
+    consumed_df.to_csv(CONSUMED_FILE, index=False)
+    participated_df.to_csv(PARTICIPATED_FILE, index=False)
+else:
+    logger.info(f"Exporting ONLY interaction data (consumed, participated) to CSV files in {OUTPUT_DIR}...")
+    consumed_df.to_csv(CONSUMED_FILE, index=False)
+    participated_df.to_csv(PARTICIPATED_FILE, index=False)
 
-students_df.to_csv(os.path.join(OUTPUT_DIR, "students.csv"), index=False)
-topics_df.to_csv(os.path.join(OUTPUT_DIR, "topics.csv"), index=False)
-resources_df.to_csv(os.path.join(OUTPUT_DIR, "resources.csv"), index=False)
-consumed_df.to_csv(os.path.join(OUTPUT_DIR, "consumed.csv"), index=False)
-resource_topic_df.to_csv(os.path.join(OUTPUT_DIR, "resource_topic.csv"), index=False)
-# No participation or recommendation data generated in this version
 
-print(f"Successfully generated rich synthetic data in directory: {OUTPUT_DIR}")
-print("\nGenerated files:")
-print(f"- {os.path.join(OUTPUT_DIR, 'students.csv')} ({len(students_df)} rows)")
-print(f"- {os.path.join(OUTPUT_DIR, 'topics.csv')} ({len(topics_df)} rows)")
-print(f"- {os.path.join(OUTPUT_DIR, 'resources.csv')} ({len(resources_df)} rows)")
-print(f"- {os.path.join(OUTPUT_DIR, 'consumed.csv')} ({len(consumed_df)} rows)")
-print(f"- {os.path.join(OUTPUT_DIR, 'resource_topic.csv')} ({len(resource_topic_df)} rows)")
+logger.info(f"Successfully generated/updated data in directory: {OUTPUT_DIR}")
+print("\nGenerated/Updated files:")
+if REGENERATE_BASE_DATA:
+    print(f"- {STUDENTS_FILE} ({len(students_df)} rows)")
+    print(f"- {TOPICS_FILE} ({len(topics_df)} rows)")
+    print(f"- {RESOURCES_FILE} ({len(resources_df)} rows)")
+    print(f"- {RESOURCE_TOPIC_FILE} ({len(resource_topic_df)} rows)")
+print(f"- {CONSUMED_FILE} ({len(consumed_df)} rows)")
+print(f"- {PARTICIPATED_FILE} ({len(participated_df)} rows)")

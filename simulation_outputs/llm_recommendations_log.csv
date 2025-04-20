@@ -1,0 +1,150 @@
+turn,studentId,resourceId,reason,timestamp
+1,S0019,R0105,This quiz aligns with the student's preferred kinaesthetic learning style and their enjoyment of Chemistry topics like CHM01: Intro to Chemistry.,2025-04-20T16:23:12.172149
+1,S0019,R0088,This quiz on CHM04: States of Matter matches the student's preferred kinaesthetic modality and interest in Chemistry.,2025-04-20T16:23:12.172149
+1,S0019,R0040,"While math is not a preferred subject, this simulation on MAT03: Equations uses the student's preferred kinaesthetic modality, which might make it more engaging.",2025-04-20T16:23:12.172149
+1,S0028,R0118,This podcast aligns with the student's preferred audio learning style.,2025-04-20T16:23:16.584368
+1,S0028,R0073,This podcast on Sets matches the student's preferred audio modality.,2025-04-20T16:23:16.584368
+1,S0028,R0147,This podcast on Heat and Temperature is recommended due to the student's preference for audio resources.,2025-04-20T16:23:16.584368
+1,S0017,R0047,"This podcast aligns with the student's preferred audio learning style and is on a new biology topic, which they have shown interest in recently.",2025-04-20T16:23:19.155690
+1,S0017,R0093,This podcast on Triangles matches the student's preferred audio modality and introduces a new math topic.,2025-04-20T16:23:19.155690
+1,S0017,R0140,"This podcast on Classification is in the student's preferred audio format and is another biology topic, building on their recent engagement.",2025-04-20T16:23:19.155690
+1,S0015,R0019,This podcast aligns with your preferred audio learning style and your interest in Biology and Living Things.,2025-04-20T16:23:21.915337
+1,S0015,R0111,This podcast on Cell Structure matches your preferred audio format and is a topic you enjoy.,2025-04-20T16:23:21.915337
+1,S0015,R0047,"Since you enjoyed learning about Cell Division through interactive methods, this podcast offers another way to explore the topic using your preferred audio modality.",2025-04-20T16:23:21.915337
+1,S0044,R0130,This simulation aligns with the student's enjoyment of Chemistry topics and their positive experience with Kinaesthetic simulations for understanding concepts.,2025-04-20T16:23:26.360938
+1,S0044,R0081,"This video covers a chemistry topic the student enjoys and fits their mixed learning style, similar to a positively rated video on Reactions Intro.",2025-04-20T16:23:26.360938
+1,S0044,R0033,"This quiz on Triangles matches a math topic the student enjoys and provides a Kinaesthetic way to reinforce their understanding, similar to their positive experience with the CHM01 quiz.",2025-04-20T16:23:26.360938
+2,S0006,R0029,"This quiz on Biology and Living Things uses a Kinaesthetic modality, which aligns with your preferred learning style and positive experience with the triangle simulation. It also introduces a new topic, which helps diversify your learning.",2025-04-20T16:23:30.928243
+2,S0006,R0035,"This quiz on Cell Structure is another Kinaesthetic resource that matches your learning preference. It's a new topic for you to explore, moving beyond the areas you've recently focused on.",2025-04-20T16:23:30.928243
+2,S0006,R0036,"While Atomic Structure is a topic you've disliked in other formats, this simulation allows you to learn about it through interactive, hands-on engagement, which you've indicated is your preferred way to learn.",2025-04-20T16:23:30.928243
+2,S0031,R0138,This podcast on Introduction to Physics aligns perfectly with the student's preferred audio learning style and interest in physics topics.,2025-04-20T16:23:33.993795
+2,S0031,R0032,This podcast on Force and Motion is another excellent match for the student's audio preference and enjoyment of physics.,2025-04-20T16:23:33.993795
+2,S0031,R0127,This podcast on Equations caters to the student's audio learning style and interest in mathematics topics like equations.,2025-04-20T16:23:33.993795
+2,S0049,R0033,This quiz on Triangles aligns with the student's preferred kinaesthetic learning style and their enjoyment of the Triangles topic.,2025-04-20T16:23:36.465856
+2,S0049,R0064,"This quiz introduces Chemistry Reactions in a kinaesthetic format, which might be more engaging for the student despite their general dislike for Chemistry.",2025-04-20T16:23:36.465856
+2,S0044,R0091,"This simulation aligns with the student's enjoyment of Math topics and their positive experience with kinaesthetic simulations, as seen with the functions simulation.",2025-04-20T16:23:41.191444
+2,S0044,R0062,This video covers a Chemistry topic the student enjoys and aligns with their mixed learning style which includes visual modalities.,2025-04-20T16:23:41.191444
+2,S0044,R0126,This simulation revisits a Chemistry topic the student recently enjoyed and provides a kinaesthetic modality which they have rated highly.,2025-04-20T16:23:41.191444
+2,S0045,R0120,This podcast aligns with the student's preferred audio learning style and interest in physics topics.,2025-04-20T16:23:45.703044
+2,S0045,R0116,This podcast on matter and properties matches the student's audio preference and interest in physics topics previously rated well.,2025-04-20T16:23:45.703044
+2,S0045,R0049,This podcast on force and motion is a good fit for the student's audio learning style and enjoyment of physics topics.,2025-04-20T16:23:45.703044
+3,S0014,R0100,This video aligns with your preferred visual learning style.,2025-04-20T16:23:50.206423
+3,S0014,R0121,This slideshow is a visual resource that may help you understand the topic better.,2025-04-20T16:23:50.206423
+3,S0014,R0008,This video is a visual resource that matches your learning preference.,2025-04-20T16:23:50.206423
+3,S0021,R0071,This video on Classification aligns with the student's interest in the topic and their preference for visual learning.,2025-04-20T16:23:54.583833
+3,S0021,R0077,"Given the student's preference for seeing things for Cell Division, this slideshow is a good visual option for a topic they find interesting.",2025-04-20T16:23:54.583833
+3,S0021,R0017,This quiz on Genetics Intro matches the student's interest in the topic and their positive experiences with quizzes as a learning modality.,2025-04-20T16:23:54.583833
+3,S0048,R0099,"This article on Introduction to Physics aligns with your preference for reading to learn science topics, as indicated by your feedback on previous videos.",2025-04-20T16:23:57.137736
+3,S0048,R0066,"Since you preferred reading about biology topics, this article on Classification is a good fit for your learning style after watching a video on the same topic.",2025-04-20T16:23:57.137736
+3,S0048,R0098,"Based on your preference for reading, this article on Cell Division is recommended to explore a new biology topic using your preferred modality.",2025-04-20T16:23:57.137736
+3,S0040,R0079,This article aligns with the student's preferred reading/writing style and covers a physics topic they enjoy.,2025-04-20T16:24:01.551374
+3,S0040,R0066,This article on classification matches the student's reading/writing preference and is in a biology topic they like.,2025-04-20T16:24:01.551374
+3,S0040,R0113,This article on Biology and Living Things fits the student's reading/writing style and covers a biology topic they enjoy.,2025-04-20T16:24:01.551374
+3,S0005,R0099,This article on Introduction to Physics aligns with your preferred reading style and an enjoyable topic.,2025-04-20T16:24:06.203965
+3,S0005,R0020,This article on Cell Division matches your preferred reading style and your interest in Biology topics.,2025-04-20T16:24:06.203965
+3,S0005,R0066,This article on Classification is a good match for your preferred reading style and interest in Biology.,2025-04-20T16:24:06.203965
+4,S0014,R0144,This video on Force and Motion aligns with the student's preference for visual learning.,2025-04-20T16:24:10.762733
+4,S0014,R0125,"Introducing a new topic, Intro to Chemistry, with a visual modality (video) caters to the student's learning style.",2025-04-20T16:24:10.762733
+4,S0014,R0080,Revisiting the topic of Logic with a video format may improve the student's experience compared to reading.,2025-04-20T16:24:10.762733
+4,S0012,R0140,"This podcast aligns with the student's preferred audio learning style and an enjoyable topic, BIO03: Classification.",2025-04-20T16:24:15.473732
+4,S0012,R0005,"This podcast matches the student's preferred audio modality and covers BIO04: Cell Division, a topic they recently enjoyed via simulation.",2025-04-20T16:24:15.473732
+4,S0012,R0053,This podcast on BIO02: Cell Structure fits the student's audio preference and is a core biology topic likely to be of interest.,2025-04-20T16:24:15.473732
+4,S0017,R0138,This podcast on Introduction to Physics aligns with the student's preferred audio learning style.,2025-04-20T16:24:19.948759
+4,S0017,R0045,This podcast on Cell Structure is an audio resource that matches the student's preferred modality.,2025-04-20T16:24:19.948759
+4,S0017,R0096,"This podcast on Energy is an audio resource that aligns with the student's preferred modality, following up on a topic they recently engaged with via quiz.",2025-04-20T16:24:19.948759
+4,S0045,R0032,This podcast on Force and Motion aligns with your preferred audio learning style and your interest in physics topics.,2025-04-20T16:24:24.286295
+4,S0045,R0054,"Given your positive experience with the previous energy podcast, this one should also suit your audio learning preference and interest in energy.",2025-04-20T16:24:24.286295
+4,S0045,R0112,"This podcast on States of Matter uses your preferred audio modality to explore a topic related to the properties of matter, which you've shown interest in.",2025-04-20T16:24:24.286295
+4,S0029,R0100,This video aligns with the student's preferred visual modality and their enjoyment of Biology topics like Classification (BIO03).,2025-04-20T16:24:29.098744
+4,S0029,R0067,"This simulation matches the student's mixed learning style, specifically their positive experience with kinaesthetic modalities, and covers a Biology topic they enjoy (BIO04: Cell Division).",2025-04-20T16:24:29.098744
+4,S0029,R0017,"This quiz provides a kinaesthetic way to engage with Genetics (BIO05), a topic the student enjoys and recently rated highly using a visual resource.",2025-04-20T16:24:29.098744
+5,S0041,R0069,This slideshow on Force and Motion aligns with your preferred visual learning style and introduces a new physics topic.,2025-04-20T16:24:31.911791
+5,S0041,R0084,"This video introduces Chemistry, a topic you've recently struggled with in audio format, using your preferred visual modality.",2025-04-20T16:24:31.911791
+5,S0041,R0031,"Following up on your positive experience with a slideshow on Matter and Properties, this slideshow covers the related physics topic of Energy.",2025-04-20T16:24:31.911791
+5,S0048,R0012,This article on Cell Structure aligns with your preferred reading/writing learning style.,2025-04-20T16:24:36.464172
+5,S0048,R0113,This article on Biology and Living Things matches your preference for learning by reading.,2025-04-20T16:24:36.464172
+5,S0048,R0109,"Based on your preference for reading, this article on States of Matter is a suitable recommendation.",2025-04-20T16:24:36.464172
+5,S0009,R0113,This article aligns with your preferred reading/writing learning style and introduces a new topic in biology.,2025-04-20T16:24:38.986045
+5,S0009,R0108,"Another article on Biology and Living Things, reinforcing your preferred learning style and introducing a new topic.",2025-04-20T16:24:38.986045
+5,S0009,R0099,This article on Introduction to Physics matches your preferred reading/writing style and explores a new science topic.,2025-04-20T16:24:38.986045
+5,S0026,R0062,"This video aligns with the student's visual learning preference and interest in States of Matter (CHM04), a topic they enjoy.",2025-04-20T16:24:41.575650
+5,S0026,R0042,"This video is a visual resource covering Introduction to Physics (PHY01), a topic the student enjoys.",2025-04-20T16:24:41.575650
+5,S0026,R0048,This video on Heat and Temperature (PHY05) matches the student's visual learning style and interest in this physics topic.,2025-04-20T16:24:41.575650
+5,S0016,R0133,This article aligns with the student's preferred Reading/Writing learning style and introduces a new physics topic.,2025-04-20T16:24:46.092231
+5,S0016,R0066,"This article on Classification uses the student's preferred Reading/Writing modality, building on a topic they recently engaged with via a quiz.",2025-04-20T16:24:46.092231
+5,S0016,R0034,"This article introduces a new math topic, Functions Intro, using the student's preferred Reading/Writing learning style.",2025-04-20T16:24:46.092231
+6,S0045,R0096,This podcast on Energy aligns perfectly with the student's preferred audio learning style and interest in Physics topics like Energy.,2025-04-20T16:24:50.592680
+6,S0045,R0057,This podcast on Heat and Temperature matches the student's audio preference and their demonstrated enjoyment of the Heat and Temperature topic.,2025-04-20T16:24:50.592680
+6,S0045,R0001,This simulation on Force and Motion aligns with the student's enjoyment of interactive activities and interest in Force and Motion.,2025-04-20T16:24:50.592680
+6,S0009,R0020,This article aligns with the student's preferred reading/writing learning style and covers a biology topic they haven't disliked.,2025-04-20T16:24:55.094116
+6,S0009,R0082,"Given the student's preference for reading, this article on Atomic Structure provides a reading-based alternative to the podcast they previously rated neutrally.",2025-04-20T16:24:55.094116
+6,S0009,R0115,"This article introduces a new chemistry topic, Reactions Intro, in the student's preferred reading/writing modality.",2025-04-20T16:24:55.094116
+6,S0019,R0036,"This simulation aligns with your preferred kinaesthetic learning style and your interest in Chemistry, specifically Atomic Structure.",2025-04-20T16:24:59.859077
+6,S0019,R0088,"You enjoyed recent quizzes, and this quiz on States of Matter covers another topic you enjoy in Chemistry using a kinaesthetic approach.",2025-04-20T16:24:59.859077
+6,S0019,R0114,This quiz on Atomic Structure is another kinaesthetic resource that matches your interest in Chemistry topics.,2025-04-20T16:24:59.859077
+6,S0042,R0085,This video on Genetics Intro aligns with the student's preferred visual learning style and an enjoyable topic.,2025-04-20T16:25:02.669035
+6,S0042,R0106,This video about Classification is a visual resource on a topic the student enjoys.,2025-04-20T16:25:02.669035
+6,S0042,R0150,This slideshow on Genetics Intro is a visual resource that matches one of the student's preferred topics.,2025-04-20T16:25:02.669035
+6,S0028,R0093,This podcast aligns with the student's preferred audio learning style.,2025-04-20T16:25:05.333613
+6,S0028,R0118,"This podcast aligns with the student's preferred audio learning style and covers a topic they have seen before but with a different, preferred modality.",2025-04-20T16:25:05.333613
+6,S0028,R0103,"This podcast aligns with the student's preferred audio learning style, offering a new topic in a format they are likely to enjoy.",2025-04-20T16:25:05.333613
+7,S0003,R0050,This article on States of Matter aligns with the student's preferred reading/writing style and a topic they recently enjoyed learning about.,2025-04-20T16:25:09.793628
+7,S0003,R0115,This article on Reactions Intro matches the student's preferred learning style and covers a topic they enjoy in chemistry.,2025-04-20T16:25:09.793628
+7,S0003,R0079,This article on Heat and Temperature is a good fit for the student's reading/writing preference and reinforces a physics topic they recently reviewed.,2025-04-20T16:25:09.793628
+7,S0034,R0148,"This article on Logic aligns perfectly with your preferred reading/writing learning style and introduces a new math topic, which helps broaden your learning experience.",2025-04-20T16:25:14.762828
+7,S0034,R0115,"Since you enjoyed learning about Atomic Structure, this article on Reactions Intro is a great next step in Chemistry. The article format matches your preferred learning style, and it's a new topic to explore.",2025-04-20T16:25:14.762828
+7,S0034,R0133,"This article on Energy introduces a new Physics topic. It's in your preferred reading/writing format, encouraging exploration in a different science field.",2025-04-20T16:25:14.762828
+7,S0042,R0024,This video on Classification aligns with your visual learning style and interest in biology topics.,2025-04-20T16:25:18.026655
+7,S0042,R0018,This video on Genetics Intro matches your visual preference and stated enjoyment of genetics topics.,2025-04-20T16:25:18.026655
+7,S0042,R0150,This slideshow on Genetics Intro is another visual resource that covers a topic you enjoy.,2025-04-20T16:25:18.026655
+7,S0005,R0013,This article on Matter and Properties aligns with your preferred reading style and interest in physics.,2025-04-20T16:25:22.338443
+7,S0005,R0099,"Based on your enjoyment of physics, this article provides a good introduction to the subject in your preferred reading format.",2025-04-20T16:25:22.338443
+7,S0005,R0145,"This simulation on Biology and Living Things allows you to explore a topic you enjoy through a different modality, which can be a good way to reinforce learning.",2025-04-20T16:25:22.338443
+7,S0004,R0036,This simulation aligns with the student's preference for kinaesthetic learning and their interest in Chemistry topics like Atomic Structure.,2025-04-20T16:25:26.742142
+7,S0004,R0145,"This simulation matches the student's kinaesthetic learning style and their enjoyment of Biology and Living Things, a topic they recently rated highly in a quiz.",2025-04-20T16:25:26.742142
+7,S0004,R0061,"This simulation provides a kinaesthetic approach to Genetics Intro, a topic the student recently found interesting through a video.",2025-04-20T16:25:26.742142
+8,S0025,R0083,"This simulation aligns with the student's enjoyment of Biology topics and provides a hands-on, kinaesthetic modality which they have rated highly recently.",2025-04-20T16:25:31.231806
+8,S0025,R0106,This video covers a Biology topic the student enjoys and utilizes a visual modality that aligns with their mixed learning style and recent positive feedback on videos.,2025-04-20T16:25:31.231806
+8,S0025,R0054,"This podcast explores a Physics topic the student enjoys, offering an audio modality that fits their mixed learning style.",2025-04-20T16:25:31.231806
+8,S0016,R0098,This article on Cell Division aligns with the student's preferred Reading/Writing learning style.,2025-04-20T16:25:35.801454
+8,S0016,R0107,This article on States of Matter is another good fit for the student's Reading/Writing preference.,2025-04-20T16:25:35.801454
+8,S0016,R0013,"This article on Matter and Properties matches the student's preferred Reading/Writing modality, exploring a new physics topic.",2025-04-20T16:25:35.801454
+8,S0028,R0028,This podcast aligns with your preferred audio learning style and introduces a new topic in Physics.,2025-04-20T16:25:40.169235
+8,S0028,R0022,"This podcast covers the topic of Energy, which you recently reviewed, using your preferred audio format.",2025-04-20T16:25:40.169235
+8,S0028,R0014,"This podcast covers the topic of Equations, which you recently reviewed, using your preferred audio format.",2025-04-20T16:25:40.169235
+8,S0027,R0088,This quiz on States of Matter aligns with the student's enjoyment of chemistry and their positive experience with kinaesthetic learning (simulations).,2025-04-20T16:25:44.531318
+8,S0027,R0084,This video on Intro to Chemistry is a good fit as the student enjoyed a previous video on this topic and rated it highly.,2025-04-20T16:25:44.531318
+8,S0027,R0064,This quiz on Reactions Intro matches the student's interest in chemistry topics and provides a kinaesthetic learning opportunity which they have enjoyed.,2025-04-20T16:25:44.531318
+8,S0044,R0025,This simulation on Triangles aligns with your enjoyment of MAT topics and your positive experience with kinaesthetic simulations.,2025-04-20T16:25:47.183830
+8,S0044,R0009,This quiz on Atomic Structure matches your interest in Chemistry and your positive experience with quizzes for review.,2025-04-20T16:25:47.183830
+8,S0044,R0125,This video on Intro to Chemistry revisits a topic you enjoyed and uses a visual modality which fits your mixed learning style.,2025-04-20T16:25:47.183830
+9,S0006,R0002,"You really enjoyed the hands-on simulation for triangles. This quiz on Biology and Living Things is also a Kinaesthetic activity that lets you interact with the material, helping you explore a new topic.",2025-04-20T16:25:51.842690
+9,S0006,R0083,"Since you liked the simulation so much, here's another Kinaesthetic resource, a simulation about Biology and Living Things. It's a different topic than you've seen recently and lets you learn by doing.",2025-04-20T16:25:51.842690
+9,S0006,R0131,"You haven't enjoyed reading about Physics before, but this simulation on Introduction to Physics is a Kinaesthetic way to explore the topic, which might be a better fit for your learning style.",2025-04-20T16:25:51.842690
+9,S0036,R0058,This simulation aligns with the student's kinaesthetic learning style and interest in CHM05: Reactions Intro.,2025-04-20T16:25:56.639896
+9,S0036,R0036,This simulation matches the student's kinaesthetic preference and their enjoyment of CHM02: Atomic Structure.,2025-04-20T16:25:56.639896
+9,S0036,R0134,"This quiz offers a kinaesthetic way to engage with CHM01: Intro to Chemistry, a topic the student enjoys.",2025-04-20T16:25:56.639896
+9,S0041,R0125,"This video aligns with your preferred visual learning style and introduces a new topic in chemistry, which you recently found engaging.",2025-04-20T16:25:59.397793
+9,S0041,R0069,"This slideshow is a visual resource that introduces a new physics topic, building on your recent positive experience with a physics slideshow.",2025-04-20T16:25:59.397793
+9,S0041,R0101,"This slideshow provides a visual introduction to chemistry, matching your learning preference and a subject you've shown interest in.",2025-04-20T16:25:59.397793
+9,S0024,R0097,"You enjoyed the video on Genetics Intro, and this video on Cell Structure is another core topic in Biology presented in your preferred visual format. It's a good way to explore another area of biology.",2025-04-20T16:26:02.025783
+9,S0024,R0069,"You've tried Physics topics before, and this slideshow on Force and Motion is a visual resource that might help you engage with a new area of Physics in a way you prefer.",2025-04-20T16:26:02.025783
+9,S0024,R0071,"To broaden your horizons, this video on Biological Classification is a new topic presented visually, which aligns with your preferred learning style. It's a good opportunity to discover if you enjoy this area of science.",2025-04-20T16:26:02.025783
+9,S0014,R0048,"This video on Heat and Temperature aligns with your preference for visual learning, addressing a topic you previously found challenging with audio.",2025-04-20T16:26:06.962241
+9,S0014,R0030,This video on Matter and Properties is a visual resource that should suit your learning style well.,2025-04-20T16:26:06.962241
+9,S0014,R0069,"This slideshow on Force and Motion uses a visual modality, which matches your preferred way of learning.",2025-04-20T16:26:06.962241
+10,S0011,R0016,This podcast on Atomic Structure aligns with your preferred audio learning style and a chemistry topic you enjoy.,2025-04-20T16:26:11.496379
+10,S0011,R0027,This podcast on Matter and Properties is a good fit for your audio preference and interest in physics topics.,2025-04-20T16:26:11.496379
+10,S0011,R0141,This podcast on States of Matter matches your audio learning style and interest in chemistry topics.,2025-04-20T16:26:11.496379
+10,S0010,R0083,This simulation aligns with your preference for kinaesthetic learning and the topic of Biology which you found interesting.,2025-04-20T16:26:14.093237
+10,S0010,R0102,"This quiz on Classification is a kinaesthetic activity in a Biology topic, which you enjoyed recently.",2025-04-20T16:26:14.093237
+10,S0010,R0070,This quiz on States of Matter provides another opportunity for hands-on learning through a kinaesthetic modality.,2025-04-20T16:26:14.093237
+10,S0016,R0108,This article aligns with the student's preferred Reading/Writing learning style and introduces a new topic in Biology.,2025-04-20T16:26:18.760645
+10,S0016,R0113,"This article is another Reading/Writing resource on Biology and Living Things, reinforcing a new topic in the student's preferred modality.",2025-04-20T16:26:18.760645
+10,S0016,R0012,This article on Cell Structure continues to explore Biology topics using the student's favored Reading/Writing format.,2025-04-20T16:26:18.760645
+10,S0044,R0046,This quiz on Triangles aligns with a topic the student enjoys and matches their positive experience with kinaesthetic quizzes.,2025-04-20T16:26:23.145744
+10,S0044,R0080,This video on Logic aligns with a topic the student enjoys and fits their preferred mixed learning style.,2025-04-20T16:26:23.145744
+10,S0044,R0006,This video on Atomic Structure aligns with a chemistry topic the student enjoys and fits their preferred visual learning modality.,2025-04-20T16:26:23.145744
+10,S0031,R0032,"This podcast aligns perfectly with the student's preferred audio learning style and interest in Physics, specifically Force and Motion.",2025-04-20T16:26:25.818841
+10,S0031,R0054,This podcast on Energy is in the student's preferred audio format and covers another topic they enjoy within Physics.,2025-04-20T16:26:25.818841
+10,S0031,R0127,This podcast on Equations caters to the student's audio learning preference and their interest in Math topics like Equations.,2025-04-20T16:26:25.818841
