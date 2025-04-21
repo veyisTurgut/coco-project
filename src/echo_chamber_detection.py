@@ -123,3 +123,42 @@ Bridge Node Analysis
 -----------------------------------------------------------
 
 """
+
+
+
+
+"""
+t =20
+--- Community Level Metrics ---
+                  avg_entropy  std_entropy  avg_betweenness  size
+louvainCommunity                                                 
+0                       3.569        0.231            0.014    16
+1                       3.520        0.254            0.011    17
+2                       3.337        0.478            0.038    17
+
+No communities found with average entropy below 2.0.
+-------------------------------
+
+
+
+
+--------------------------------------------------
+Individual Low Entropy Nodes
+No students found with entropy below 2.0.
+
+
+
+--------------------------------------------------
+Bridge Node Analysis
+
+--- Potential Bridge Nodes (High Betweenness Centrality) ---
+   studentId  betweenness louvainCommunity  shannonEntropy
+41     S0042     0.150489                2        2.251629
+48     S0049     0.124542                2        3.000000
+49     S0050     0.102791                2        3.095795
+12     S0013     0.081273                2        3.459432
+9      S0010     0.072633                2        2.321928
+-----------------------------------------------------------
+
+Communities potentially lacking strong bridges: {'1', '0'}
+"""

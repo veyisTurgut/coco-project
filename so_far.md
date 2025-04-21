@@ -176,11 +176,6 @@ coco-project/
 *   **Password Management (Docker):** `NEO4J_AUTH` env var only sets initial password. Reset using `docker run --rm -v ... neo4j:latest neo4j-admin set-initial-password <newpass>` if needed.
 *   **Model Tuning:** Student choice model (`simulate_student_choice`) is basic; could be refined. LLM prompts might require further tuning for optimal results.
 
-## 9. Visualizations and Evaluation Metrics
-
-* 
-
-
 ## 9. Next Steps / Future Work
 
 1.  **Refine Models:** Improve the `simulate_student_choice` model. Tune LLM prompts for feedback and recommendations. Adjust `DIVERSITY_THRESHOLD` for adaptation.

@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 # --- Simulation Parameters ---
 MAX_WORKERS = 30 # Number of concurrent LLM calls (for recs AND feedback)
-NUM_TURNS = 40
+NUM_TURNS = 20
 STUDENTS_PER_TURN = 30
 DIVERSITY_THRESHOLD = 0.5 # Example: If Shannon entropy drops below this, trigger adaptation
 HISTORY_LIMIT_FOR_ENTROPY = 10 # How far back to look for entropy calculation
