@@ -1,4 +1,4 @@
-## **Updated Project Proposal: Detecting Echo Chambers and Bias in AI-Powered Learning Communities**
+## **Project Proposal: Detecting Echo Chambers and Bias in AI-Powered Learning Communities**
 
 ### **1. Introduction**  
 AI-driven educational platforms personalize learning by recommending content based on students' interests and progress. However, such personalization can inadvertently create echo chambers where students only encounter similar perspectives, reinforcing biases. This project examines how cooperation and competition emerge in digital learning communities through AI recommendations. By modeling interactions as a knowledge graph, we will detect insular clusters and assess bias in content recommendations. This approach builds on decentralized, graph-based analysis methods, central to CMPE58A, to highlight both the collaborative and competitive aspects of digital information ecosystems .
