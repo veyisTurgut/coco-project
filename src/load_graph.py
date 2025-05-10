@@ -1,4 +1,73 @@
 # src/load_graph.py
+# Purpose:
+# This script is responsible for populating a Neo4j graph database with initial data
+# from CSV files. It handles the setup of the graph structure, including nodes and
+# relationships, which form the baseline for subsequent simulations and analyses.
+#
+# What it does:
+# 1.  Initialization and Configuration:
+#     - Loads environment variables for Neo4j connection (URI, user, password).
+#     - Defines configuration parameters such as the data directory (`DATA_DIR`),
+#       a flag to clear the database before loading (`CLEAR_DB_BEFORE_LOADING`),
+#       and the batch size for database operations (`BATCH_SIZE`).
+#
+# 2.  File Checks and Pre-requisites:
+#     - `check_files_exist()`: Verifies the presence of required CSV files (e.g.,
+#       `students.csv`, `topics.csv`, `resources.csv`, `consumed_initially.csv`,
+#       `resource_topic.csv`) and optional files (e.g., `participated.csv`) in the
+#       specified `DATA_DIR`. Exits if required files are missing.
+#
+# 3.  Database Operations:
+#     - Establishes a connection to the Neo4j database.
+#     - `clear_database()`: If `CLEAR_DB_BEFORE_LOADING` is true, it deletes all existing
+#       nodes and relationships from the database.
+#     - `create_constraints()`: Creates uniqueness constraints on `studentId` for Student nodes,
+#       `resourceId` for Resource nodes, and `topicId` for Topic nodes to ensure data
+#       integrity and improve query performance.
+#
+# 4.  Node Loading (`load_nodes()`):
+#     - Loads nodes for different labels (Topic, Resource, Student) from their respective CSV files.
+#     - Reads CSV data using pandas.
+#     - Uses `df_to_batches()` to process data in manageable chunks.
+#     - Constructs and executes Cypher `MERGE` queries to create or update nodes, setting their
+#       properties. This function handles various property types, including lists/JSON strings
+#       stored in CSV columns (e.g., `lovedTopicIds` for Students).
+#
+# 5.  Relationship Loading (`load_relationships()`):
+#     - Loads relationships between nodes from CSV files.
+#     - Supports different relationship types (`ABOUT_TOPIC`, `CONSUMED`, `PARTICIPATED_IN`).
+#     - Reads CSV data and processes it in batches.
+#     - Constructs and executes Cypher `MERGE` queries to create relationships between
+#       existing nodes, setting relationship properties from CSV columns.
+#     - Allows adding `extra_rel_props` (e.g., `{"source": "initial"}`) to relationships,
+#       which is used to distinguish initially loaded `CONSUMED` interactions.
+#
+# 6.  Specific Data Loading Steps (in `if __name__ == "__main__":`):
+#     - Loads Topic nodes.
+#     - Loads Resource nodes.
+#     - Loads Student nodes (including properties like `learningStyle`, `lovedTopicIds`,
+#       `dislikedTopicIds`, `socialEngagementScore`).
+#     - Loads `ABOUT_TOPIC` relationships between Resources and Topics.
+#     - Loads initial `CONSUMED` relationships between Students and Resources from
+#       `consumed_initially.csv`, including properties like `timestamp`, `rating`, `comment`,
+#       `feedback_generated_by`, and an extra `source: "initial"` property.
+#     - Loads optional `PARTICIPATED_IN` relationships between Students and Topics from
+#       `participated.csv`, including `timestamp` and `interactionType`.
+#
+# 7.  Verification and Completion:
+#     - After loading, it queries the Neo4j database to get counts of loaded nodes (Student,
+#       Topic, Resource) and relationships (CONSUMED, PARTICIPATED_IN, ABOUT_TOPIC).
+#     - Prints these counts to the console for verification.
+#     - Logs the total execution time of the script.
+#
+# Key Libraries Used:
+# - pandas: For reading and processing CSV files in batches.
+# - py2neo: For interacting with the Neo4j graph database (connecting, running queries,
+#   managing transactions).
+# - dotenv: For managing environment variables (Neo4j credentials).
+# - os, traceback, time, math, json, numpy: Standard Python libraries for file operations,
+#   error handling, timing, JSON processing, and numerical operations (handling NaNs).
+
 import pandas as pd
 from py2neo import Graph, Node, Relationship, Transaction, Subgraph
 import os, traceback, time, math, json # Added json
@@ -251,7 +320,7 @@ if __name__ == "__main__":
     # --- Load Nodes ---
     load_nodes(graph, "Topic", "topics.csv", "topicId", ["name"])
     load_nodes(graph, "Resource", "resources.csv", "resourceId", ["title", "type", "modality"])
-    load_nodes(graph, "Student", "students.csv", "studentId", ["name", "learningStyle", "lovedTopicIds", "dislikedTopicIds"])
+    load_nodes(graph, "Student", "students.csv", "studentId", ["name", "learningStyle", "lovedTopicIds", "dislikedTopicIds", "socialEngagementScore"])
 
     # --- Load Relationships ---
     load_relationships(graph, "Resource", "resourceId", "Topic", "topicId",

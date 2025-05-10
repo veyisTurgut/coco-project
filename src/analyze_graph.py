@@ -1,3 +1,83 @@
+# src/analyze_graph.py
+# Purpose:
+# This script performs a detailed analysis of a student interaction graph derived from a
+# Neo4j database. It aims to uncover structural properties of the student network,
+# identify communities, measure student influence and engagement, and explore
+# relationships between student profiles, their interactions, and feedback.
+#
+# What it does:
+# 1.  Initialization and Configuration:
+#     - Loads environment variables (for Neo4j connection details) and sets up logging.
+#     - Parses command-line arguments for specifying output filenames for node-level
+#       analysis results and graph edges (for Gephi).
+#     - Establishes a connection to the Neo4j graph database.
+#     - Defines flags to control optional analyses like profile correlation and
+#       sentiment analysis (sentiment analysis depends on TextBlob availability).
+#
+# 2.  Graph Construction and Export:
+#     - Queries Neo4j to fetch student data and their interactions.
+#     - Constructs a weighted, undirected student interaction graph using NetworkX.
+#       - Nodes represent students.
+#       - Edges are formed between students who have interacted with the same topic (either by
+#         consuming a resource related to the topic or directly participating in the topic).
+#       - Edge weights represent the number of distinct shared topics between two students.
+#     - Exports the graph's edge list (Source, Target, Weight, Type) to a CSV file
+#       (specified by `--output_edges`, default: `gephi_edges.csv`) suitable for import into
+#       network analysis tools like Gephi.
+#
+# 3.  Network Analysis Metrics:
+#     - Initializes a dictionary to store analysis results for each student node.
+#     - Community Detection:
+#       - Applies the Louvain algorithm to detect communities based on edge weights.
+#       - Applies Spectral Clustering to provide an alternative community structure.
+#       - Stores the resulting community IDs for each student.
+#     - Centrality Measures:
+#       - Calculates PageRank to estimate the influence of each student in the network.
+#       - Calculates Betweenness Centrality to identify students who act as bridges between
+#         different parts of the network.
+#       - Stores these centrality scores for each student.
+#     - Topic Diversity (Shannon Entropy):
+#       - For each student, queries Neo4j to get counts of their interactions across different topics
+#         (considering both consumed resources and direct topic participations).
+#       - Calculates the Shannon Entropy of these topic interaction distributions as a measure
+#         of the diversity of topics a student engages with.
+#       - Stores the entropy value for each student.
+#
+# 4.  Profile and Feedback Analysis (Optional):
+#     - Fetches detailed interaction data from Neo4j, including student profiles (learning style,
+#       loved/disliked topics), consumed resources (modality, topic), and feedback (ratings, comments).
+#     - Profile Correlation Analysis (if `RUN_PROFILE_ANALYSIS` is True):
+#       - Analyzes average ratings based on matches between student learning styles and resource modalities.
+#       - Analyzes average ratings based on student affinity (loved, disliked, neutral) towards the topic
+#         of the consumed resource.
+#       - Prints these aggregated results to the console.
+#     - Comment Sentiment Analysis (if `RUN_SENTIMENT_ANALYSIS` is True and TextBlob is available):
+#       - Calculates the sentiment polarity of student comments using TextBlob.
+#       - Analyzes the average sentiment polarity grouped by rating.
+#       - Calculates the correlation between ratings and comment sentiment.
+#       - Prints these results to the console.
+#
+# 5.  Results Output and Visualization:
+#     - Compiles all calculated metrics (Louvain community, spectral community, PageRank,
+#       betweenness, Shannon entropy) into a Pandas DataFrame.
+#     - Saves this student-level analysis data to a CSV file (specified by `--output_nodes`,
+#       default: `analysis_results_rich.csv`).
+#     - Generates an interactive HTML visualization of the student network using Pyvis (if the graph has edges):
+#       - Nodes are colored based on their Louvain community and sized based on a centrality measure (e.g., betweenness).
+#       - Node tooltips display detailed metrics (community, entropy, PageRank, betweenness).
+#       - Edges are weighted visually.
+#       - Saves the visualization as an HTML file (default: `student_network.html`) and attempts
+#         to open it in the default web browser.
+#
+# Key Libraries Used:
+# - pandas: For data manipulation and CSV I/O.
+# - networkx: For graph creation, manipulation, and core graph algorithms.
+# - pyvis: For generating interactive network visualizations.
+# - community (python-louvain): For Louvain community detection.
+# - scikit-learn: For Spectral Clustering.
+# - py2neo: For interacting with the Neo4j database.
+# - textblob (optional): For sentiment analysis.
+
 import pandas as pd
 import networkx as nx
 from pyvis.network import Network
@@ -12,6 +92,7 @@ from py2neo import Graph
 from scipy.stats import entropy as shannon_entropy
 from sklearn.cluster import SpectralClustering
 import webbrowser 
+import argparse
 
 # Optional: For sentiment analysis
 try:
@@ -33,7 +114,14 @@ NEO4J_URI = os.getenv("NEO4J_URI", "bolt://gcloud.madlen.io:7687")
 NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 
-OUTPUT_RESULTS_FILE = "analysis_results_rich.csv" # New output name
+# output file parse from args
+parser = argparse.ArgumentParser(description='Analyze student interaction graph.')
+parser.add_argument('--output_nodes', type=str, default='analysis_results_rich.csv', help='Output file name')
+parser.add_argument("--output_edges", type=str, default="gephi_edges.csv", help="Filename for the output CSV containing graph edges for Gephi.")
+args = parser.parse_args()
+
+OUTPUT_RESULTS_FILE = args.output_nodes
+OUTPUT_EDGES_FILE = args.output_edges
 UPDATE_NEO4J = False # Keep False for now unless explicitly needed
 RUN_PROFILE_ANALYSIS = True # Flag to run the new analyses
 RUN_SENTIMENT_ANALYSIS = TEXTBLOB_AVAILABLE # Run only if library is available
@@ -122,9 +210,8 @@ def get_student_interaction_graph_corrected(graph_db):
                 # Gephi typically needs Source, Target, Weight, Type (Undirected/Directed)
                 edges_for_export.append({'Source': u, 'Target': v, 'Weight': data.get('weight', 1), 'Type': 'Undirected'})
             edges_df_export = pd.DataFrame(edges_for_export)
-            edges_filepath = 'gephi_edges.csv'
-            edges_df_export.to_csv(edges_filepath, index=False)
-            logger.info(f"Exported {len(edges_df_export)} edges to {edges_filepath}")
+            edges_df_export.to_csv(OUTPUT_EDGES_FILE, index=False)
+            logger.info(f"Exported {len(edges_df_export)} edges to {OUTPUT_EDGES_FILE}")
         except Exception as e:
             logger.error(f"Failed to export edges for Gephi: {e}")
     # --- END EXPORT ---
@@ -462,6 +549,5 @@ if __name__ == "__main__":
          visualize_network_pyvis(G_interaction, results_df)
     else:
          logger.warning("results_df not available, skipping Pyvis visualization.")
-
 
     logger.info(f"\nAnalysis Complete. Total time: {time.time() - analysis_start_time:.2f} seconds.")

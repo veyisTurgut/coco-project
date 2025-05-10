@@ -1,3 +1,76 @@
+# src/generate_data.py
+# Purpose:
+# This script generates a synthetic dataset for a simulated learning environment. It creates
+# CSV files containing information about students, topics, learning resources, and initial
+# interactions (resource consumptions with LLM-generated feedback, and topic participations).
+# This dataset serves as the foundational data for loading into a Neo4j graph database,
+# which is then used by the simulation and analysis scripts.
+#
+# What it does:
+# 1.  Initialization and Configuration:
+#     - Loads environment variables (e.g., for LLM access if needed externally, though primarily uses local config).
+#     - Sets up logging.
+#     - Defines core parameters: number of students, resources, min/max initial interactions,
+#       learning styles, output directory for CSVs, LLM batch size, and probability of initial participation.
+#     - Defines file paths for all output CSVs.
+#     - Initializes Faker for generating synthetic names.
+#
+# 2.  Curriculum Definition:
+#     - Defines a hierarchical curriculum structure with subjects (e.g., Physics, Biology)
+#       and specific topics within each subject.
+#     - Generates unique topic IDs and maintains mappings between topic IDs, names, and subject codes.
+#
+# 3.  Base Node Data Generation (Conditional - `REGENERATE_BASE_DATA` flag or missing files):
+#     - Topics: Creates a list of topics based on the curriculum, assigning unique IDs and names.
+#       Saves to `topics.csv`.
+#     - Resources:
+#       - Generates a specified number of resources with unique IDs.
+#       - Assigns titles using Faker, types (e.g., 'Article', 'Video'), and corresponding
+#         modalities (e.g., 'Reading/Writing', 'Visual').
+#       - Randomly associates each resource with one or more topics from the curriculum.
+#       - Saves resource data to `resources.csv` and resource-topic relationships to `resource_topic.csv`.
+#     - Students:
+#       - Generates a specified number of student profiles.
+#       - Assigns unique student IDs and names (using Faker).
+#       - Randomly assigns a learning style from a predefined list.
+#       - Randomly assigns a set of 'loved' and 'disliked' topic IDs from the curriculum.
+#       - Assigns a random social engagement score.
+#       - Saves student data to `students.csv`.
+#
+# 4.  Initial Interaction Data Generation:
+#     - Consumed Interactions (`consumed_initially.csv`):
+#       - For each student, simulates a random number of initial resource consumption events.
+#       - Resources are chosen to generally align with student preferences (avoiding disliked topics if possible).
+#       - Generates random timestamps for these interactions within a defined historical period.
+#       - **LLM-Powered Feedback**: For batches of these consumption events, it calls a
+#         Large Language Model (Vertex AI Gemini via `llm.curl_vertex` and `llm.mylib`)
+#         to generate realistic initial feedback (a rating from 1-5 and a short comment).
+#         - Prompts include student profile snippets (style, topic preferences) and resource details.
+#         - Uses a `ThreadPoolExecutor` to make parallel LLM calls for feedback generation on batches
+#           of interactions to improve efficiency.
+#         - Stores the `studentId`, `resourceId`, `timestamp`, `rating`, `comment`, and
+#           `feedback_generated_by` (marked as 'llm_initial').
+#     - Participated Interactions (`participated.csv`):
+#       - After a simulated consumption, there's a defined probability that the student also
+#         'participates' in the topic of the consumed resource.
+#       - These interactions are recorded with `studentId`, `topicId`, `timestamp`, and
+#         `interactionType` (marked as 'initial_post').
+#
+# 5.  Output:
+#     - All generated data (students, topics, resources, resource-topic links, initial
+#       consumptions with feedback, initial participations) are saved as CSV files in the
+#       directory specified by `OUTPUT_DIR` (default: "synthetic_data").
+#
+# Key Libraries/Modules Used:
+# - pandas: For creating and managing DataFrames, and saving to CSV.
+# - numpy: For numerical operations, especially random number generation and handling NaNs.
+# - Faker: For generating realistic synthetic data like names and text snippets.
+# - datetime, timedelta: For generating and managing timestamps.
+# - concurrent.futures (ThreadPoolExecutor): For parallelizing LLM calls for feedback generation.
+# - llm.curl_vertex, llm.mylib (custom): For interfacing with Google Vertex AI LLMs to generate feedback.
+# - json: For handling JSON data, especially LLM responses and schema definitions.
+# - os, random, logging, time: Standard Python libraries.
+
 import pandas as pd, numpy as np, random, os, json, logging, time
 from faker import Faker
 from datetime import datetime, timedelta
@@ -17,11 +90,11 @@ REGENERATE_BASE_DATA = True # Set to True to regenerate students, topics, resour
 
 # --- Simulation Parameters ---
 NUM_STUDENTS = 250; NUM_RESOURCES = 500
-MIN_INITIAL_INTERACTIONS = 5; MAX_INITIAL_INTERACTIONS = 15
-LEARNING_STYLES = ['Visual', 'Audio', 'Kinaesthetic', 'Reading/Writing', 'Mixed',]
-AVG_LOVED_SUBJECTS = 2; AVG_DISLIKED_SUBJECTS = 3
+MIN_INITIAL_INTERACTIONS = 3; MAX_INITIAL_INTERACTIONS = 15
+LEARNING_STYLES = ['Visual', 'Audio', 'Kinaesthetic', 'Reading/Writing', 'Mixed']
+AVG_LOVED_SUBJECTS = 2; AVG_DISLIKED_SUBJECTS = 4
 OUTPUT_DIR = "synthetic_data" # Ensure this matches where files should be read/written
-LLM_BATCH_SIZE = 50; MAX_WORKERS = 25
+LLM_BATCH_SIZE = 50; MAX_WORKERS = 50
 PROBABILITY_INITIAL_PARTICIPATION = 0.05
 
 # --- File Paths ---
@@ -61,6 +134,10 @@ curriculum_topics = {
     "LIT": [ # Literature
         "LIT01: Elements of Literature (Plot, Character)", "LIT02: Introduction to Poetry",
         "LIT03: Short Stories Analysis", "LIT04: Introduction to Drama", "LIT05: The Novel Genre",
+    ],
+    "TRK": [ # Turkish
+        "TRK01: Introduction to Turkish", "TRK02: Turkish Grammar",
+        "TRK03: Turkish Vocabulary", "TRK04: Turkish Pronunciation", "TRK05: Turkish Culture",
     ]
 }
 # SUBJECT_CODES will now automatically include "HIS", "GEO", "LIT"
@@ -92,7 +169,7 @@ all_topic_ids = list(topic_id_map.keys())
 # --- End Curriculum ---
 
 # --- Initialization ---
-fake = Faker(); random.seed(42); np.random.seed(42)
+fake = Faker('tr_TR'); random.seed(42); np.random.seed(42)
 if not os.path.exists(OUTPUT_DIR): os.makedirs(OUTPUT_DIR)
 # ---
 
@@ -103,16 +180,8 @@ def generate_random_timestamp(start_date, end_date):
     return start_date + timedelta(seconds=random_seconds)
 
 # --- LLM Interaction Function (Revised response handling) ---
-def chat_with_llm(prompt: str, system_prompt: str = None, schema: dict = None):
-    # ... (Initialization and LLMConfig setup same as before) ...
-    if not system_prompt: system_prompt = "You are a helpful AI assistant."
-    try: vertex_credentials.initialize()
-    except Exception as e: logger.error(f"Vertex init failed: {e}"); return None
-
-    llm_config = LLMConfig({ "model_arch": ChatMainLLM.VERTEXLLM.value, "model_name": ChatMainLLMName.VERTEX_GEMINI_25_FLASH_PREVIEW,
-                           "temperature": 0.7, "top_k": 10, "top_p": 0.95, "max_output_tokens": 50000, 
-                           "llm_region": "us-central1", "response_mimetype": "application/json", "responseSchema": schema })
-    curl_vertex = CurlVertex(llm_config=llm_config, logger=logger) 
+def chat_with_llm(prompt: str, curl_vertex, system_prompt: str = None):
+    if not system_prompt: system_prompt = "Sen yardımcı bir yapay zeka asistanısın."
 
     chat_history = [Message(
             role="user",
@@ -161,7 +230,7 @@ BATCH_LLM_FEEDBACK_SCHEMA = {
     }
 }
 
-def generate_batch_initial_feedback_llm(batch_scenarios: list, topic_id_map: dict) -> dict:
+def generate_batch_initial_feedback_llm(batch_scenarios: list, topic_id_map: dict, curl_vertex) -> dict:
     """
     Generates simulated feedback for a batch of interactions using a single LLM call.
     Args:
@@ -187,7 +256,7 @@ def generate_batch_initial_feedback_llm(batch_scenarios: list, topic_id_map: dic
     prompt_parts.append(f"Output Format (JSON array only, matching schema, {len(batch_scenarios)} items):")
     full_prompt = "\n".join(prompt_parts)
     
-    batch_feedback_list = chat_with_llm(full_prompt, system_prompt=BATCH_LLM_FEEDBACK_SYSTEM_PROMPT, schema=BATCH_LLM_FEEDBACK_SCHEMA)
+    batch_feedback_list = chat_with_llm(full_prompt, curl_vertex, system_prompt=BATCH_LLM_FEEDBACK_SYSTEM_PROMPT)
     results = {} 
     if batch_feedback_list and isinstance(batch_feedback_list, list):
         if len(batch_feedback_list) != len(batch_scenarios): logger.warning(f"LLM batch length mismatch! Exp {len(batch_scenarios)}, got {len(batch_feedback_list)}.")
@@ -203,13 +272,13 @@ def generate_batch_initial_feedback_llm(batch_scenarios: list, topic_id_map: dic
     return results
 
 # --- Wrapper function for parallel execution ---
-def process_feedback_batch(batch_data):
+def process_feedback_batch(batch_data, curl_vertex):
     """Wrapper to call LLM feedback generation for use with ThreadPoolExecutor."""
     batch_scenarios, topic_map = batch_data # Unpack arguments
     # **Crucial:** Add error handling within the thread if needed
     try:
         logger.info(f"Thread {os.getpid()} processing batch of {len(batch_scenarios)}...")
-        result = generate_batch_initial_feedback_llm(batch_scenarios, topic_map)
+        result = generate_batch_initial_feedback_llm(batch_scenarios, topic_map, curl_vertex)
         logger.info(f"Thread {os.getpid()} finished batch.")
         return result
     except Exception as e:
@@ -278,10 +347,15 @@ if REGENERATE_BASE_DATA or not all(os.path.exists(f) for f in [STUDENTS_FILE, TO
     for i in range(NUM_STUDENTS):
         student_id = f"S{i+1:04d}"; learning_style = random.choice(LEARNING_STYLES)
         loved_subjects = random.sample(SUBJECT_CODES, k=random.randint(0, AVG_LOVED_SUBJECTS + 1))
-        remaining_subjects = list(set(SUBJECT_CODES) - set(loved_subjects)); disliked_subjects = random.sample(remaining_subjects, k=random.randint(0, AVG_DISLIKED_SUBJECTS + 1)) if remaining_subjects else []
-        loved_topic_ids = [tid for tid, subj in topic_subject_map.items() if subj in loved_subjects]; disliked_topic_ids = [tid for tid, subj in topic_subject_map.items() if subj in disliked_subjects]
-        students_data.append({ "studentId": student_id, "name": fake.name(), "learningStyle": learning_style, "lovedTopicIds": json.dumps(loved_topic_ids), "dislikedTopicIds": json.dumps(disliked_topic_ids) })
-        student_profiles[student_id] = { "learningStyle": learning_style, "lovedTopics": loved_topic_ids, "dislikedTopics": disliked_topic_ids }
+        remaining_subjects = list(set(SUBJECT_CODES) - set(loved_subjects))
+        disliked_subjects = random.sample(remaining_subjects, k=random.randint(0, AVG_DISLIKED_SUBJECTS + 1)) if remaining_subjects else []
+        all_loved_topic_ids = [tid for tid, subj in topic_subject_map.items() if subj in loved_subjects]
+        # Get a random subset of loved topics, between 1 and all of them
+        loved_topic_ids = random.sample(all_loved_topic_ids, k=random.randint(1, max(1, len(all_loved_topic_ids)))) if all_loved_topic_ids else []
+        disliked_topic_ids = [tid for tid, subj in topic_subject_map.items() if subj in disliked_subjects]
+        social_engagement_score = np.random.beta(a=2, b=5) # scaled to 0-1
+        students_data.append({ "studentId": student_id, "name": fake.name(), "learningStyle": learning_style, "lovedTopicIds": json.dumps(loved_topic_ids), "dislikedTopicIds": json.dumps(disliked_topic_ids), "socialEngagementScore": social_engagement_score })
+        student_profiles[student_id] = { "learningStyle": learning_style, "lovedTopics": loved_topic_ids, "dislikedTopics": disliked_topic_ids, "socialEngagementScore": social_engagement_score }
     students_df = pd.DataFrame(students_data)
     all_student_ids = students_df["studentId"].tolist()
     logger.info(f"Generated {len(students_df)} students.")
@@ -384,9 +458,15 @@ logger.info(f"Generated {len(initial_participated_rels)} initial PARTICIPATED_IN
 logger.info(f"Generating feedback for {len(interaction_pairs_to_process)} interactions concurrently...")
 all_feedback_results = {}; llm_feedback_failures = 0; start_batch_processing_time = time.time()
 tasks = [];
+
+llm_config = LLMConfig({ "model_arch": ChatMainLLM.VERTEXLLM.value, "model_name": ChatMainLLMName.VERTEX_GEMINI_25_FLASH_PREVIEW,
+                           "temperature": 0.7, "top_k": 10, "top_p": 0.95, "max_output_tokens": 50000, 
+                           "llm_region": "us-central1", "response_mimetype": "application/json", "responseSchema": BATCH_LLM_FEEDBACK_SCHEMA })
+curl_vertex = CurlVertex(llm_config=llm_config, logger=logger) 
+
 for i in range(0, len(interaction_pairs_to_process), LLM_BATCH_SIZE): tasks.append((interaction_pairs_to_process[i : i + LLM_BATCH_SIZE], topic_id_map))
 with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-    future_to_batch_num = {executor.submit(process_feedback_batch, task_data): i for i, task_data in enumerate(tasks)}
+    future_to_batch_num = {executor.submit(process_feedback_batch, task_data, curl_vertex): i for i, task_data in enumerate(tasks)}
     total_batches = len(tasks)
     for i, future in enumerate(as_completed(future_to_batch_num)):
         batch_num = future_to_batch_num[future]

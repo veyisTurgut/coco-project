@@ -1,6 +1,6 @@
 import pandas as pd
 
-results_df = pd.read_csv('analysis_results_rich.csv')
+results_df = pd.read_csv('analysis_snapshots_relabelled/analysis_results_T100.csv')
 
 # Ensure community is treated as categorical/string for grouping if needed
 results_df['louvainCommunity'] = results_df['louvainCommunity'].astype(str)

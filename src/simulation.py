@@ -1,12 +1,99 @@
 # src/simulation.py
-import logging, os, random, time, pandas as pd
+# Purpose:
+# This script simulates a dynamic learning network environment where students interact with
+# learning resources over a series of turns. It models the process of students receiving
+# personalized recommendations, choosing resources based on their profiles and preferences,
+# and providing feedback on the resources they consume. The simulation aims to generate
+# data reflecting student learning journeys and interaction patterns within an adaptive
+# recommendation system.
+#
+# What it does:
+# 1.  Initialization:
+#     - Parses command-line arguments (e.g., number of simulation turns).
+#     - Loads environment variables and sets up logging.
+#     - Defines core simulation parameters, including concurrency limits for LLM calls,
+#       student selection size per turn, diversity thresholds for recommendation adaptation,
+#       history limits for calculations, LLM prompts and schemas for feedback generation,
+#       and output CSV filenames.
+#     - Connects to a Neo4j graph database.
+#     - Fetches initial data from Neo4j: topic maps, resource information maps, and a list
+#       of all student IDs.
+#
+# 2.  Main Simulation Loop (executed for a configurable number of turns):
+#     - In each turn:
+#       a. Selects a random subset of students to participate.
+#       b. Fetches current resource metrics (e.g., popularity, ratings) from Neo4j.
+#       c. Phase 1: Data Fetching and Recommendation Task Preparation:
+#          - For each selected student, fetches their profile and interaction history.
+#          - Calculates the Shannon entropy of topics in their recent history to assess
+#            consumption diversity.
+#          - Determines if recommendation prompts need adaptation (e.g., to encourage
+#            exploration if diversity is low).
+#          - Prepares tasks for generating recommendations.
+#       d. Phase 2: Parallel Recommendation Generation:
+#          - Uses a ThreadPoolExecutor to concurrently generate resource recommendations
+#            for students via an external `recommender_engine`.
+#          - Recommendations consider student data, resource details, topic information,
+#            current resource metrics, the adaptation flag, the current simulation turn,
+#            and a configured period for "echo chamber formation."
+#       e. Phase 3: Student Choice Simulation and Feedback Task Preparation:
+#          - For each student with recommendations:
+#            i. Logs all generated recommendations to Neo4j (as `LLM_RECOMMENDED`
+#               relationships) and to a CSV file (`llm_recommendations_log.csv`).
+#            ii. Simulates the student's choice of a resource (or choosing nothing) based
+#                on a model considering topic preferences, modality match, and a baseline
+#                probability of inaction.
+#            iii. If a resource is chosen, prepares tasks for generating simulated feedback.
+#       f. Phase 4: Parallel Feedback Generation:
+#          - Uses a ThreadPoolExecutor to concurrently generate simulated student feedback
+#            (rating and comment) for chosen resources using an LLM.
+#          - The LLM prompt is primed with the student's profile and details of the
+#            chosen resource.
+#       g. Phase 5: Persistence of Choices and Feedback:
+#          - For each student who consumed a resource and for whom feedback was generated:
+#            i. Persists the `CONSUMED` interaction (including rating, comment, and
+#               source="simulation") to Neo4j.
+#            ii. Logs the consumption event to a CSV file (`consumed_in_simulation.csv`).
+#            iii. Simulates a probabilistic `PARTICIPATED_IN` interaction for the topic of
+#                the consumed resource and persists it to Neo4j.
+#
+# 3.  Output and Logging:
+#     - Logs detailed information about the simulation's progress, warnings, and errors.
+#     - Upon completion or error, saves two primary CSV files:
+#       - `llm_recommendations_log.csv`: Records all recommendations made to students.
+#       - `consumed_in_simulation.csv`: Records all resources consumed by students,
+#         along with the LLM-generated feedback.
+#
+# Key Features:
+# - Dynamic Recommendation Adaptation: Adjusts recommendation strategies based on student
+#   interaction diversity (measured by topic entropy).
+# - Echo Chamber Dynamics: Incorporates a mechanism to potentially alter recommendation
+#   behavior during an initial phase of the simulation.
+# - Probabilistic Student Choice Model: Simulates student decisions with considerations for
+#   personal preferences, learning style, and inherent randomness.
+# - LLM-Powered Feedback: Leverages a Large Language Model to generate realistic qualitative
+#   and quantitative feedback on learning resources.
+# - Parallel Processing: Employs concurrent execution for computationally intensive tasks
+#   (recommendation and feedback generation) to improve simulation speed.
+# - Graph Database Integration: Uses Neo4j for storing and retrieving the network state,
+#   student profiles, resource information, and simulated interactions.
+# - Comprehensive Data Logging: Produces CSV logs for offline analysis of simulation outcomes.
+
+import logging, os, random, time, pandas as pd, argparse
 from datetime import datetime
 from py2neo import Graph
 from scipy.stats import entropy as shannon_entropy
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor, as_completed # For parallelism
 
-
+parser = argparse.ArgumentParser(description="Run dynamic learning network simulation.")
+parser.add_argument(
+    "--num_turns",
+    type=int,
+    default=10, # Default if not provided
+    help="Number of simulation turns to run for this segment."
+)
+args = parser.parse_args()
 # Import functions from the engine
 from recommender_engine import (
     connect_neo4j,
@@ -23,8 +110,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 logger = logging.getLogger(__name__)
 
 # --- Simulation Parameters ---
-MAX_WORKERS = 30 # Number of concurrent LLM calls (for recs AND feedback)
-NUM_TURNS = 20
+MAX_WORKERS = 50 # Number of concurrent LLM calls (for recs AND feedback)
+NUM_TURNS = args.num_turns
 STUDENTS_PER_TURN = 50
 DIVERSITY_THRESHOLD = 0.4 # Example: If Shannon entropy drops below this, trigger adaptation
 HISTORY_LIMIT_FOR_ENTROPY = 10 # How far back to look for entropy calculation
@@ -35,8 +122,9 @@ BASE_SCORE = 1.0
 LOVED_TOPIC_BONUS = 10.0
 DISLIKED_TOPIC_PENALTY = -10.0
 MODALITY_MATCH_BONUS = 4
-PROBABILITY_CHOOSE_NOTHING = 0.4 # 20% chance student ignores recommendations
+PROBABILITY_CHOOSE_NOTHING = 0.4 # 40% chance student ignores recommendations
 PROBABILITY_PARTICIPATE_AFTER_CONSUME = 0.05 # 5% chance to also participate in the topic
+ECHO_CHAMBER_FORMATION_TURNS = 50 # e.g., first 50 turns are for echo chamber formation
 
 
 LLM_FEEDBACK_SYSTEM_PROMPT = """
@@ -96,7 +184,11 @@ def simulate_student_choice(student_profile: dict, recommendations: list, resour
 
     # Add option to choose nothing
     choices = [None] + [rec['resource_id'] for rec in recommendations]
-    weights = [PROBABILITY_CHOOSE_NOTHING]
+    student_social_score = student_profile.get('socialEngagementScore', 0.5)
+    effective_prob_choose_nothing = PROBABILITY_CHOOSE_NOTHING * (1 - (student_social_score - 0.5) * 0.8) # Adjust multiplier (0.8)
+    effective_prob_choose_nothing = max(0.01, min(0.5, effective_prob_choose_nothing)) # Clamp
+
+    weights = [effective_prob_choose_nothing]
 
     # Calculate scores for each actual recommendation
     for rec in recommendations:
@@ -128,7 +220,7 @@ def simulate_student_choice(student_profile: dict, recommendations: list, resour
     # Normalize weights to sum to 1 (excluding the 'None' probability)
     total_rec_weight = sum(weights[1:])
     if total_rec_weight > 0:
-         normalized_rec_weights = [(w / total_rec_weight) * (1.0 - PROBABILITY_CHOOSE_NOTHING) for w in weights[1:]]
+         normalized_rec_weights = [(w / total_rec_weight) * (1.0 - effective_prob_choose_nothing) for w in weights[1:]]
          final_weights = [PROBABILITY_CHOOSE_NOTHING] + normalized_rec_weights
     else:
         # If all scores were somehow zero or negative, give equal chance among recs (excluding None initially)
@@ -253,26 +345,21 @@ def add_llm_recommendation_to_neo4j(graph: Graph, student_id: str, resource_id: 
 # --- End Persistence ---
 
 
-# --- NEW: Wrapper Functions for Parallel Execution ---
+# --- Wrapper Functions for Parallel Execution ---
 def process_student_recommendation(args):
-    """Wrapper to generate recommendations for one student."""
-    student_id, student_data, resource_map, topic_map, num_recs, needs_adapt, current_resource_metrics = args
-    logger.debug(f"Thread {os.getpid()} starting recommendations for {student_id} (Adapt: {needs_adapt})...")
+    # Unpack arguments including the new turn info
+    student_id, student_data, resource_map, topic_map, resource_metrics, num_recs, needs_adapt_flag, current_turn_sim, echo_turns_sim = args # Added turn info
+    logger.debug(f"Thread {os.getpid()} recs for {student_id} (Turn: {current_turn_sim}, Adapt: {needs_adapt_flag}, EchoPhase: {current_turn_sim <= echo_turns_sim})...")
     try:
         recommendations = recommend_to_student(
-            student_data,
-            resource_map,
-            topic_map,
-            num_recommendations=num_recs,
-            resource_metrics_map=current_resource_metrics,
-            adapt_prompt=needs_adapt
+            student_data, resource_map, topic_map, resource_metrics,
+            num_recommendations=num_recs, adapt_prompt=needs_adapt_flag,
+            current_turn=current_turn_sim, echo_formation_turns=echo_turns_sim # Pass turn info
         )
-        logger.debug(f"Thread {os.getpid()} finished recommendations for {student_id}.")
-        # Return student ID along with results for mapping later
+        logger.debug(f"Thread {os.getpid()} finished recs for {student_id}.")
         return student_id, recommendations
-    except Exception as e:
-        logger.error(f"Error generating recommendations for {student_id} in thread {os.getpid()}: {e}")
-        return student_id, None # Return None on error
+    except Exception as e: logger.error(f"Error recs for {student_id} in thread {os.getpid()}: {e}"); return student_id, None
+
 
 def process_student_feedback(args):
     """Wrapper to generate feedback for one student's choice."""
@@ -335,7 +422,9 @@ if __name__ == "__main__":
                     current_entropy = calculate_topic_entropy(student_data['history'], resource_map, HISTORY_LIMIT_FOR_ENTROPY)
                     needs_adaptation = current_entropy < DIVERSITY_THRESHOLD
                     student_states[student_id] = {'data': student_data, 'entropy': current_entropy, 'needs_adapt': needs_adaptation}
-                    rec_tasks_args.append((student_id, student_data, resource_map, topic_map, NUM_RECOMMENDATIONS_PER_STUDENT, needs_adaptation, current_resource_metrics))
+                    rec_tasks_args.append((student_id, student_data, resource_map, topic_map, current_resource_metrics,
+                                           NUM_RECOMMENDATIONS_PER_STUDENT, needs_adaptation,
+                                           turn, ECHO_CHAMBER_FORMATION_TURNS))
                     logger.debug(f"Prepared rec task for {student_id} (Entropy: {current_entropy:.3f}, Adapt: {needs_adaptation})")
 
                 # --- Phase 2: Parallel Recommendation Generation ---
@@ -415,9 +504,13 @@ if __name__ == "__main__":
                         if feedback:
                             consumed_persisted = add_consumed_interaction_to_neo4j(db, student_id, chosen_resource_id, feedback['rating'], feedback['comment'], consumption_ts, source="simulation")
                             if consumed_persisted:
+                                student_social_score = student_data['profile'].get('socialEngagementScore', 0.5) # Default to 0.5
+                                effective_participation_prob = PROBABILITY_PARTICIPATE_AFTER_CONSUME * (1 + (student_social_score - 0.5) * 1.5)
+                                effective_participation_prob = max(0.01, min(0.95, effective_participation_prob)) # Clamp probability
+
                                 all_simulated_consumptions_log.append({"turn": turn, "studentId": student_id, "resourceId": chosen_resource_id, "rating": feedback['rating'], "comment": feedback['comment'], "timestamp": consumption_ts, "feedback_generated_by": "llm"})
                                 # Optional Participation
-                                if random.random() < PROBABILITY_PARTICIPATE_AFTER_CONSUME:
+                                if random.random() < effective_participation_prob:
                                     chosen_resource_info = resource_map.get(chosen_resource_id)
                                     topic_id = chosen_resource_info.get('topicId') if chosen_resource_info else None
                                     if topic_id: add_participation_to_neo4j(db, student_id, topic_id, consumption_ts)
