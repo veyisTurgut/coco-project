@@ -1,0 +1,4 @@
+        socialEngagementScore  num_loved  num_disliked
+mean                     0.25       0.43          4.29
+median                   0.23       0.00          5.00
+std                      0.16       0.79          5.35

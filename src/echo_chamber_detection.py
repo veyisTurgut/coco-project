@@ -1,3 +1,52 @@
+# src/echo_chamber_detection.py
+# Purpose:
+# This script analyzes network metrics from a pre-computed CSV file (typically an output
+# from `analyze_graph.py` and potentially processed by `relabel_communities.py`)
+# to identify potential echo chambers and key structural nodes within a student interaction network.
+# It focuses on community-level diversity and individual student characteristics.
+#
+# What it does:
+# 1.  Data Loading:
+#     - Reads a CSV file (e.g., `analysis_snapshots_relabelled/analysis_results_T<timestep>.csv`)
+#       into a pandas DataFrame. This file is expected to contain columns such as
+#       `studentId`, `louvainCommunity`, `shannonEntropy`, and `betweenness`.
+#
+# 2.  Community-Level Metrics Calculation:
+#     - Filters out nodes that are not assigned to a valid community (if an identifier like '-1' is used).
+#     - Groups the data by the `louvainCommunity` identifier.
+#     - For each community, it calculates and prints:
+#       - `avg_entropy`: The average Shannon entropy of students within that community, indicating
+#         the mean topic diversity.
+#       - `std_entropy`: The standard deviation of Shannon entropy, showing variability in diversity.
+#       - `avg_betweenness`: The average betweenness centrality of students in the community.
+#       - `size`: The number of students in the community.
+#
+# 3.  Potential Echo Chamber Identification (Community-Level):
+#     - Based on the calculated community metrics, it identifies communities where the
+#       `avg_entropy` falls below a predefined `low_entropy_threshold`.
+#     - Prints these communities, as they might represent echo chambers due to low overall
+#       topic diversity among their members.
+#
+# 4.  Low Topic Diversity Identification (Individual-Level):
+#     - Filters and prints individual students whose `shannonEntropy` is below the
+#       `low_entropy_threshold`, highlighting students with narrow topic engagement regardless
+#       of their community's average.
+#
+# 5.  Bridge Node Analysis:
+#     - Identifies potential "bridge nodes" by selecting students whose `betweenness` centrality
+#       is above a certain threshold (e.g., the 90th percentile of all betweenness scores).
+#     - Prints these high-betweenness students, as they may play a crucial role in connecting
+#       different parts of the network or different communities.
+#     - Further analyzes if any of the previously identified Louvain communities lack such
+#       high-betweenness bridge nodes, potentially indicating isolated communities.
+#
+# 6.  Output:
+#     - All analyses and identified lists (community metrics, potential echo chambers,
+#       low-entropy students, bridge nodes, communities lacking bridges) are printed to the console.
+#
+# Key Libraries Used:
+# - pandas: For data loading, manipulation, aggregation, and filtering.
+
 import pandas as pd
 
 results_df = pd.read_csv('analysis_snapshots_relabelled/analysis_results_T100.csv')
