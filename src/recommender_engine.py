@@ -92,7 +92,7 @@ def chat_with_llm(prompt: str, system_prompt: str = None, schema: dict = None): 
         "model_arch": ChatMainLLM.VERTEXLLM.value,
         "model_name": ChatMainLLMName.VERTEX_GEMINI_25_FLASH_PREVIEW,
         "temperature": 0.6, # Adjusted temp
-        "top_k": 10, "top_p": 0.95, "max_output_tokens": 500,
+        "top_k": 10, "top_p": 0.95, "max_output_tokens": 4500,
         "llm_region": "us-central1",
         "response_mimetype": "application/json", # Expect JSON
         "responseSchema": schema # Pass the schema
@@ -219,7 +219,7 @@ def recommend_to_student(student_data, all_resource_info_map, topic_id_map, reso
         candidate_list_str = "No candidate resources available."
     else:
         candidate_lines = []
-        max_candidates_in_prompt = 40 # Adjust if needed, metrics add length
+        max_candidates_in_prompt = 40
         selected_candidate_ids = random.sample(list(candidate_ids), k=min(len(candidate_ids), max_candidates_in_prompt))
 
         for res_id in selected_candidate_ids:
@@ -237,7 +237,7 @@ def recommend_to_student(student_data, all_resource_info_map, topic_id_map, reso
             rec_count_str = f"TimesRecommended: {metrics['recommendationCount']}"
 
             candidate_lines.append(f"- ID: {res_id}, Title: '{title}', Topic: {topic_name}, Modality: {modality}, "
-                                   f"{rating_str} {rating_count_str}, {rec_count_str}") # Added metrics
+                                   f"{rating_str} {rating_count_str}, {rec_count_str}")
 
         candidate_list_str = "\n".join(candidate_lines)
         if len(candidate_ids) > max_candidates_in_prompt:
@@ -291,13 +291,19 @@ Task:
 Based *only* on the student's profile, interaction history, and the candidate resource list (including their metrics), recommend exactly {num_recommendations} specific resources for this student to engage with next.
 
 Instructions for Recommendation:
-1.  **Select ONLY from Candidates:** Choose 'ID' values strictly from the 'Candidate Resources' list. Do NOT invent IDs.
-2.  **Consider Multiple Factors:** Balance the student's profile (style, affinities) with resource metrics:
-    *   **AvgRating:** Generally prefer resources with higher average ratings, especially if based on a reasonable number of ratings (e.g., ratingCount > 3). Treat low/no ratings as neutral or requiring caution.
-    *   **TimesRecommended:** Be cautious about suggesting resources recommended very frequently unless they are an exceptionally good fit for the student's immediate need or profile. Consider less recommended items if they align well.
-3.  **Justify Choices:** Briefly explain *why* each resource is recommended for *this student* in the 'reason' field, potentially mentioning alignment, rating, or exploration goals.{adaptation_instruction}{output_format_instruction}
+1.  **Select ONLY from Candidates:** Choose 'ID' values strictly from the 'Candidate Resources' list.
+2.  **Prioritize Strong Affinity & Recency:**
+    *   Strongly prefer resources from topics the student **enjoys** (`Enjoys Topics Like`).
+    *   Strongly prefer resources from topics **identical or very similar** to those in their `Recent Interaction History`.
+3.  **Leverage Social Proof & Popularity (Engagement Signals):**
+    *   Favor resources with a high `AvgRating`, especially if based on a good `ratingCount` (e.g., > 5). This indicates other students liked it.
+    *   Consider resources that have been `TimesRecommended` before, as this might indicate system-identified relevance or general popularity.
+4.  **Modality Match:** If possible, align with the student's `Preferred Learning Style`.
+5.  **Minimize Exploration (Unless No Other Option):** De-prioritize topics the student `Dislikes Topics Like` or topics unrelated to their recent history or loved topics, unless there are no strong matches from preferred areas. If suggesting exploration, acknowledge it.
+6.  **Justify Choices:** Briefly explain *why* each resource is a good engagement-focused recommendation for *this student* in the 'reason' field, referencing their profile, recent history, or the resource's popularity/ratings.
 
-Begin Recommendation (JSON output only, matching schema with 'resource_id' and 'reason' keys):
+{adaptation_instruction}{output_format_instruction}
+
 """
 
     # System prompt (can remain the same or be tweaked)

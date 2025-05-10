@@ -13,15 +13,15 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-REGENERATE_BASE_DATA = False # Set to True to regenerate students, topics, resources
+REGENERATE_BASE_DATA = True # Set to True to regenerate students, topics, resources
 
 # --- Simulation Parameters ---
-NUM_STUDENTS = 50; NUM_RESOURCES = 210
+NUM_STUDENTS = 250; NUM_RESOURCES = 500
 MIN_INITIAL_INTERACTIONS = 5; MAX_INITIAL_INTERACTIONS = 15
-LEARNING_STYLES = ['Visual', 'Audio', 'Kinaesthetic', 'Reading/Writing', 'Mixed']
-AVG_LOVED_SUBJECTS = 2; AVG_DISLIKED_SUBJECTS = 2
+LEARNING_STYLES = ['Visual', 'Audio', 'Kinaesthetic', 'Reading/Writing', 'Mixed',]
+AVG_LOVED_SUBJECTS = 2; AVG_DISLIKED_SUBJECTS = 3
 OUTPUT_DIR = "synthetic_data" # Ensure this matches where files should be read/written
-LLM_BATCH_SIZE = 10; MAX_WORKERS = 5
+LLM_BATCH_SIZE = 50; MAX_WORKERS = 25
 PROBABILITY_INITIAL_PARTICIPATION = 0.05
 
 # --- File Paths ---
@@ -110,7 +110,7 @@ def chat_with_llm(prompt: str, system_prompt: str = None, schema: dict = None):
     except Exception as e: logger.error(f"Vertex init failed: {e}"); return None
 
     llm_config = LLMConfig({ "model_arch": ChatMainLLM.VERTEXLLM.value, "model_name": ChatMainLLMName.VERTEX_GEMINI_25_FLASH_PREVIEW,
-                           "temperature": 0.7, "top_k": 10, "top_p": 0.95, "max_output_tokens": 2048, 
+                           "temperature": 0.7, "top_k": 10, "top_p": 0.95, "max_output_tokens": 50000, 
                            "llm_region": "us-central1", "response_mimetype": "application/json", "responseSchema": schema })
     curl_vertex = CurlVertex(llm_config=llm_config, logger=logger) 
 
@@ -122,21 +122,22 @@ def chat_with_llm(prompt: str, system_prompt: str = None, schema: dict = None):
             message_type=None
         )]
     try:
-        # Call generate (non-streaming)
-        response = curl_vertex.generate( instruction_prompt=system_prompt, chat_history=chat_history,
-                                      is_streaming=False, return_tokens=False, timeout=20 )
+        for i in range(5):
+            # Call generate (non-streaming)
+            response = curl_vertex.generate( instruction_prompt=system_prompt, chat_history=chat_history,
+                                        is_streaming=False, return_tokens=False, timeout=80 )
 
-        # Accumulate content if generate returns an iterable
-        response_content = ""
-        for item in response:
-            response_content += item.content
+            # Accumulate content if generate returns an iterable
+            response_content = ""
+            for item in response:
+                response_content += item.content
 
-        logger.debug(f"Raw LLM Batch Response Length: {len(response_content)}")
-        try:
-            # Attempt to parse the accumulated string
-            return json.loads(response_content)
-        except json.JSONDecodeError as json_err: logger.error(f"LLM JSON parse fail: {json_err}. Resp: {response_content[:500]}..."); return None # Log truncated response
-        except TypeError as type_err: logger.error(f"LLM response content not string? Type: {type(response_content)}. Err: {type_err}"); return None
+            logger.debug(f"Raw LLM Batch Response Length: {len(response_content)}")
+            try:
+                # Attempt to parse the accumulated string
+                return json.loads(response_content)
+            except json.JSONDecodeError as json_err: logger.error(f"LLM JSON parse fail: {json_err}. Resp: {response_content}"); return None # Log truncated response
+            except TypeError as type_err: logger.error(f"LLM response content not string? Type: {type(response_content)}. Err: {type_err}"); return None
     except Exception as e: logger.exception(f"LLM generation error: {e}"); return None
 
 # --- NEW: Function to Generate *Batch* Initial Feedback via LLM ---
@@ -185,8 +186,9 @@ def generate_batch_initial_feedback_llm(batch_scenarios: list, topic_id_map: dic
     prompt_parts.append("Consider the student's style/modality match and topic affinity.")
     prompt_parts.append(f"Output Format (JSON array only, matching schema, {len(batch_scenarios)} items):")
     full_prompt = "\n".join(prompt_parts)
+    
     batch_feedback_list = chat_with_llm(full_prompt, system_prompt=BATCH_LLM_FEEDBACK_SYSTEM_PROMPT, schema=BATCH_LLM_FEEDBACK_SCHEMA)
-    results = {} # ...(rest of result processing is same)...
+    results = {} 
     if batch_feedback_list and isinstance(batch_feedback_list, list):
         if len(batch_feedback_list) != len(batch_scenarios): logger.warning(f"LLM batch length mismatch! Exp {len(batch_scenarios)}, got {len(batch_feedback_list)}.")
         for feedback_item in batch_feedback_list:

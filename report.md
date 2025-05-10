@@ -151,11 +151,8 @@ coco-project/
 ├── gephi_nodes_00.csv           # Nodes w/ metrics at T=0
 ├── gephi_nodes_20.csv           # Nodes w/ metrics at T=20 
 ├── gephi_nodes_40.csv           # Nodes w/ metrics at T=40
-├── insights.md                  # Supporting analysis notes
 ├── proposal.md
-├── readme.md
 ├── requirements.txt
-├── so_far.md                    # Supporting analysis notes
 ├── student_network.html         # Pyvis output
 └── vertex_keys.json             # GCP Credentials (gitignore!)
 ```

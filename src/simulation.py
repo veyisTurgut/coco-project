@@ -25,17 +25,17 @@ logger = logging.getLogger(__name__)
 # --- Simulation Parameters ---
 MAX_WORKERS = 30 # Number of concurrent LLM calls (for recs AND feedback)
 NUM_TURNS = 20
-STUDENTS_PER_TURN = 30
-DIVERSITY_THRESHOLD = 0.5 # Example: If Shannon entropy drops below this, trigger adaptation
+STUDENTS_PER_TURN = 50
+DIVERSITY_THRESHOLD = 0.4 # Example: If Shannon entropy drops below this, trigger adaptation
 HISTORY_LIMIT_FOR_ENTROPY = 10 # How far back to look for entropy calculation
 HISTORY_LIMIT_FOR_PROMPT = 3 # How far back to show LLM in prompt
 NUM_RECOMMENDATIONS_PER_STUDENT = 3
 # Student Choice Model Params
 BASE_SCORE = 1.0
 LOVED_TOPIC_BONUS = 10.0
-DISLIKED_TOPIC_PENALTY = -5.0
+DISLIKED_TOPIC_PENALTY = -10.0
 MODALITY_MATCH_BONUS = 4
-PROBABILITY_CHOOSE_NOTHING = 0.2 # 20% chance student ignores recommendations
+PROBABILITY_CHOOSE_NOTHING = 0.4 # 20% chance student ignores recommendations
 PROBABILITY_PARTICIPATE_AFTER_CONSUME = 0.05 # 5% chance to also participate in the topic
 
 
