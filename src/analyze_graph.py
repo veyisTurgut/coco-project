@@ -227,7 +227,7 @@ def run_community_detection(G: nx.Graph, results: dict):
     logger.info("Running Louvain community detection...")
     start_time = time.time()
     if G.number_of_edges() > 0:
-        partition_louvain = community_louvain.best_partition(G, weight='weight', random_state=42)
+        partition_louvain = community_louvain.best_partition(G, weight='weight', random_state=68)
         num_louvain_communities = len(set(partition_louvain.values()))
         logger.info(f"Louvain found {num_louvain_communities} communities in {time.time() - start_time:.2f}s.")
         for node, comm_id in partition_louvain.items():
@@ -244,7 +244,7 @@ def run_community_detection(G: nx.Graph, results: dict):
         try:
             node_list = list(G.nodes())
             adjacency_matrix = nx.to_numpy_array(G, nodelist=node_list, weight='weight')
-            sc = SpectralClustering(N_CLUSTERS_SPECTRAL, affinity='precomputed', assign_labels='kmeans', random_state=42)
+            sc = SpectralClustering(N_CLUSTERS_SPECTRAL, affinity='precomputed', assign_labels='kmeans', random_state=68)
             spectral_labels = sc.fit_predict(adjacency_matrix)
             logger.info(f"Spectral Clustering finished in {time.time() - start_time:.2f}s.")
             for i, node in enumerate(node_list):

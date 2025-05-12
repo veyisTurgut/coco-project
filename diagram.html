@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Learning Platform Network Diagram</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: sans-serif;
+      padding: 2rem;
+    }
+    .mermaid {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>AI-Powered Learning Platform - Conceptual Network Diagram</h1>
+  <div class="mermaid">
+  graph TD
+    subgraph Students
+      style Students fill:#eaf4ff,stroke:#3399ff,stroke-width:2px
+      Student1[Student 1]
+      Student2[Student 2]
+      Student3[Student 3]
+    end
+
+    subgraph Resources
+      style Resources fill:#e5f9f7,stroke:#00b3b3,stroke-width:2px
+      Res1[Article: Newton's Laws]
+      Res2[Video: Gravity Explained]
+      Res3[Podcast: History of Math]
+      Res4[Article: Shakespeare’s Plays]
+    end
+
+    subgraph Topics
+      style Topics fill:#fff3e0,stroke:#ff9800,stroke-width:2px
+      Topic1[Physics]
+      Topic2[Math]
+      Topic3[Literature]
+    end
+
+    Student1 -->|CONSUMED ★★★★☆| Res1       
+    Student1 -->|CONSUMED ★★★☆☆| Res2       
+    Student1 -- LLM_RECOMMENDED --> Res3    
+    Student1 -->|PARTICIPATED_IN| Topic1    
+    Student2 -->|CONSUMED ★★★★★| Res3       
+    Student2 -- LLM_RECOMMENDED --> Res4    
+    Student2 -->|PARTICIPATED_IN| Topic2    
+    Student3 -->|PARTICIPATED_IN| Topic1    
+    Student3 -->|CONSUMED ★★☆☆☆| Res2       
+
+    Res1 -->|ABOUT_TOPIC| Topic1            
+    Res2 -->|ABOUT_TOPIC| Topic1            
+    Res3 -->|ABOUT_TOPIC| Topic2            
+    Res4 -->|ABOUT_TOPIC| Topic3            
+
+    %% Apply styling for links based on type
+    linkStyle 0 stroke:#3399ff,stroke-width:2px;
+    linkStyle 1 stroke:#3399ff,stroke-width:2px;
+    linkStyle 2 stroke:#9999cc,stroke-dasharray: 4 4;
+    linkStyle 3 stroke:#ff9800,stroke-dasharray: 6 3;
+    linkStyle 4 stroke:#3399ff,stroke-width:2px;
+    linkStyle 5 stroke:#9999cc,stroke-dasharray: 4 4;
+    linkStyle 6 stroke:#ff9800,stroke-dasharray: 6 3;
+    linkStyle 7 stroke:#ff9800,stroke-dasharray: 6 3;
+    linkStyle 8 stroke:#3399ff,stroke-width:2px;
+    linkStyle 9 stroke:#00b3b3,stroke-width:1.5px;
+    linkStyle 10 stroke:#00b3b3,stroke-width:1.5px;
+    linkStyle 11 stroke:#00b3b3,stroke-width:1.5px;
+    linkStyle 12 stroke:#00b3b3,stroke-width:1.5px;
+  </div>
+</body>
+</html>
